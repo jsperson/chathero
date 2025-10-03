@@ -19,6 +19,26 @@ export class OpenAIAdapter implements AIAdapter {
     try {
       const currentDate = context.current_date || new Date().toISOString().split('T')[0];
 
+      // Check if this is a JSON analysis request
+      const isJsonMode = context.system_instruction && context.require_json;
+
+      if (isJsonMode) {
+        // Query analysis mode - return structured JSON
+        const completion = await this.client.chat.completions.create({
+          model: this.model,
+          messages: [
+            { role: 'system', content: context.system_instruction },
+            { role: 'user', content: message }
+          ],
+          response_format: { type: 'json_object' },
+          max_tokens: 1000,
+        });
+
+        const response = completion.choices[0]?.message?.content;
+        return response || '{}';
+      }
+
+      // Normal chat mode
       // Use project-specific system role or default
       const systemRole = this.projectConfig?.aiContext.systemRole ||
         'You are a helpful assistant that answers questions about the provided data.';

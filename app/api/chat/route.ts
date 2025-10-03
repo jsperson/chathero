@@ -3,6 +3,7 @@ import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
 import { JSONAdapter } from '@/lib/adapters/json.adapter';
 import { DataProcessor } from '@/lib/data-processor';
+import { QueryAnalyzer } from '@/lib/query-analyzer';
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,42 +24,29 @@ export async function POST(request: NextRequest) {
     const dataAdapter = new JSONAdapter(config.dataSource);
     const rawData = await dataAdapter.getData();
 
-    // Analyze the query to determine what data to send
+    // Initialize AI adapter
+    const aiAdapter = new OpenAIAdapter(config.ai, projectConfig);
+
+    // PHASE 1: AI analyzes the query with a data sample
+    console.log('Phase 1: Analyzing query with AI...');
+    const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
+    const queryAnalysis = await queryAnalyzer.analyze(message, rawData);
+    console.log('Query analysis:', JSON.stringify(queryAnalysis, null, 2));
+
+    // PHASE 2: Execute the analysis instructions to process data
+    console.log('Phase 2: Executing data processing instructions...');
     const processor = new DataProcessor(rawData, projectConfig);
-    const queryAnalysis = processor.analyzeQuery(message);
-
-    let contextData: any;
-
-    // Process data based on query type
-    if (queryAnalysis.type === 'aggregate') {
-      contextData = processor.aggregate(queryAnalysis.fields || ['year', 'vehicle', 'outcome']);
-    } else if (queryAnalysis.type === 'filter') {
-      const filtered = processor.filter(queryAnalysis.filters || {}, queryAnalysis.limit || 50);
-      contextData = {
-        total_matching: filtered.length,
-        results: filtered,
-      };
-    } else if (queryAnalysis.type === 'specific') {
-      // For specific queries, send a small subset
-      contextData = {
-        total_records: rawData.length,
-        recent_launches: rawData.slice(-10), // Last 10 launches
-        first_launches: rawData.slice(0, 10), // First 10 launches
-      };
-    } else {
-      // Default: send aggregated summary
-      contextData = processor.aggregate(['year', 'vehicle', 'outcome']);
-    }
+    const contextData = processor.executeAnalysis(queryAnalysis);
 
     // Add metadata
     const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
     const metadata = {
       current_date: currentDate,
-      query_type: queryAnalysis.type,
+      query_analysis: queryAnalysis.explanation,
     };
 
-    // Initialize AI adapter and get response
-    const aiAdapter = new OpenAIAdapter(config.ai, projectConfig);
+    // PHASE 3: AI generates final response with processed data
+    console.log('Phase 3: Generating final response...');
     const response = await aiAdapter.chat(message, { ...contextData, ...metadata });
 
     return NextResponse.json({
