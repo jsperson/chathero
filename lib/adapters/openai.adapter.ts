@@ -28,7 +28,7 @@ Answer the user's question based on this data. Be concise and accurate. If the d
           { role: 'user', content: message }
         ],
         temperature: 0.7,
-        max_tokens: 500,
+        max_completion_tokens: 500,
       });
 
       return completion.choices[0]?.message?.content || 'No response generated';
