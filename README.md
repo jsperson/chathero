@@ -28,6 +28,7 @@ ChatHero is a generic framework that allows users to chat with JSON data using A
 - **AI Adapter Pattern**: Interface for AI providers (OpenAI initially, expandable to Anthropic, Azure, etc.)
 - **Data Source Adapter Pattern**: JSON file reader (expandable to PostgreSQL, MongoDB, etc.)
 - **Config-Driven Design**: All branding, AI settings, and data sources configurable without code changes
+- **Automatic Schema Discovery**: Analyzes JSON data structure to auto-generate configuration when project.yaml is not present
 
 ### Configuration Schema
 
@@ -118,8 +119,41 @@ This data demonstrates the chat capabilities for querying historical space missi
 ```
 /config          - Theme, AI provider, and data source configurations
 /lib/adapters    - AI and data source adapter implementations
+/lib             - Core utilities including schema discovery
 /components      - Reusable UI components
 /app             - Next.js pages and routes
 /data            - JSON data files
 /public/assets   - Custom logos and static assets
 ```
+
+## Automatic Schema Discovery
+
+ChatHero can automatically work with any JSON data file without requiring manual configuration. When `config/project.yaml` is not present, the application will:
+
+1. Analyze the JSON data structure
+2. Identify field types (string, number, boolean, date, array, object)
+3. Detect categorical fields (fields with limited unique values)
+4. Detect numeric and date fields
+5. Generate example questions based on discovered schema
+6. Auto-create field keywords for natural language processing
+
+### Using Schema Discovery
+
+**Option 1: Automatic (No project.yaml)**
+- Simply point `config/app.yaml` to your JSON file
+- The app will auto-discover schema on startup
+- View discovered schema: `GET /api/schema`
+
+**Option 2: Generate and Customize**
+- Download auto-generated config: `POST /api/schema` (returns YAML file)
+- Save as `config/project.yaml` and customize as needed
+- Restart the application to use manual configuration
+
+### Schema Discovery Features
+
+- **Type Detection**: Automatically identifies dates (YYYY-MM-DD, MM/DD/YYYY patterns)
+- **Categorical Detection**: Fields with < 10% unique values or < 100 total unique values
+- **Smart Display Names**: Converts field_name → Field Name
+- **Unit Guessing**: Infers units for numeric fields (kg, USD, %, m, s)
+- **Keyword Generation**: Creates singular/plural variations for better query matching
+- **Example Questions**: Generates relevant sample queries based on data structure

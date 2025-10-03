@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import { SchemaDiscovery } from './schema-discovery';
 
 export interface AppConfig {
   app: {
@@ -88,10 +89,33 @@ export async function loadProjectConfig(): Promise<ProjectConfig> {
 
   try {
     const configPath = path.join(process.cwd(), 'config', 'project.yaml');
-    const fileContent = await fs.readFile(configPath, 'utf-8');
 
-    cachedProjectConfig = yaml.load(fileContent) as ProjectConfig;
-    return cachedProjectConfig;
+    try {
+      const fileContent = await fs.readFile(configPath, 'utf-8');
+      cachedProjectConfig = yaml.load(fileContent) as ProjectConfig;
+      return cachedProjectConfig;
+    } catch (readError) {
+      // If project.yaml doesn't exist, auto-discover schema from data
+      console.log('project.yaml not found, auto-discovering schema from data...');
+
+      const appConfig = await loadConfig();
+      const dataPath = path.join(process.cwd(), appConfig.dataSource.path);
+      const dataContent = await fs.readFile(dataPath, 'utf-8');
+      const data = JSON.parse(dataContent);
+
+      // Extract project name from data source path
+      const fileName = path.basename(appConfig.dataSource.path, '.json');
+      const projectName = fileName
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+
+      cachedProjectConfig = SchemaDiscovery.generateProjectConfig(data, projectName);
+
+      console.log(`Auto-discovered schema with ${cachedProjectConfig.dataSchema.categoricalFields.length} categorical fields and ${cachedProjectConfig.dataSchema.numericFields?.length || 0} numeric fields`);
+
+      return cachedProjectConfig;
+    }
   } catch (error) {
     console.error('Error loading project config:', error);
     throw new Error('Failed to load project configuration');
