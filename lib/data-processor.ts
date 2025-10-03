@@ -56,11 +56,6 @@ export class DataProcessor {
     const fields: string[] = [];
     const fieldKeywords = this.projectConfig.domainKnowledge.fieldKeywords;
 
-    // Check for year-based grouping
-    if (question.match(/\b(by year|per year|each year|yearly|annually)\b/)) {
-      fields.push('year');
-    }
-
     // Check each configured field for keyword matches
     for (const [fieldName, keywords] of Object.entries(fieldKeywords)) {
       if (keywords.some(keyword => question.includes(keyword))) {
@@ -71,13 +66,7 @@ export class DataProcessor {
     // Default fields if none found
     const categoricalFields = this.projectConfig.dataSchema.categoricalFields;
     if (fields.length === 0) {
-      // Include year if we have a date field, plus top categorical fields
-      const defaultFields: string[] = [];
-      if (this.projectConfig.dataSchema.primaryDateField) {
-        defaultFields.push('year');
-      }
-      defaultFields.push(...categoricalFields.slice(0, 2).map(f => f.name));
-      return defaultFields;
+      return categoricalFields.slice(0, 3).map(f => f.name);
     }
 
     return fields;
@@ -127,12 +116,14 @@ export class DataProcessor {
     fields.forEach(field => {
       if (field === 'year') {
         result.by_year = this.groupByYear();
-      } else {
-        // Generic grouping for any field
-        const displayName = this.projectConfig.dataSchema.categoricalFields
-          .find(f => f.name === field)?.displayName || field;
-        const key = `by_${field}`;
-        result[key] = this.groupBy(field);
+      } else if (field === 'vehicle') {
+        result.by_vehicle = this.groupBy('vehicle');
+      } else if (field === 'outcome') {
+        result.by_outcome = this.groupBy('outcome');
+      } else if (field === 'site') {
+        result.by_site = this.groupBy('site');
+      } else if (field === 'customer') {
+        result.by_customer = this.groupBy('customer');
       }
     });
 
