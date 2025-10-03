@@ -1,170 +1,377 @@
 # ChatHero
 
-A configurable web application for interacting with data through AI-powered chat and direct table browsing.
+A powerful, AI-powered data exploration platform that works with any JSON dataset. Chat with your data using natural language, browse it in tables, and configure everything through an intelligent admin interface.
 
 ## Overview
 
-ChatHero is a generic framework that allows users to chat with JSON data using AI. The application is designed with abstracted branding and configuration, making it easy to customize and deploy for different use cases.
+ChatHero is a generic framework that allows users to interact with JSON data through AI-powered chat and direct table browsing. The application features automatic schema discovery, intelligent query processing, and a complete admin interface for configuration - all without writing code.
 
-## Requirements
+## Key Features
 
-### Core Features
+### 🤖 Intelligent AI Chat
+- **Three-Phase Query System**: AI analyzes questions, processes data server-side, then generates natural language responses
+- **Smart Query Understanding**: Handles complex queries like "launches by year", "by day of week", "average cost per vehicle"
+- **Date Transformations**: Automatically extracts year, month, day of week, quarter from date fields
+- **Aggregations & Filters**: Counts, sums, averages, filtering by any field
+- **Context-Aware**: AI knows current date and dataset domain
 
-- **AI-Powered Chat Interface**: Natural language queries against JSON data using OpenAI
-- **Data Table View**: Browse, search, sort, and filter data in a table format
-- **Configurable Branding**: Custom logos, colors, and themes via configuration files
-- **Containerized Deployment**: Docker-based setup for consistent development and production environments
+### 📊 Data Management
+- **Automatic Schema Discovery**: Analyzes JSON structure to identify field types, categorical fields, and date fields
+- **Interactive Data Browser**: Sortable, searchable table view with all data
+- **Field Detection**: Automatically identifies strings, numbers, booleans, dates, arrays, objects
+- **Smart Categorization**: Fields with limited unique values marked as categorical
 
-### Tech Stack
+### ⚙️ Admin Interface (`/admin/schema`)
+- **AI-Assisted Configuration**: Built-in AI helps generate field descriptions, keywords, and example questions
+- **Schema Rediscovery**: Update field list when data changes while preserving custom metadata
+- **Visual Editor**: Edit display names, descriptions, keywords for all fields
+- **One-Click Actions**: Save, download YAML, clear configuration, rediscover schema
+- **Project Metadata**: Configure project name, description, domain
 
-- **Frontend & Backend**: Next.js 14 with TypeScript
-- **AI Integration**: OpenAI API (gpt-5-mini model)
-- **Styling**: Tailwind CSS with dynamic theming
-- **Containerization**: Docker (user-managed setup)
+### 🎨 Fully Configurable
+- **Theme Customization**: Logo, primary color, secondary color, all configurable via YAML
+- **AI Provider**: Currently OpenAI (gpt-4o-mini), expandable to Anthropic, Azure
+- **Data Sources**: JSON files (expandable to PostgreSQL, MongoDB, MySQL)
+- **Environment Variables**: Secure API key storage in `.env` file
+
+## Tech Stack
+
+- **Framework**: Next.js 14 with TypeScript and App Router
+- **AI Integration**: OpenAI API (gpt-4o-mini, 128K context window)
+- **Styling**: Tailwind CSS with dynamic theming from config
 - **Configuration**: YAML/JSON-based config files
+- **Containerization**: Docker (user-managed setup)
 
-### Architecture Patterns
+## Architecture
 
-- **AI Adapter Pattern**: Interface for AI providers (OpenAI initially, expandable to Anthropic, Azure, etc.)
-- **Data Source Adapter Pattern**: JSON file reader (expandable to PostgreSQL, MongoDB, etc.)
-- **Config-Driven Design**: All branding, AI settings, and data sources configurable without code changes
-- **Automatic Schema Discovery**: Analyzes JSON data structure to auto-generate configuration when project.yaml is not present
+### Adapter Patterns
+- **AI Adapters**: Pluggable AI providers (OpenAI implemented, expandable)
+- **Data Adapters**: Pluggable data sources (JSON implemented, expandable)
+- **Config-Driven**: All settings in YAML, no code changes needed
 
-### Configuration Schema
+### Query Processing Architecture
+
+**Phase 1: AI Query Analysis**
+- User question + data sample sent to AI
+- AI returns structured JSON with processing instructions
+- Determines: operation type, fields to group by, transformations, filters
+
+**Phase 2: Server-Side Data Processing**
+- Executes AI's instructions on full dataset
+- Applies transformations (extract_year, extract_month, extract_day_of_week, extract_quarter)
+- Performs aggregations (count, sum, average, min, max)
+- Applies filters (equals, contains, greater_than, less_than, between)
+
+**Phase 3: Response Generation**
+- Processed data sent back to AI with minimal context
+- AI generates natural language response
+
+This three-phase approach handles complex queries efficiently while keeping context size minimal.
+
+## Configuration
+
+### App Configuration (`config/app.yaml`)
 
 ```yaml
 app:
   name: "ChatHero"
 
 theme:
-  logo: "/assets/logo.png"
-  primaryColor: "#0066cc"
-  secondaryColor: "#00cc66"
+  logo: "/assets/logo.svg"
+  primaryColor: "#005288"      # Main button color, user message background
+  secondaryColor: "#A7A9AC"
   backgroundColor: "#ffffff"
-  textColor: "#333333"
+  textColor: "#000000"
 
 ai:
   provider: "openai"
-  model: "gpt-5-mini"
-  apiKey: "${OPENAI_API_KEY}"
+  model: "gpt-4o-mini"         # 128K context, JSON mode support
+  apiKey: "${OPENAI_API_KEY}"  # Environment variable substitution
 
 dataSource:
   type: "json"
   path: "./data/spacex-launches.json"
 ```
 
-### Deployment
+### Project Configuration (`config/project.yaml`)
 
-- **Port**: 3000 (mapped to localhost:3000)
-- **Container**: Docker with user-managed configuration (Dockerfile automation planned for future)
-- **Volumes**: Config, data, and assets mounted for hot-reload during development
-- **Environment**: Variables stored in `.env` file
-  - Required: `OPENAI_API_KEY` for gpt-5-mini access
+Optional - auto-generated if not present:
 
-### UI Structure
+```yaml
+project:
+  name: "My Project"
+  description: "Dataset description"
+  domain: "space launches"      # Used for AI context
 
-#### Chat Page (`/`)
-- Message input and conversation history
-- AI-powered responses querying JSON data
-- Branded interface with custom theming
+dataSchema:
+  primaryDateField: "launch_date"
+  categoricalFields:
+    - name: "vehicle"
+      displayName: "Vehicle/Rocket"
+      description: "Type of launch vehicle"
+  numericFields:
+    - name: "payload_mass_kg"
+      displayName: "Payload Mass"
+      unit: "kg"
 
-#### Data Page (`/data`)
-- Sortable table with all data columns
-- Search and filter functionality
-- Pagination for large datasets
+domainKnowledge:
+  fieldKeywords:
+    vehicle: ["vehicle", "rocket", "falcon", "starship"]
 
-#### Navigation
-- Branded header with custom logo
-- Toggle between Chat and Data views
-- Theme colors applied from configuration
+exampleQuestions:
+  - "How many launches by year?"
+  - "What's the average payload mass?"
 
-### Tenancy
+aiContext:
+  systemRole: "You are a helpful assistant..."
+  domainContext: "This dataset contains..."
+```
 
-- **Current**: Single-tenant deployment
-- **Future**: Multi-tenant architecture with isolated data and configurations per tenant
+## Quick Start
 
-### Future Expansion
+### Prerequisites
+- Node.js 20.x or higher
+- npm
+- OpenAI API key
 
-- **Multi-Tenant Support**: Separate configurations per company/tenant with data isolation
-- **Multiple AI Providers**: Anthropic Claude, Azure OpenAI, local models
-- **Database Connections**: PostgreSQL, MongoDB, MySQL support
-- **Authentication & Authorization**:
-  - Azure Entra ID (formerly Azure AD) for user authentication and SSO
-  - Role-Based Access Control (RBAC) with Entra ID App Roles
-  - Microsoft Identity Platform (OAuth 2.0/OIDC) integration
-  - JWT tokens with role claims for authorization
-  - Per-tenant data isolation using Azure resource groups
-- **Data Export**: CSV, JSON, Excel export functionality
-- **Advanced Analytics**: Data visualization and insights
+### Installation
 
-## Sample Data
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/jsperson/chathero.git
+   cd chathero
+   ```
 
-The initial implementation includes SpaceX launch data:
-- **Launches**: Historical SpaceX launches through October 3, 2025
-- **Launch Vehicles**: Falcon 9, Falcon Heavy, Starship specifications
-- **Data Fields**: Launch date, vehicle, mission name, outcome, payload details
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-This data demonstrates the chat capabilities for querying historical space missions, launch statistics, vehicle comparisons, and mission outcomes.
+3. **Configure environment**
+   ```bash
+   echo "OPENAI_API_KEY=your-api-key-here" > .env
+   ```
 
-## Development Workflow
+4. **Point to your data**
+   Edit `config/app.yaml`:
+   ```yaml
+   dataSource:
+     type: "json"
+     path: "./data/your-data.json"
+   ```
 
-1. Set up environment variables in `.env` file with your OpenAI API key
-2. Start container with your Docker setup
-3. Access application: `http://localhost:3000`
-4. Edit configs/data on host machine (changes reflect immediately via mounted volumes)
-5. Custom logos/assets placed in `./public/assets`
+5. **Start the application**
+   ```bash
+   npm run dev
+   ```
+
+6. **Access the application**
+   - Chat: http://localhost:3000
+   - Data Browser: http://localhost:3000/data
+   - Admin: http://localhost:3000/admin/schema
+
+## Using ChatHero with Your Data
+
+### Step 1: Prepare Your Data
+- JSON array format: `[{...}, {...}, ...]`
+- Place in `data/` directory
+- Update path in `config/app.yaml`
+
+### Step 2: Configure Schema (Optional)
+
+**Option A: Automatic** (Easiest)
+- Just start the app - schema auto-discovered
+- Works immediately with any JSON
+
+**Option B: AI-Assisted** (Recommended)
+1. Navigate to `/admin/schema`
+2. Review auto-discovered fields
+3. Ask AI: "Generate better descriptions for all fields"
+4. Ask AI: "Create 5 example questions for this dataset"
+5. Click "Save Configuration"
+
+**Option C: Manual**
+- Download auto-generated YAML from `/admin/schema`
+- Customize `project.yaml` manually
+- Restart application
+
+### Step 3: Start Chatting
+- Ask questions in natural language
+- Examples: "Show me data by year", "What's the average?", "Filter by X"
+- AI understands date transformations, aggregations, filters
 
 ## Project Structure
 
 ```
-/config          - Theme, AI provider, and data source configurations
-/lib/adapters    - AI and data source adapter implementations
-/lib             - Core utilities including schema discovery
-/components      - Reusable UI components
-/app             - Next.js pages and routes
-/data            - JSON data files
-/public/assets   - Custom logos and static assets
+/config              - App and project configuration (YAML)
+/lib
+  /adapters          - AI and data source adapters
+  config.ts          - Config loading with env var substitution
+  data-processor.ts  - Server-side data processing engine
+  query-analyzer.ts  - AI-powered query analysis
+  schema-discovery.ts - Automatic schema detection
+/app
+  /                  - Chat interface
+  /data              - Data browser table view
+  /admin/schema      - Schema configuration admin
+  /api
+    /chat            - Three-phase query processing
+    /data            - Data endpoint
+    /config          - Public config endpoint
+    /admin/schema    - Schema admin APIs
+/data                - JSON data files
+/public/assets       - Custom logos and static files
+/scripts             - Data processing utilities
 ```
 
-## Automatic Schema Discovery
+## Admin Features
 
-ChatHero can automatically work with any JSON data file without requiring manual configuration. When `config/project.yaml` is not present, the application will:
+### Schema Configuration (`/admin/schema`)
 
-1. Analyze the JSON data structure
-2. Identify field types (string, number, boolean, date, array, object)
-3. Detect categorical fields (fields with limited unique values)
-4. Detect numeric and date fields
-5. Generate example questions based on discovered schema
-6. Auto-create field keywords for natural language processing
+**Actions (Top of Page)**
+- **Save Configuration**: Writes to `config/project.yaml`
+- **Rediscover Schema**: Updates fields from data while preserving metadata
+- **Download YAML**: Get configuration file
+- **Clear Configuration**: Reset to auto-discovery
 
-### Using Schema Discovery
+**AI Assistant**
+- Ask AI to improve descriptions, suggest keywords
+- Generate example questions automatically
+- Identify appropriate data domain
+- Improve field display names
 
-**Option 1: Automatic (No project.yaml)**
-- Simply point `config/app.yaml` to your JSON file
-- The app will auto-discover schema on startup
-- Works immediately without any configuration
+**Field Management**
+- Edit display names, descriptions, keywords
+- View sample values and unique counts
+- Configure categorical and numeric fields
+- Set primary date field
 
-**Option 2: AI-Assisted Schema Configuration (Recommended)**
-- Navigate to `/admin/schema` in your browser
-- View auto-discovered fields with sample data
-- Use the built-in AI assistant to:
-  - Generate better field descriptions
-  - Suggest keywords for improved query matching
-  - Create example questions
-  - Identify the data domain
-  - Improve display names
-- Save configuration directly or download as `project.yaml`
+## Sample Dataset
 
-**Option 3: Manual Configuration**
-- Download auto-generated config: `POST /api/schema` (returns YAML file)
-- Save as `config/project.yaml` and customize manually
-- Restart the application to use manual configuration
+Includes SpaceX launch data (578 missions, 2006-2025):
 
-### Schema Discovery Features
+**Fields:**
+- `launch_date`: Date of launch
+- `vehicle`: Falcon 1, Falcon 9, Falcon Heavy, Starship
+- `mission_name`: Mission identifier
+- `outcome`: Success/Failure
+- `site`: Launch location
+- `customer`: Primary customer
+- `payload_mass_kg`: Payload mass (420 records with data)
+- `launch_cost_usd_millions`: Estimated launch cost (all records)
 
-- **Type Detection**: Automatically identifies dates (YYYY-MM-DD, MM/DD/YYYY patterns)
-- **Categorical Detection**: Fields with < 10% unique values or < 100 total unique values
-- **Smart Display Names**: Converts field_name → Field Name
-- **Unit Guessing**: Infers units for numeric fields (kg, USD, %, m, s)
-- **Keyword Generation**: Creates singular/plural variations for better query matching
-- **Example Questions**: Generates relevant sample queries based on data structure
+**Sample Queries:**
+- "How many launches by year?"
+- "Show launches by day of week"
+- "What's the total cost of all Falcon 9 launches?"
+- "Average payload mass by vehicle?"
+- "Show successful launches in 2024"
+
+## Advanced Features
+
+### Query Capabilities
+- **Date Operations**: by year, month, day of week, quarter
+- **Aggregations**: count, sum, average, min, max
+- **Filters**: equals, contains, greater/less than, between
+- **Multi-field**: Group by multiple fields simultaneously
+
+### Schema Discovery Intelligence
+- **Type Detection**: Identifies dates via pattern matching (YYYY-MM-DD, MM/DD/YYYY, etc.)
+- **Categorical Detection**: Fields with <10% unique values or <100 total unique values
+- **Unit Inference**: Guesses units for numeric fields (kg, USD, %, m, s)
+- **Display Names**: Auto-converts field_name to "Field Name"
+- **Keywords**: Generates singular/plural variations
+
+### Configuration Management
+- **Cache Clearing**: Auto-clears on save for immediate updates
+- **Merge Logic**: Rediscover preserves custom metadata, adds new fields, removes old
+- **Validation**: Ensures data consistency across reloads
+
+## Deployment
+
+### Development
+```bash
+npm run dev          # Start dev server on port 3000
+```
+
+### Production
+```bash
+npm run build        # Build for production
+npm start            # Start production server
+```
+
+### Docker (User-Managed)
+- Volume mount `config/`, `data/`, `public/assets/`
+- Expose port 3000
+- Pass `OPENAI_API_KEY` via environment
+
+### Environment Variables
+```bash
+OPENAI_API_KEY=sk-...    # Required for AI features
+```
+
+## API Endpoints
+
+### Public APIs
+- `GET /api/config` - Public configuration (theme, project metadata)
+- `GET /api/data` - Full dataset
+- `POST /api/chat` - Three-phase AI query processing
+- `GET /api/schema` - Schema discovery results
+
+### Admin APIs
+- `GET /api/admin/schema` - Load schema with existing config
+- `POST /api/admin/schema/save` - Save configuration to project.yaml
+- `POST /api/admin/schema/download` - Download YAML
+- `POST /api/admin/schema/clear` - Delete configuration
+- `POST /api/admin/schema/rediscover` - Merge discovered schema with existing
+- `POST /api/admin/schema/ai-assist` - AI suggestions for schema
+
+## Future Roadmap
+
+### Multi-Tenant Support
+- Tenant-specific configurations
+- Data isolation per tenant
+- Azure resource group integration
+
+### Authentication & Authorization
+- Azure Entra ID (Microsoft Identity Platform)
+- OAuth 2.0/OIDC integration
+- Role-Based Access Control (RBAC)
+- JWT tokens with role claims
+- SSO support
+
+### Additional AI Providers
+- Anthropic Claude
+- Azure OpenAI
+- Local models (Ollama, etc.)
+
+### Database Support
+- PostgreSQL adapter
+- MongoDB adapter
+- MySQL adapter
+- Connection pooling
+
+### Export Features
+- CSV export
+- Excel export
+- JSON export
+- Scheduled exports
+
+### Analytics
+- Data visualization
+- Dashboard creation
+- Insights generation
+
+## Contributing
+
+Issues and pull requests welcome at: https://github.com/jsperson/chathero
+
+## License
+
+[License information to be added]
+
+## Support
+
+For questions or issues:
+- GitHub Issues: https://github.com/jsperson/chathero/issues
+- Documentation: [Coming soon]
