@@ -10,7 +10,7 @@ theme:
 
 ai:
   provider: "openai"
-  model: "gpt-5-mini"
+  model: "gpt-4o-mini"
   apiKey: "${OPENAI_API_KEY}"
 
 dataSource:

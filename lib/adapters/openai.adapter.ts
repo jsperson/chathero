@@ -46,7 +46,7 @@ Answer the user's question based on this data. Be concise and accurate. If the d
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_completion_tokens: 500,
+        max_tokens: 500,
       });
 
       const response = completion.choices[0]?.message?.content;
