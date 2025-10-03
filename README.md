@@ -142,11 +142,22 @@ ChatHero can automatically work with any JSON data file without requiring manual
 **Option 1: Automatic (No project.yaml)**
 - Simply point `config/app.yaml` to your JSON file
 - The app will auto-discover schema on startup
-- View discovered schema: `GET /api/schema`
+- Works immediately without any configuration
 
-**Option 2: Generate and Customize**
+**Option 2: AI-Assisted Schema Configuration (Recommended)**
+- Navigate to `/admin/schema` in your browser
+- View auto-discovered fields with sample data
+- Use the built-in AI assistant to:
+  - Generate better field descriptions
+  - Suggest keywords for improved query matching
+  - Create example questions
+  - Identify the data domain
+  - Improve display names
+- Save configuration directly or download as `project.yaml`
+
+**Option 3: Manual Configuration**
 - Download auto-generated config: `POST /api/schema` (returns YAML file)
-- Save as `config/project.yaml` and customize as needed
+- Save as `config/project.yaml` and customize manually
 - Restart the application to use manual configuration
 
 ### Schema Discovery Features
