@@ -14,12 +14,16 @@ export class OpenAIAdapter implements AIAdapter {
 
   async chat(message: string, context: any): Promise<string> {
     try {
-      const systemPrompt = `You are a helpful assistant that answers questions about the provided data.
+      const currentDate = context.current_date || new Date().toISOString().split('T')[0];
+
+      const systemPrompt = `You are a helpful assistant that answers questions about SpaceX launch data.
+
+Current date: ${currentDate}
 
 Data context:
 ${JSON.stringify(context, null, 2)}
 
-Answer the user's question based on this data. Be concise and accurate. If the data doesn't contain relevant information, say so.`;
+Answer the user's question based on this data. Be concise and accurate. If the data doesn't contain relevant information, say so. When discussing dates, remember that today is ${currentDate}.`;
 
       const completion = await this.client.chat.completions.create({
         model: this.model,
