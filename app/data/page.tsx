@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import DatasetSelector from '@/components/DatasetSelector';
 
 export default function DataPage() {
   const [data, setData] = useState<any[]>([]);
@@ -87,6 +88,9 @@ export default function DataPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="mb-4">
+        <DatasetSelector />
+      </div>
       <div className="bg-white rounded-lg shadow-lg p-6">
         <div className="mb-4 flex justify-between items-center">
           <h2 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>

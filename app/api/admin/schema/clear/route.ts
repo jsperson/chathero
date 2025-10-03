@@ -1,11 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { clearConfigCache } from '@/lib/config';
+import { clearConfigCache, loadConfig } from '@/lib/config';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
-    const configPath = path.join(process.cwd(), 'config', 'project.yaml');
+    // Get selected dataset from cookie or use default
+    const cookies = request.cookies;
+    const selectedDataset = cookies.get('selectedDataset')?.value;
+
+    const config = await loadConfig();
+    const datasetName = selectedDataset || config.dataSource.defaultDataset;
+    const configPath = path.join(process.cwd(), config.dataSource.datasetsPath, datasetName, 'project.yaml');
 
     // Check if file exists
     try {

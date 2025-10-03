@@ -7,9 +7,13 @@ export async function POST(request: NextRequest) {
   try {
     const { existingSchema } = await request.json();
 
+    // Get selected dataset from cookie or use default
+    const cookies = request.cookies;
+    const selectedDataset = cookies.get('selectedDataset')?.value;
+
     // Load current data and discover schema
     const config = await loadConfig();
-    const dataAdapter = new JSONAdapter(config.dataSource);
+    const dataAdapter = new JSONAdapter(config.dataSource, selectedDataset);
     const data = await dataAdapter.getData();
     const discoveredSchema = SchemaDiscovery.discover(data);
 

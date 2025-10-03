@@ -2,10 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import { clearConfigCache } from '@/lib/config';
+import { clearConfigCache, loadConfig } from '@/lib/config';
 
 export async function POST(request: NextRequest) {
   try {
+    // Get selected dataset from cookie or use default
+    const cookies = request.cookies;
+    const selectedDataset = cookies.get('selectedDataset')?.value;
+
     const schemaConfig = await request.json();
 
     // Transform UI schema format to project.yaml format
@@ -43,8 +47,10 @@ export async function POST(request: NextRequest) {
       projectConfig.domainKnowledge.fieldKeywords[field.name] = field.keywords || [field.name];
     });
 
-    // Write to config/project.yaml
-    const configPath = path.join(process.cwd(), 'config', 'project.yaml');
+    // Write to dataset-specific project.yaml
+    const config = await loadConfig();
+    const datasetName = selectedDataset || config.dataSource.defaultDataset;
+    const configPath = path.join(process.cwd(), config.dataSource.datasetsPath, datasetName, 'project.yaml');
     const yamlContent = yaml.dump(projectConfig, {
       indent: 2,
       lineWidth: 100,
@@ -57,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Configuration saved to config/project.yaml',
+      message: `Configuration saved to ${datasetName}/project.yaml`,
     });
   } catch (error) {
     console.error('Save error:', error);

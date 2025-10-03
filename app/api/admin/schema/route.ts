@@ -1,25 +1,30 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { JSONAdapter } from '@/lib/adapters/json.adapter';
 import { SchemaDiscovery } from '@/lib/schema-discovery';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // Get selected dataset from cookie or use default
+    const cookies = request.cookies;
+    const selectedDataset = cookies.get('selectedDataset')?.value;
+
     const config = await loadConfig();
-    const dataAdapter = new JSONAdapter(config.dataSource);
+    const dataAdapter = new JSONAdapter(config.dataSource, selectedDataset);
     const data = await dataAdapter.getData();
 
     const discoveredSchema = SchemaDiscovery.discover(data);
 
-    // Check if project.yaml exists
+    // Check if project.yaml exists for this dataset
     let existingConfig = null;
     try {
-      const configPath = path.join(process.cwd(), 'config', 'project.yaml');
+      const datasetName = selectedDataset || config.dataSource.defaultDataset;
+      const configPath = path.join(process.cwd(), config.dataSource.datasetsPath, datasetName, 'project.yaml');
       await fs.access(configPath);
       // File exists, load it
-      const projectConfig = await loadProjectConfig();
+      const projectConfig = await loadProjectConfig(selectedDataset);
       existingConfig = projectConfig;
     } catch (error) {
       // File doesn't exist, that's ok

@@ -14,11 +14,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get selected dataset from cookie or use default
+    const cookies = request.cookies;
+    const selectedDataset = cookies.get('selectedDataset')?.value;
+
     const config = await loadConfig();
-    const projectConfig = await loadProjectConfig();
+    const projectConfig = await loadProjectConfig(selectedDataset);
 
     // Load data for context
-    const dataAdapter = new JSONAdapter(config.dataSource);
+    const dataAdapter = new JSONAdapter(config.dataSource, selectedDataset);
     const data = await dataAdapter.getData();
 
     // Build AI prompt

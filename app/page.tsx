@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import DatasetSelector from '@/components/DatasetSelector';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -61,7 +62,10 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="bg-white rounded-lg shadow-lg p-6 h-[calc(100vh-12rem)] flex flex-col">
+      <div className="mb-4">
+        <DatasetSelector />
+      </div>
+      <div className="bg-white rounded-lg shadow-lg p-6 h-[calc(100vh-16rem)] flex flex-col">
         {/* Messages */}
         <div className="flex-1 overflow-y-auto mb-4 space-y-4">
           {messages.length === 0 ? (

@@ -15,4 +15,5 @@ ai:
 
 dataSource:
   type: "json"
-  path: "./data/spacex-launches.json"
+  datasetsPath: "./data"        # Root folder containing dataset subfolders
+  defaultDataset: "spacex-launches"  # Default dataset to load

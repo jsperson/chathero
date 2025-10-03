@@ -21,7 +21,9 @@ export interface AppConfig {
   };
   dataSource: {
     type: string;
-    path: string;
+    datasetsPath: string;
+    defaultDataset: string;
+    path?: string; // Deprecated - for backward compatibility
   };
 }
 
@@ -82,13 +84,20 @@ export async function loadConfig(): Promise<AppConfig> {
   }
 }
 
-export async function loadProjectConfig(): Promise<ProjectConfig> {
+export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig> {
+  // Clear cache if switching datasets
+  if (dataset && cachedProjectConfig) {
+    cachedProjectConfig = null;
+  }
+
   if (cachedProjectConfig) {
     return cachedProjectConfig;
   }
 
   try {
-    const configPath = path.join(process.cwd(), 'config', 'project.yaml');
+    const appConfig = await loadConfig();
+    const datasetName = dataset || appConfig.dataSource.defaultDataset;
+    const configPath = path.join(process.cwd(), appConfig.dataSource.datasetsPath, datasetName, 'project.yaml');
 
     try {
       const fileContent = await fs.readFile(configPath, 'utf-8');
@@ -98,13 +107,12 @@ export async function loadProjectConfig(): Promise<ProjectConfig> {
       // If project.yaml doesn't exist, auto-discover schema from data
       console.log('project.yaml not found, auto-discovering schema from data...');
 
-      const appConfig = await loadConfig();
-      const dataPath = path.join(process.cwd(), appConfig.dataSource.path);
+      const dataPath = path.join(process.cwd(), appConfig.dataSource.datasetsPath, datasetName, 'data.json');
       const dataContent = await fs.readFile(dataPath, 'utf-8');
       const data = JSON.parse(dataContent);
 
-      // Extract project name from data source path
-      const fileName = path.basename(appConfig.dataSource.path, '.json');
+      // Extract project name from dataset folder name
+      const fileName = datasetName;
       const projectName = fileName
         .split('-')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
