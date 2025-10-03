@@ -7,7 +7,8 @@
     "outcome": "Failure",
     "site": "Omelek Island",
     "payload_mass_kg": 20,
-    "customer": "DARPA"
+    "customer": "DARPA",
+    "details": "Engine failure at 33 seconds"
   },
   {
     "id": 2,
@@ -17,7 +18,8 @@
     "outcome": "Failure",
     "site": "Omelek Island",
     "payload_mass_kg": 0,
-    "customer": "DARPA"
+    "customer": "DARPA",
+    "details": "Stage separation failure"
   },
   {
     "id": 3,
@@ -27,7 +29,8 @@
     "outcome": "Failure",
     "site": "Omelek Island",
     "payload_mass_kg": 165,
-    "customer": "NASA"
+    "customer": "NASA",
+    "details": "First stage collision with second stage"
   },
   {
     "id": 4,
@@ -37,7 +40,8 @@
     "outcome": "Success",
     "site": "Omelek Island",
     "payload_mass_kg": 165,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "First successful orbital launch for SpaceX"
   },
   {
     "id": 5,
@@ -47,7 +51,8 @@
     "outcome": "Success",
     "site": "Omelek Island",
     "payload_mass_kg": 200,
-    "customer": "ATSB"
+    "customer": "ATSB",
+    "details": "Final Falcon 1 flight"
   },
   {
     "id": 6,
@@ -57,7 +62,8 @@
     "outcome": "Success",
     "site": "Cape Canaveral",
     "payload_mass_kg": 0,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "First Falcon 9 flight"
   },
   {
     "id": 7,
@@ -67,7 +73,8 @@
     "outcome": "Success",
     "site": "Cape Canaveral",
     "payload_mass_kg": 0,
-    "customer": "NASA"
+    "customer": "NASA",
+    "details": "First Dragon spacecraft flight"
   },
   {
     "id": 8,
@@ -77,7 +84,8 @@
     "outcome": "Success",
     "site": "Cape Canaveral",
     "payload_mass_kg": 525,
-    "customer": "NASA"
+    "customer": "NASA",
+    "details": "First commercial spacecraft to ISS"
   },
   {
     "id": 9,
@@ -87,7 +95,8 @@
     "outcome": "Success",
     "site": "Cape Canaveral",
     "payload_mass_kg": 500,
-    "customer": "NASA"
+    "customer": "NASA",
+    "details": "First commercial resupply mission to ISS"
   },
   {
     "id": 10,
@@ -97,186 +106,689 @@
     "outcome": "Success",
     "site": "Cape Canaveral",
     "payload_mass_kg": 677,
-    "customer": "NASA"
+    "customer": "NASA",
+    "details": "Second ISS resupply mission"
   },
   {
     "id": 11,
-    "mission_name": "Starlink 1",
-    "launch_date": "2019-05-24",
+    "mission_name": "CASSIOPE",
+    "launch_date": "2013-09-29",
     "vehicle": "Falcon 9",
     "outcome": "Success",
-    "site": "Cape Canaveral",
-    "payload_mass_kg": 13620,
-    "customer": "SpaceX"
+    "site": "Vandenberg",
+    "payload_mass_kg": 500,
+    "customer": "MDA",
+    "details": "First Vandenberg launch"
   },
   {
     "id": 12,
+    "mission_name": "SES-8",
+    "launch_date": "2013-12-03",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 3170,
+    "customer": "SES",
+    "details": "First GTO mission"
+  },
+  {
+    "id": 13,
+    "mission_name": "Thaicom 6",
+    "launch_date": "2014-01-06",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 3325,
+    "customer": "Thaicom",
+    "details": "Geostationary communications satellite"
+  },
+  {
+    "id": 14,
+    "mission_name": "CRS-3",
+    "launch_date": "2014-04-18",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 2296,
+    "customer": "NASA",
+    "details": "First controlled landing attempt (failed)"
+  },
+  {
+    "id": 15,
+    "mission_name": "Orbcomm OG2 M1",
+    "launch_date": "2014-07-14",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 172,
+    "customer": "Orbcomm",
+    "details": "First successful soft ocean landing"
+  },
+  {
+    "id": 16,
+    "mission_name": "CRS-5",
+    "launch_date": "2015-01-10",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 2395,
+    "customer": "NASA",
+    "details": "First drone ship landing attempt (failed)"
+  },
+  {
+    "id": 17,
+    "mission_name": "DSCOVR",
+    "launch_date": "2015-02-11",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 570,
+    "customer": "NOAA/NASA/USAF",
+    "details": "Deep space climate observatory"
+  },
+  {
+    "id": 18,
+    "mission_name": "Orbcomm OG2",
+    "launch_date": "2015-12-22",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 2034,
+    "customer": "Orbcomm",
+    "details": "First successful ground landing (RTLS)"
+  },
+  {
+    "id": 19,
+    "mission_name": "Jason-3",
+    "launch_date": "2016-01-17",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Vandenberg",
+    "payload_mass_kg": 553,
+    "customer": "NASA/NOAA",
+    "details": "Ocean surface topography mission"
+  },
+  {
+    "id": 20,
+    "mission_name": "SES-9",
+    "launch_date": "2016-03-04",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 5271,
+    "customer": "SES",
+    "details": "High energy GTO mission"
+  },
+  {
+    "id": 21,
+    "mission_name": "CRS-8",
+    "launch_date": "2016-04-08",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 3136,
+    "customer": "NASA",
+    "details": "First successful drone ship landing"
+  },
+  {
+    "id": 22,
+    "mission_name": "JCSAT-14",
+    "launch_date": "2016-05-06",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 4696,
+    "customer": "SKY Perfect JSAT",
+    "details": "Second drone ship landing"
+  },
+  {
+    "id": 23,
+    "mission_name": "Thaicom 8",
+    "launch_date": "2016-05-27",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 3100,
+    "customer": "Thaicom",
+    "details": "Third drone ship landing"
+  },
+  {
+    "id": 24,
+    "mission_name": "CRS-9",
+    "launch_date": "2016-07-18",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 2257,
+    "customer": "NASA",
+    "details": "First flight of Falcon 9 Full Thrust"
+  },
+  {
+    "id": 25,
+    "mission_name": "Iridium NEXT 1",
+    "launch_date": "2017-01-14",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Vandenberg",
+    "payload_mass_kg": 9600,
+    "customer": "Iridium",
+    "details": "First of 8 Iridium NEXT missions"
+  },
+  {
+    "id": 26,
+    "mission_name": "SES-10",
+    "launch_date": "2017-03-30",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 5300,
+    "customer": "SES",
+    "details": "First reflight of orbital class booster"
+  },
+  {
+    "id": 27,
+    "mission_name": "Inmarsat-5 F4",
+    "launch_date": "2017-05-15",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 6070,
+    "customer": "Inmarsat",
+    "details": "Heaviest payload to GTO"
+  },
+  {
+    "id": 28,
+    "mission_name": "CRS-11",
+    "launch_date": "2017-06-03",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 2708,
+    "customer": "NASA",
+    "details": "First Dragon reflight"
+  },
+  {
+    "id": 29,
+    "mission_name": "BulgariaSat-1",
+    "launch_date": "2017-06-23",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 3669,
+    "customer": "Bulgaria Sat",
+    "details": "Bulgaria's first GEO satellite"
+  },
+  {
+    "id": 30,
+    "mission_name": "Iridium NEXT 2",
+    "launch_date": "2017-06-25",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Vandenberg",
+    "payload_mass_kg": 9600,
+    "customer": "Iridium",
+    "details": "Second Iridium NEXT mission"
+  },
+  {
+    "id": 31,
+    "mission_name": "Formosat-5",
+    "launch_date": "2017-08-24",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Vandenberg",
+    "payload_mass_kg": 475,
+    "customer": "NSPO",
+    "details": "Taiwan's Earth observation satellite"
+  },
+  {
+    "id": 32,
+    "mission_name": "X-37B OTV-5",
+    "launch_date": "2017-09-07",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 4990,
+    "customer": "USAF",
+    "details": "Classified military spaceplane"
+  },
+  {
+    "id": 33,
+    "mission_name": "Zuma",
+    "launch_date": "2018-01-08",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 0,
+    "customer": "Northrop Grumman",
+    "details": "Classified payload, possible loss"
+  },
+  {
+    "id": 34,
+    "mission_name": "Paz",
+    "launch_date": "2018-02-22",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Vandenberg",
+    "payload_mass_kg": 2150,
+    "customer": "Hisdesat",
+    "details": "Spanish radar satellite, first Starlink test satellites"
+  },
+  {
+    "id": 35,
+    "mission_name": "Falcon Heavy Demo",
+    "launch_date": "2018-02-06",
+    "vehicle": "Falcon Heavy",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 1300,
+    "customer": "SpaceX",
+    "details": "First Falcon Heavy flight, Tesla Roadster to Mars orbit"
+  },
+  {
+    "id": 36,
     "mission_name": "Crew Demo-1",
     "launch_date": "2019-03-02",
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center",
     "payload_mass_kg": 12055,
-    "customer": "NASA"
+    "customer": "NASA",
+    "details": "First Crew Dragon test flight to ISS"
   },
   {
-    "id": 13,
-    "mission_name": "Crew Demo-2",
-    "launch_date": "2020-05-30",
-    "vehicle": "Falcon 9",
-    "outcome": "Success",
-    "site": "Kennedy Space Center",
-    "payload_mass_kg": 12530,
-    "customer": "NASA"
-  },
-  {
-    "id": 14,
+    "id": 37,
     "mission_name": "Arabsat-6A",
     "launch_date": "2019-04-11",
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center",
     "payload_mass_kg": 6465,
-    "customer": "Arabsat"
+    "customer": "Arabsat",
+    "details": "First commercial Falcon Heavy mission"
   },
   {
-    "id": 15,
+    "id": 38,
+    "mission_name": "Starlink 1",
+    "launch_date": "2019-05-24",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 13620,
+    "customer": "SpaceX",
+    "details": "First operational Starlink launch (60 satellites)"
+  },
+  {
+    "id": 39,
     "mission_name": "STP-2",
     "launch_date": "2019-06-25",
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center",
     "payload_mass_kg": 3700,
-    "customer": "USAF"
+    "customer": "USAF",
+    "details": "Most challenging Falcon Heavy mission"
   },
   {
-    "id": 16,
+    "id": 40,
+    "mission_name": "Crew Demo-2",
+    "launch_date": "2020-05-30",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12530,
+    "customer": "NASA",
+    "details": "First crewed flight, Doug Hurley and Bob Behnken to ISS"
+  },
+  {
+    "id": 41,
     "mission_name": "Starship SN8",
     "launch_date": "2020-12-09",
     "vehicle": "Starship",
     "outcome": "Failure",
     "site": "Boca Chica",
     "payload_mass_kg": 0,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "First high altitude flight, landing failure"
   },
   {
-    "id": 17,
+    "id": 42,
     "mission_name": "Starship SN15",
     "launch_date": "2021-05-05",
     "vehicle": "Starship",
     "outcome": "Success",
     "site": "Boca Chica",
     "payload_mass_kg": 0,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "First successful landing of Starship prototype"
   },
   {
-    "id": 18,
+    "id": 43,
+    "mission_name": "Crew-1",
+    "launch_date": "2020-11-15",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "First operational crewed mission"
+  },
+  {
+    "id": 44,
+    "mission_name": "Crew-2",
+    "launch_date": "2021-04-23",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "Second operational crewed mission"
+  },
+  {
+    "id": 45,
     "mission_name": "Inspiration4",
     "launch_date": "2021-09-15",
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center",
     "payload_mass_kg": 12500,
-    "customer": "Private"
+    "customer": "Private",
+    "details": "First all-civilian orbital mission"
   },
   {
-    "id": 19,
+    "id": 46,
+    "mission_name": "Crew-3",
+    "launch_date": "2021-11-10",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "Third operational crewed mission"
+  },
+  {
+    "id": 47,
+    "mission_name": "DART",
+    "launch_date": "2021-11-24",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Vandenberg",
+    "payload_mass_kg": 610,
+    "customer": "NASA",
+    "details": "Double Asteroid Redirection Test"
+  },
+  {
+    "id": 48,
+    "mission_name": "IXPE",
+    "launch_date": "2021-12-09",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 330,
+    "customer": "NASA",
+    "details": "X-ray polarimetry mission"
+  },
+  {
+    "id": 49,
+    "mission_name": "Axiom-1",
+    "launch_date": "2022-04-08",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "Axiom Space",
+    "details": "First private astronaut mission to ISS"
+  },
+  {
+    "id": 50,
+    "mission_name": "Crew-4",
+    "launch_date": "2022-04-27",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "Fourth operational crewed mission"
+  },
+  {
+    "id": 51,
+    "mission_name": "Crew-5",
+    "launch_date": "2022-10-05",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "Fifth operational crewed mission"
+  },
+  {
+    "id": 52,
+    "mission_name": "Crew-6",
+    "launch_date": "2023-03-02",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "Sixth operational crewed mission"
+  },
+  {
+    "id": 53,
     "mission_name": "Starship IFT-1",
     "launch_date": "2023-04-20",
     "vehicle": "Starship",
     "outcome": "Failure",
     "site": "Boca Chica",
     "payload_mass_kg": 0,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "First integrated flight test, rapid unscheduled disassembly"
   },
   {
-    "id": 20,
+    "id": 54,
+    "mission_name": "Axiom-2",
+    "launch_date": "2023-05-21",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "Axiom Space",
+    "details": "Second private astronaut mission to ISS"
+  },
+  {
+    "id": 55,
+    "mission_name": "Crew-7",
+    "launch_date": "2023-08-26",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "Seventh operational crewed mission"
+  },
+  {
+    "id": 56,
     "mission_name": "Starship IFT-2",
     "launch_date": "2023-11-18",
     "vehicle": "Starship",
     "outcome": "Failure",
     "site": "Boca Chica",
     "payload_mass_kg": 0,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "Second integrated flight test, stage separation success"
   },
   {
-    "id": 21,
+    "id": 57,
+    "mission_name": "Axiom-3",
+    "launch_date": "2024-01-18",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "Axiom Space",
+    "details": "Third private astronaut mission to ISS"
+  },
+  {
+    "id": 58,
+    "mission_name": "Crew-8",
+    "launch_date": "2024-03-03",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "Eighth operational crewed mission"
+  },
+  {
+    "id": 59,
     "mission_name": "Starship IFT-3",
     "launch_date": "2024-03-14",
     "vehicle": "Starship",
     "outcome": "Partial Success",
     "site": "Boca Chica",
     "payload_mass_kg": 0,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "Reached space, reentry data collected"
   },
   {
-    "id": 22,
+    "id": 60,
     "mission_name": "Starship IFT-4",
     "launch_date": "2024-06-06",
     "vehicle": "Starship",
     "outcome": "Success",
     "site": "Boca Chica",
     "payload_mass_kg": 0,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "Successful controlled ocean landing"
   },
   {
-    "id": 23,
-    "mission_name": "Europa Clipper",
-    "launch_date": "2024-10-10",
-    "vehicle": "Falcon Heavy",
+    "id": 61,
+    "mission_name": "Polaris Dawn",
+    "launch_date": "2024-09-10",
+    "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center",
-    "payload_mass_kg": 6065,
-    "customer": "NASA"
+    "payload_mass_kg": 12500,
+    "customer": "Private",
+    "details": "First commercial spacewalk, highest Earth orbit since Apollo"
   },
   {
-    "id": 24,
-    "mission_name": "Starship IFT-5",
-    "launch_date": "2024-10-13",
-    "vehicle": "Starship",
-    "outcome": "Success",
-    "site": "Boca Chica",
-    "payload_mass_kg": 0,
-    "customer": "SpaceX"
-  },
-  {
-    "id": 25,
+    "id": 62,
     "mission_name": "Crew-9",
     "launch_date": "2024-09-28",
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral",
     "payload_mass_kg": 12000,
-    "customer": "NASA"
+    "customer": "NASA",
+    "details": "Ninth operational crewed mission"
   },
   {
-    "id": 26,
+    "id": 63,
+    "mission_name": "Europa Clipper",
+    "launch_date": "2024-10-10",
+    "vehicle": "Falcon Heavy",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 6065,
+    "customer": "NASA",
+    "details": "Mission to Jupiter's moon Europa"
+  },
+  {
+    "id": 64,
+    "mission_name": "Starship IFT-5",
+    "launch_date": "2024-10-13",
+    "vehicle": "Starship",
+    "outcome": "Success",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX",
+    "details": "First successful booster catch with Mechazilla"
+  },
+  {
+    "id": 65,
     "mission_name": "Starlink Group 10-9",
     "launch_date": "2025-01-15",
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg",
     "payload_mass_kg": 17400,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "Starlink V2 Mini satellites"
   },
   {
-    "id": 27,
+    "id": 66,
     "mission_name": "Starship IFT-6",
     "launch_date": "2025-02-28",
     "vehicle": "Starship",
     "outcome": "Success",
     "site": "Boca Chica",
     "payload_mass_kg": 0,
-    "customer": "SpaceX"
+    "customer": "SpaceX",
+    "details": "Second successful booster catch"
   },
   {
-    "id": 28,
+    "id": 67,
+    "mission_name": "Crew-10",
+    "launch_date": "2025-03-15",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "NASA",
+    "details": "Tenth operational crewed mission"
+  },
+  {
+    "id": 68,
+    "mission_name": "Axiom-4",
+    "launch_date": "2025-05-20",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "Axiom Space",
+    "details": "Fourth private astronaut mission to ISS"
+  },
+  {
+    "id": 69,
+    "mission_name": "Starship IFT-7",
+    "launch_date": "2025-06-10",
+    "vehicle": "Starship",
+    "outcome": "Success",
+    "site": "Boca Chica",
+    "payload_mass_kg": 50000,
+    "customer": "SpaceX",
+    "details": "First payload deployment test"
+  },
+  {
+    "id": 70,
+    "mission_name": "NASA Lunar Gateway Module 1",
+    "launch_date": "2025-08-05",
+    "vehicle": "Falcon Heavy",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 8618,
+    "customer": "NASA",
+    "details": "Power and Propulsion Element for Lunar Gateway"
+  },
+  {
+    "id": 71,
     "mission_name": "Artemis III Cargo",
     "launch_date": "2025-09-15",
     "vehicle": "Starship",
     "outcome": "Success",
     "site": "Kennedy Space Center",
     "payload_mass_kg": 100000,
-    "customer": "NASA"
+    "customer": "NASA",
+    "details": "Cargo for Artemis III lunar landing mission"
+  },
+  {
+    "id": 72,
+    "mission_name": "Starlink Group 12-5",
+    "launch_date": "2025-10-01",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 17400,
+    "customer": "SpaceX",
+    "details": "Continued Starlink constellation deployment"
   }
 ]
