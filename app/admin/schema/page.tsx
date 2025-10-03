@@ -33,6 +33,7 @@ export default function SchemaAdmin() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResponse, setAiResponse] = useState('');
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [rediscovering, setRediscovering] = useState(false);
 
   useEffect(() => {
     loadSchema();
@@ -255,6 +256,34 @@ export default function SchemaAdmin() {
     }
   };
 
+  const rediscoverSchema = async () => {
+    if (!schema) return;
+
+    try {
+      setRediscovering(true);
+
+      const response = await fetch('/api/admin/schema/rediscover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ existingSchema: schema }),
+      });
+
+      const data = await response.json();
+
+      if (data.updatedSchema) {
+        setSchema(data.updatedSchema);
+        alert(`Schema rediscovered!\n\nAdded: ${data.stats.added} fields\nRemoved: ${data.stats.removed} fields\nPreserved: ${data.stats.preserved} fields`);
+      } else {
+        alert('Failed to rediscover schema');
+      }
+    } catch (error) {
+      console.error('Rediscover error:', error);
+      alert('Failed to rediscover schema');
+    } finally {
+      setRediscovering(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -437,13 +466,21 @@ export default function SchemaAdmin() {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-wrap">
         <button
           onClick={saveConfiguration}
           disabled={saving}
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
         >
           {saving ? 'Saving...' : 'Save Configuration'}
+        </button>
+
+        <button
+          onClick={rediscoverSchema}
+          disabled={rediscovering}
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+        >
+          {rediscovering ? 'Rediscovering...' : 'Rediscover Schema'}
         </button>
 
         <button
