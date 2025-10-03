@@ -14,29 +14,10 @@ export class OpenAIAdapter implements AIAdapter {
 
   async chat(message: string, context: any): Promise<string> {
     try {
-      // Summarize context if it's too large (array with many items)
-      let contextSummary = context;
-
-      if (Array.isArray(context)) {
-        const dataSize = JSON.stringify(context).length;
-
-        console.log('Data size:', dataSize, 'bytes');
-
-        // If data is too large, create a summary
-        // Need to leave room for: system prompt + user message + response (500 tokens)
-        // Safe limit: ~100KB of data (~25K tokens), leaving 247K for model processing
-        if (dataSize > 100000) {
-          console.log('Data too large, creating summary...');
-          contextSummary = this.summarizeData(context);
-        } else {
-          console.log('Using full dataset as context');
-        }
-      }
-
       const systemPrompt = `You are a helpful assistant that answers questions about the provided data.
 
 Data context:
-${JSON.stringify(contextSummary, null, 2)}
+${JSON.stringify(context, null, 2)}
 
 Answer the user's question based on this data. Be concise and accurate. If the data doesn't contain relevant information, say so.`;
 
@@ -46,69 +27,15 @@ Answer the user's question based on this data. Be concise and accurate. If the d
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 500,
+        max_tokens: 1000,
       });
 
       const response = completion.choices[0]?.message?.content;
-
-      // Log for debugging
-      console.log('OpenAI response received:', {
-        hasContent: !!response,
-        contentLength: response?.length || 0,
-        finishReason: completion.choices[0]?.finish_reason,
-        model: completion.model,
-      });
 
       return response || 'No response generated';
     } catch (error) {
       console.error('OpenAI API error:', error);
       throw new Error('Failed to get AI response');
     }
-  }
-
-  private summarizeData(data: any[]): any {
-    // Create statistical summary for large datasets
-    const summary: any = {
-      total_records: data.length,
-      sample_records: data.slice(0, 5), // First 5 records as examples
-    };
-
-    // Try to create useful aggregations
-    if (data.length > 0) {
-      const firstRecord = data[0];
-
-      // Group by common fields
-      const groupings: any = {};
-
-      for (const key of Object.keys(firstRecord)) {
-        const values = data.map(item => item[key]).filter(v => v != null);
-        const uniqueValues = [...new Set(values)];
-
-        // If field has categorical data (not too many unique values)
-        if (uniqueValues.length < 100) {
-          const counts: any = {};
-          values.forEach(v => {
-            counts[v] = (counts[v] || 0) + 1;
-          });
-          groupings[`${key}_distribution`] = counts;
-        }
-
-        // If field is numeric, calculate stats
-        if (typeof values[0] === 'number') {
-          const nums = values.filter(v => typeof v === 'number');
-          if (nums.length > 0) {
-            groupings[`${key}_stats`] = {
-              min: Math.min(...nums),
-              max: Math.max(...nums),
-              avg: nums.reduce((a, b) => a + b, 0) / nums.length
-            };
-          }
-        }
-      }
-
-      summary.aggregations = groupings;
-    }
-
-    return summary;
   }
 }
