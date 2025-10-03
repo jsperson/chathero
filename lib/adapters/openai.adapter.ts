@@ -1,24 +1,34 @@
 import OpenAI from 'openai';
 import { AIAdapter, AIConfig } from './ai.adapter';
+import { ProjectConfig } from '../config';
 
 export class OpenAIAdapter implements AIAdapter {
   private client: OpenAI;
   private model: string;
+  private projectConfig?: ProjectConfig;
 
-  constructor(config: AIConfig) {
+  constructor(config: AIConfig, projectConfig?: ProjectConfig) {
     this.client = new OpenAI({
       apiKey: config.apiKey,
     });
     this.model = config.model;
+    this.projectConfig = projectConfig;
   }
 
   async chat(message: string, context: any): Promise<string> {
     try {
       const currentDate = context.current_date || new Date().toISOString().split('T')[0];
 
-      const systemPrompt = `You are a helpful assistant that answers questions about SpaceX launch data.
+      // Use project-specific system role or default
+      const systemRole = this.projectConfig?.aiContext.systemRole ||
+        'You are a helpful assistant that answers questions about the provided data.';
 
-Current date: ${currentDate}
+      const domainContext = this.projectConfig?.aiContext.domainContext ?
+        `\n\n${this.projectConfig.aiContext.domainContext}` : '';
+
+      const systemPrompt = `${systemRole}
+
+Current date: ${currentDate}${domainContext}
 
 Data context:
 ${JSON.stringify(context, null, 2)}

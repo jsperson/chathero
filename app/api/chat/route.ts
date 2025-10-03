@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { loadConfig } from '@/lib/config';
+import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
 import { JSONAdapter } from '@/lib/adapters/json.adapter';
 import { DataProcessor } from '@/lib/data-processor';
@@ -15,16 +15,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Load configuration
+    // Load configurations
     const config = await loadConfig();
+    const projectConfig = await loadProjectConfig();
 
     // Initialize data adapter
     const dataAdapter = new JSONAdapter(config.dataSource);
     const rawData = await dataAdapter.getData();
 
     // Analyze the query to determine what data to send
-    const queryAnalysis = DataProcessor.analyzeQuery(message);
-    const processor = new DataProcessor(rawData);
+    const processor = new DataProcessor(rawData, projectConfig);
+    const queryAnalysis = processor.analyzeQuery(message);
 
     let contextData: any;
 
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Initialize AI adapter and get response
-    const aiAdapter = new OpenAIAdapter(config.ai);
+    const aiAdapter = new OpenAIAdapter(config.ai, projectConfig);
     const response = await aiAdapter.chat(message, { ...contextData, ...metadata });
 
     return NextResponse.json({

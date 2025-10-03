@@ -1,0 +1,71 @@
+# Project-specific configuration for data fields and domain knowledge
+
+project:
+  name: "SpaceX Launch History"
+  description: "Complete history of SpaceX rocket launches"
+  domain: "space launches"
+
+# Define the data schema and important fields
+dataSchema:
+  primaryDateField: "launch_date"
+
+  # Fields to use for common aggregations
+  categoricalFields:
+    - name: "vehicle"
+      displayName: "Vehicle/Rocket"
+      description: "Type of rocket used"
+    - name: "outcome"
+      displayName: "Outcome"
+      description: "Success or failure of launch"
+    - name: "site"
+      displayName: "Launch Site"
+      description: "Location of launch"
+    - name: "customer"
+      displayName: "Customer"
+      description: "Customer or payload owner"
+
+  # Numeric fields for statistics
+  numericFields:
+    - name: "payload_mass_kg"
+      displayName: "Payload Mass"
+      unit: "kg"
+
+# Domain-specific knowledge for query parsing
+domainKnowledge:
+  # Specific values to recognize in queries
+  vehicleTypes:
+    - "Falcon 1"
+    - "Falcon 9"
+    - "Falcon Heavy"
+    - "Starship"
+
+  outcomeTypes:
+    - "Success"
+    - "Failure"
+    - "Partial Success"
+
+  # Keywords that indicate specific field queries
+  fieldKeywords:
+    vehicle: ["vehicle", "rocket", "falcon", "starship"]
+    outcome: ["outcome", "success", "failure", "successful", "failed"]
+    site: ["site", "location", "where", "launch site", "pad"]
+    customer: ["customer", "client", "payload owner", "operator"]
+
+# Example questions for the UI
+exampleQuestions:
+  - "How many launches were there in 2024?"
+  - "Show me all Falcon Heavy missions"
+  - "What was the success rate?"
+  - "Launches by year"
+  - "How many Starship test flights?"
+  - "Show me recent launches"
+
+# AI assistant context
+aiContext:
+  systemRole: "You are a helpful assistant that answers questions about SpaceX launch data."
+  domainContext: |
+    This dataset contains SpaceX rocket launches from 2006 to present, including:
+    - Falcon 1: First orbital rocket (5 launches, 2006-2009)
+    - Falcon 9: Workhorse vehicle with reusable boosters (540+ launches)
+    - Falcon Heavy: Heavy-lift vehicle (11 launches)
+    - Starship: Next-generation fully reusable system (test flights)

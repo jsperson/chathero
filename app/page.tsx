@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -11,6 +11,19 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [exampleQuestions, setExampleQuestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Load example questions from config
+    fetch('/api/config')
+      .then(res => res.json())
+      .then(data => {
+        if (data.project?.exampleQuestions) {
+          setExampleQuestions(data.project.exampleQuestions);
+        }
+      })
+      .catch(err => console.error('Failed to load example questions:', err));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +67,16 @@ export default function Home() {
           {messages.length === 0 ? (
             <div className="text-center text-gray-500 mt-8">
               <p className="text-lg">Welcome! Ask me anything about the data.</p>
-              <p className="text-sm mt-2">Try: &quot;How many launches were there?&quot; or &quot;Show me all Falcon 9 launches&quot;</p>
+              {exampleQuestions.length > 0 && (
+                <div className="text-sm mt-4">
+                  <p className="font-semibold mb-2">Try asking:</p>
+                  <div className="space-y-1">
+                    {exampleQuestions.slice(0, 3).map((q, i) => (
+                      <p key={i} className="text-gray-600">&quot;{q}&quot;</p>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             messages.map((msg, idx) => (

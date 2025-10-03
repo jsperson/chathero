@@ -1,4 +1,5 @@
 // Data processor for intelligent query handling
+import { ProjectConfig } from './config';
 
 export interface QueryAnalysis {
   type: 'aggregate' | 'filter' | 'specific' | 'search' | 'full';
@@ -9,13 +10,15 @@ export interface QueryAnalysis {
 
 export class DataProcessor {
   private data: any[];
+  private projectConfig: ProjectConfig;
 
-  constructor(data: any[]) {
+  constructor(data: any[], projectConfig: ProjectConfig) {
     this.data = data;
+    this.projectConfig = projectConfig;
   }
 
   // Analyze what kind of query this is
-  static analyzeQuery(question: string): QueryAnalysis {
+  analyzeQuery(question: string): QueryAnalysis {
     const lowerQ = question.toLowerCase();
 
     // Aggregate queries
@@ -49,19 +52,27 @@ export class DataProcessor {
     };
   }
 
-  private static extractFields(question: string): string[] {
+  private extractFields(question: string): string[] {
     const fields: string[] = [];
+    const fieldKeywords = this.projectConfig.domainKnowledge.fieldKeywords;
 
-    if (question.includes('year')) fields.push('year');
-    if (question.includes('vehicle')) fields.push('vehicle');
-    if (question.includes('outcome') || question.includes('success') || question.includes('failure')) fields.push('outcome');
-    if (question.includes('site') || question.includes('location')) fields.push('site');
-    if (question.includes('customer')) fields.push('customer');
+    // Check each configured field for keyword matches
+    for (const [fieldName, keywords] of Object.entries(fieldKeywords)) {
+      if (keywords.some(keyword => question.includes(keyword))) {
+        fields.push(fieldName);
+      }
+    }
 
-    return fields.length > 0 ? fields : ['year', 'vehicle', 'outcome'];
+    // Default fields if none found
+    const categoricalFields = this.projectConfig.dataSchema.categoricalFields;
+    if (fields.length === 0) {
+      return categoricalFields.slice(0, 3).map(f => f.name);
+    }
+
+    return fields;
   }
 
-  private static extractFilters(question: string): Record<string, any> {
+  private extractFilters(question: string): Record<string, any> {
     const filters: Record<string, any> = {};
 
     // Extract year
@@ -70,15 +81,28 @@ export class DataProcessor {
       filters.year = yearMatch[1];
     }
 
-    // Extract vehicle
-    if (question.includes('falcon 1')) filters.vehicle = 'Falcon 1';
-    if (question.includes('falcon 9')) filters.vehicle = 'Falcon 9';
-    if (question.includes('falcon heavy')) filters.vehicle = 'Falcon Heavy';
-    if (question.includes('starship')) filters.vehicle = 'Starship';
+    // Extract specific values from domain knowledge
+    const domain = this.projectConfig.domainKnowledge;
 
-    // Extract outcome
-    if (question.includes('successful') || question.includes('success')) filters.outcome = 'Success';
-    if (question.includes('failed') || question.includes('failure')) filters.outcome = 'Failure';
+    // Check for vehicle types
+    if (domain.vehicleTypes) {
+      for (const vehicleType of domain.vehicleTypes) {
+        if (question.toLowerCase().includes(vehicleType.toLowerCase())) {
+          filters.vehicle = vehicleType;
+          break;
+        }
+      }
+    }
+
+    // Check for outcome types
+    if (domain.outcomeTypes) {
+      for (const outcomeType of domain.outcomeTypes) {
+        if (question.toLowerCase().includes(outcomeType.toLowerCase())) {
+          filters.outcome = outcomeType;
+          break;
+        }
+      }
+    }
 
     return filters;
   }
@@ -112,11 +136,12 @@ export class DataProcessor {
   // Filter data
   filter(filters: Record<string, any>, limit: number = 50): any[] {
     let filtered = this.data;
+    const dateField = this.projectConfig.dataSchema.primaryDateField;
 
     Object.entries(filters).forEach(([key, value]) => {
       if (key === 'year') {
         filtered = filtered.filter(item =>
-          item.launch_date?.startsWith(value)
+          item[dateField]?.startsWith(value)
         );
       } else {
         filtered = filtered.filter(item =>
@@ -150,9 +175,10 @@ export class DataProcessor {
   // Helper: Group by year
   private groupByYear(): Record<string, number> {
     const counts: Record<string, number> = {};
+    const dateField = this.projectConfig.dataSchema.primaryDateField;
 
     this.data.forEach(item => {
-      const year = item.launch_date?.substring(0, 4);
+      const year = item[dateField]?.substring(0, 4);
       if (year) {
         counts[year] = (counts[year] || 0) + 1;
       }
