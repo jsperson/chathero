@@ -32,6 +32,7 @@ export default function SchemaAdmin() {
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResponse, setAiResponse] = useState('');
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   useEffect(() => {
     loadSchema();
@@ -235,6 +236,25 @@ export default function SchemaAdmin() {
     }
   };
 
+  const clearSchema = async () => {
+    try {
+      const response = await fetch('/api/admin/schema/clear', {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        setShowClearConfirm(false);
+        alert('Configuration cleared successfully! Reloading...');
+        window.location.reload();
+      } else {
+        alert('Failed to clear configuration');
+      }
+    } catch (error) {
+      console.error('Clear error:', error);
+      alert('Failed to clear configuration');
+    }
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -432,7 +452,41 @@ export default function SchemaAdmin() {
         >
           Download YAML
         </button>
+
+        <button
+          onClick={() => setShowClearConfirm(true)}
+          className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700"
+        >
+          Clear Configuration
+        </button>
       </div>
+
+      {/* Confirmation Modal */}
+      {showClearConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md mx-4">
+            <h3 className="text-xl font-bold mb-4">Clear Configuration?</h3>
+            <p className="mb-6 text-gray-600">
+              This will delete <code className="bg-gray-100 px-2 py-1 rounded">config/project.yaml</code> and reset to auto-discovered schema.
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-4 justify-end">
+              <button
+                onClick={() => setShowClearConfirm(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={clearSchema}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Yes, Clear Configuration
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
