@@ -1,0 +1,18 @@
+app:
+  name: "ChatHero"
+
+theme:
+  logo: "/assets/logo.png"
+  primaryColor: "#005288"
+  secondaryColor: "#A7A9AC"
+  backgroundColor: "#ffffff"
+  textColor: "#000000"
+
+ai:
+  provider: "openai"
+  model: "gpt-5-mini"
+  apiKey: "${OPENAI_API_KEY}"
+
+dataSource:
+  type: "json"
+  path: "./data/spacex-launches.json"

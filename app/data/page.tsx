@@ -1,0 +1,153 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+export default function DataPage() {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortKey, setSortKey] = useState<string>('');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  useEffect(() => {
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setData(data);
+        } else {
+          setError('Data is not in array format');
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        setError('Failed to load data');
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <p className="text-center text-gray-500">Loading data...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <p className="text-center text-red-500">{error}</p>
+      </div>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <p className="text-center text-gray-500">No data available</p>
+      </div>
+    );
+  }
+
+  // Get all unique keys from the data
+  const keys = Array.from(new Set(data.flatMap(item => Object.keys(item))));
+
+  // Filter data based on search
+  const filteredData = data.filter(item =>
+    Object.values(item).some(value =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
+  // Sort data
+  const sortedData = sortKey
+    ? [...filteredData].sort((a, b) => {
+        const aVal = a[sortKey];
+        const bVal = b[sortKey];
+        const multiplier = sortDirection === 'asc' ? 1 : -1;
+
+        if (typeof aVal === 'number' && typeof bVal === 'number') {
+          return (aVal - bVal) * multiplier;
+        }
+
+        return String(aVal).localeCompare(String(bVal)) * multiplier;
+      })
+    : filteredData;
+
+  const handleSort = (key: string) => {
+    if (sortKey === key) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      setSortDirection('asc');
+    }
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="mb-4 flex justify-between items-center">
+          <h2 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>
+            Data Browser
+          </h2>
+          <div className="text-sm text-gray-500">
+            {sortedData.length} of {data.length} records
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="mb-4">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search..."
+            className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2"
+            style={{ '--tw-ring-color': 'var(--color-primary)' } as any}
+          />
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="border-b-2" style={{ borderColor: 'var(--color-primary)' }}>
+                {keys.map(key => (
+                  <th
+                    key={key}
+                    className="px-4 py-2 text-left font-semibold cursor-pointer hover:bg-gray-50"
+                    onClick={() => handleSort(key)}
+                  >
+                    <div className="flex items-center gap-1">
+                      {key}
+                      {sortKey === key && (
+                        <span className="text-xs">
+                          {sortDirection === 'asc' ? '↑' : '↓'}
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {sortedData.map((item, idx) => (
+                <tr key={idx} className="border-b hover:bg-gray-50">
+                  {keys.map(key => (
+                    <td key={key} className="px-4 py-2">
+                      {typeof item[key] === 'object'
+                        ? JSON.stringify(item[key])
+                        : String(item[key] ?? '')}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,282 @@
+[
+  {
+    "id": 1,
+    "mission_name": "FalconSat",
+    "launch_date": "2006-03-24",
+    "vehicle": "Falcon 1",
+    "outcome": "Failure",
+    "site": "Omelek Island",
+    "payload_mass_kg": 20,
+    "customer": "DARPA"
+  },
+  {
+    "id": 2,
+    "mission_name": "DemoSat",
+    "launch_date": "2007-03-21",
+    "vehicle": "Falcon 1",
+    "outcome": "Failure",
+    "site": "Omelek Island",
+    "payload_mass_kg": 0,
+    "customer": "DARPA"
+  },
+  {
+    "id": 3,
+    "mission_name": "Trailblazer",
+    "launch_date": "2008-08-03",
+    "vehicle": "Falcon 1",
+    "outcome": "Failure",
+    "site": "Omelek Island",
+    "payload_mass_kg": 165,
+    "customer": "NASA"
+  },
+  {
+    "id": 4,
+    "mission_name": "RatSat",
+    "launch_date": "2008-09-28",
+    "vehicle": "Falcon 1",
+    "outcome": "Success",
+    "site": "Omelek Island",
+    "payload_mass_kg": 165,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 5,
+    "mission_name": "RazakSAT",
+    "launch_date": "2009-07-13",
+    "vehicle": "Falcon 1",
+    "outcome": "Success",
+    "site": "Omelek Island",
+    "payload_mass_kg": 200,
+    "customer": "ATSB"
+  },
+  {
+    "id": 6,
+    "mission_name": "Dragon Qualification Unit",
+    "launch_date": "2010-06-04",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 7,
+    "mission_name": "COTS Demo Flight 1",
+    "launch_date": "2010-12-08",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 0,
+    "customer": "NASA"
+  },
+  {
+    "id": 8,
+    "mission_name": "COTS Demo Flight 2",
+    "launch_date": "2012-05-22",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 525,
+    "customer": "NASA"
+  },
+  {
+    "id": 9,
+    "mission_name": "CRS-1",
+    "launch_date": "2012-10-08",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 500,
+    "customer": "NASA"
+  },
+  {
+    "id": 10,
+    "mission_name": "CRS-2",
+    "launch_date": "2013-03-01",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 677,
+    "customer": "NASA"
+  },
+  {
+    "id": 11,
+    "mission_name": "Starlink 1",
+    "launch_date": "2019-05-24",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 13620,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 12,
+    "mission_name": "Crew Demo-1",
+    "launch_date": "2019-03-02",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12055,
+    "customer": "NASA"
+  },
+  {
+    "id": 13,
+    "mission_name": "Crew Demo-2",
+    "launch_date": "2020-05-30",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12530,
+    "customer": "NASA"
+  },
+  {
+    "id": 14,
+    "mission_name": "Arabsat-6A",
+    "launch_date": "2019-04-11",
+    "vehicle": "Falcon Heavy",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 6465,
+    "customer": "Arabsat"
+  },
+  {
+    "id": 15,
+    "mission_name": "STP-2",
+    "launch_date": "2019-06-25",
+    "vehicle": "Falcon Heavy",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 3700,
+    "customer": "USAF"
+  },
+  {
+    "id": 16,
+    "mission_name": "Starship SN8",
+    "launch_date": "2020-12-09",
+    "vehicle": "Starship",
+    "outcome": "Failure",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 17,
+    "mission_name": "Starship SN15",
+    "launch_date": "2021-05-05",
+    "vehicle": "Starship",
+    "outcome": "Success",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 18,
+    "mission_name": "Inspiration4",
+    "launch_date": "2021-09-15",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 12500,
+    "customer": "Private"
+  },
+  {
+    "id": 19,
+    "mission_name": "Starship IFT-1",
+    "launch_date": "2023-04-20",
+    "vehicle": "Starship",
+    "outcome": "Failure",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 20,
+    "mission_name": "Starship IFT-2",
+    "launch_date": "2023-11-18",
+    "vehicle": "Starship",
+    "outcome": "Failure",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 21,
+    "mission_name": "Starship IFT-3",
+    "launch_date": "2024-03-14",
+    "vehicle": "Starship",
+    "outcome": "Partial Success",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 22,
+    "mission_name": "Starship IFT-4",
+    "launch_date": "2024-06-06",
+    "vehicle": "Starship",
+    "outcome": "Success",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 23,
+    "mission_name": "Europa Clipper",
+    "launch_date": "2024-10-10",
+    "vehicle": "Falcon Heavy",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 6065,
+    "customer": "NASA"
+  },
+  {
+    "id": 24,
+    "mission_name": "Starship IFT-5",
+    "launch_date": "2024-10-13",
+    "vehicle": "Starship",
+    "outcome": "Success",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 25,
+    "mission_name": "Crew-9",
+    "launch_date": "2024-09-28",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Cape Canaveral",
+    "payload_mass_kg": 12000,
+    "customer": "NASA"
+  },
+  {
+    "id": 26,
+    "mission_name": "Starlink Group 10-9",
+    "launch_date": "2025-01-15",
+    "vehicle": "Falcon 9",
+    "outcome": "Success",
+    "site": "Vandenberg",
+    "payload_mass_kg": 17400,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 27,
+    "mission_name": "Starship IFT-6",
+    "launch_date": "2025-02-28",
+    "vehicle": "Starship",
+    "outcome": "Success",
+    "site": "Boca Chica",
+    "payload_mass_kg": 0,
+    "customer": "SpaceX"
+  },
+  {
+    "id": 28,
+    "mission_name": "Artemis III Cargo",
+    "launch_date": "2025-09-15",
+    "vehicle": "Starship",
+    "outcome": "Success",
+    "site": "Kennedy Space Center",
+    "payload_mass_kg": 100000,
+    "customer": "NASA"
+  }
+]
