@@ -85,11 +85,27 @@ fi
 echo "Node.js installed: $(node --version)"
 echo "npm installed: $(npm --version)"
 
-# Clone ChatHero repository
+# Determine installation directory and user
 echo ""
-echo "Cloning ChatHero repository..."
+echo "Determining installation directory..."
 
-INSTALL_DIR="${INSTALL_DIR:-$HOME/chathero}"
+# Default to /opt/chathero for root, or $HOME/chathero for regular user
+if [ "$EUID" -eq 0 ]; then
+    # Running as root
+    INSTALL_DIR="${INSTALL_DIR:-/opt/chathero}"
+    INSTALL_USER="${SUDO_USER:-$USER}"
+else
+    # Running as regular user
+    INSTALL_DIR="${INSTALL_DIR:-$HOME/chathero}"
+    INSTALL_USER="$USER"
+fi
+
+echo "Installation directory: $INSTALL_DIR"
+echo "Owner will be: $INSTALL_USER"
+echo ""
+
+# Clone ChatHero repository
+echo "Cloning ChatHero repository..."
 
 if [ -d "$INSTALL_DIR" ]; then
     echo "Directory $INSTALL_DIR already exists."
@@ -108,6 +124,12 @@ fi
 
 cd "$INSTALL_DIR"
 
+# Fix ownership if running as root
+if [ "$EUID" -eq 0 ] && [ -n "$SUDO_USER" ]; then
+    echo "Setting ownership to $INSTALL_USER..."
+    chown -R "$INSTALL_USER":"$INSTALL_USER" "$INSTALL_DIR"
+fi
+
 # Install project dependencies
 echo ""
 echo "Installing ChatHero dependencies..."
@@ -117,7 +139,12 @@ if [ ! -f package.json ]; then
     exit 1
 fi
 
-npm install
+# Run npm install as the target user if we're root
+if [ "$EUID" -eq 0 ] && [ -n "$SUDO_USER" ]; then
+    sudo -u "$INSTALL_USER" npm install
+else
+    npm install
+fi
 
 echo ""
 echo "================================================"
@@ -125,8 +152,12 @@ echo "Installation Complete!"
 echo "================================================"
 echo ""
 echo "ChatHero installed in: $INSTALL_DIR"
+echo "Owned by: $INSTALL_USER"
 echo ""
 echo "Next steps:"
+if [ "$EUID" -eq 0 ]; then
+    echo "1. Switch to user: su - $INSTALL_USER (or exit and login as $INSTALL_USER)"
+fi
 echo "1. cd $INSTALL_DIR"
 echo "2. Create .env file: cp .env.example .env"
 echo "3. Edit .env and add your OpenAI API key"
