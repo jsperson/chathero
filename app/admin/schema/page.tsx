@@ -304,6 +304,79 @@ export default function SchemaAdmin() {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <h1 className="text-3xl font-bold mb-6">Schema Configuration</h1>
 
+      {/* Actions */}
+      <div className="flex gap-4 flex-wrap mb-6">
+        <button
+          onClick={saveConfiguration}
+          disabled={saving}
+          className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+        >
+          {saving ? 'Saving...' : 'Save Configuration'}
+        </button>
+
+        <button
+          onClick={rediscoverSchema}
+          disabled={rediscovering}
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+        >
+          {rediscovering ? 'Rediscovering...' : 'Rediscover Schema'}
+        </button>
+
+        <button
+          onClick={downloadYaml}
+          className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+        >
+          Download YAML
+        </button>
+
+        <button
+          onClick={() => setShowClearConfirm(true)}
+          className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700"
+        >
+          Clear Configuration
+        </button>
+      </div>
+
+      {/* AI Assistant */}
+      <div className="bg-blue-50 rounded-lg shadow p-6 mb-6">
+        <h2 className="text-xl font-semibold mb-4">🤖 AI Assistant</h2>
+
+        <div className="mb-4">
+          <textarea
+            value={aiPrompt}
+            onChange={(e) => setAiPrompt(e.target.value)}
+            placeholder="What would you like me to help with?"
+            className="w-full border rounded px-3 py-2 h-24"
+            disabled={aiLoading}
+          />
+        </div>
+
+        <button
+          onClick={handleAiAssist}
+          disabled={aiLoading || !aiPrompt.trim()}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+        >
+          {aiLoading ? 'Thinking...' : 'Ask AI'}
+        </button>
+
+        {aiResponse && (
+          <div className="mt-4 p-4 bg-white rounded border">
+            <div className="font-medium mb-2">AI Response:</div>
+            <div className="whitespace-pre-wrap">{aiResponse}</div>
+          </div>
+        )}
+
+        <div className="mt-4 text-sm text-gray-600">
+          <div className="font-medium mb-2">Try asking:</div>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Generate better descriptions for all fields</li>
+            <li>Suggest keywords for the {schema.categoricalFields[0]?.name} field</li>
+            <li>Create 5 example questions for this dataset</li>
+            <li>What's a good domain name for this data?</li>
+          </ul>
+        </div>
+      </div>
+
       {/* Project Information */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">Project Information</h2>
@@ -424,79 +497,6 @@ export default function SchemaAdmin() {
           ))}
         </div>
       )}
-
-      {/* AI Assistant */}
-      <div className="bg-blue-50 rounded-lg shadow p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4">🤖 AI Assistant</h2>
-
-        <div className="mb-4">
-          <textarea
-            value={aiPrompt}
-            onChange={(e) => setAiPrompt(e.target.value)}
-            placeholder="What would you like me to help with?"
-            className="w-full border rounded px-3 py-2 h-24"
-            disabled={aiLoading}
-          />
-        </div>
-
-        <button
-          onClick={handleAiAssist}
-          disabled={aiLoading || !aiPrompt.trim()}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-        >
-          {aiLoading ? 'Thinking...' : 'Ask AI'}
-        </button>
-
-        {aiResponse && (
-          <div className="mt-4 p-4 bg-white rounded border">
-            <div className="font-medium mb-2">AI Response:</div>
-            <div className="whitespace-pre-wrap">{aiResponse}</div>
-          </div>
-        )}
-
-        <div className="mt-4 text-sm text-gray-600">
-          <div className="font-medium mb-2">Try asking:</div>
-          <ul className="list-disc list-inside space-y-1">
-            <li>Generate better descriptions for all fields</li>
-            <li>Suggest keywords for the {schema.categoricalFields[0]?.name} field</li>
-            <li>Create 5 example questions for this dataset</li>
-            <li>What's a good domain name for this data?</li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="flex gap-4 flex-wrap">
-        <button
-          onClick={saveConfiguration}
-          disabled={saving}
-          className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
-        >
-          {saving ? 'Saving...' : 'Save Configuration'}
-        </button>
-
-        <button
-          onClick={rediscoverSchema}
-          disabled={rediscovering}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-        >
-          {rediscovering ? 'Rediscovering...' : 'Rediscover Schema'}
-        </button>
-
-        <button
-          onClick={downloadYaml}
-          className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
-        >
-          Download YAML
-        </button>
-
-        <button
-          onClick={() => setShowClearConfirm(true)}
-          className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700"
-        >
-          Clear Configuration
-        </button>
-      </div>
 
       {/* Confirmation Modal */}
       {showClearConfirm && (
