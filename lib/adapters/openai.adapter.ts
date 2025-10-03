@@ -22,9 +22,10 @@ export class OpenAIAdapter implements AIAdapter {
 
         console.log('Data size:', dataSize, 'bytes');
 
-        // If data is too large (>800KB ~= 200K tokens), create a summary
-        // gpt-5-mini has 272K token input limit, leaving room for prompt + response
-        if (dataSize > 800000) {
+        // If data is too large, create a summary
+        // Need to leave room for: system prompt + user message + response (500 tokens)
+        // Safe limit: ~100KB of data (~25K tokens), leaving 247K for model processing
+        if (dataSize > 100000) {
           console.log('Data too large, creating summary...');
           contextSummary = this.summarizeData(context);
         } else {
