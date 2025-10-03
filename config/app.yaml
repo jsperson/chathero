@@ -2,7 +2,7 @@ app:
   name: "ChatHero"
 
 theme:
-  logo: "/assets/logo.png"
+  logo: "/assets/logo.svg"
   primaryColor: "#005288"
   secondaryColor: "#A7A9AC"
   backgroundColor: "#ffffff"
