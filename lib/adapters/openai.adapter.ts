@@ -20,8 +20,9 @@ export class OpenAIAdapter implements AIAdapter {
       if (Array.isArray(context)) {
         const dataSize = JSON.stringify(context).length;
 
-        // If data is too large (>50KB), create a summary
-        if (dataSize > 50000) {
+        // If data is too large (>800KB ~= 200K tokens), create a summary
+        // gpt-5-mini has 272K token input limit, leaving room for prompt + response
+        if (dataSize > 800000) {
           contextSummary = this.summarizeData(context);
         }
       }
