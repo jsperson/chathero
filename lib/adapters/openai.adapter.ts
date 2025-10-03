@@ -20,10 +20,15 @@ export class OpenAIAdapter implements AIAdapter {
       if (Array.isArray(context)) {
         const dataSize = JSON.stringify(context).length;
 
+        console.log('Data size:', dataSize, 'bytes');
+
         // If data is too large (>800KB ~= 200K tokens), create a summary
         // gpt-5-mini has 272K token input limit, leaving room for prompt + response
         if (dataSize > 800000) {
+          console.log('Data too large, creating summary...');
           contextSummary = this.summarizeData(context);
+        } else {
+          console.log('Using full dataset as context');
         }
       }
 
@@ -43,7 +48,17 @@ Answer the user's question based on this data. Be concise and accurate. If the d
         max_completion_tokens: 500,
       });
 
-      return completion.choices[0]?.message?.content || 'No response generated';
+      const response = completion.choices[0]?.message?.content;
+
+      // Log for debugging
+      console.log('OpenAI response received:', {
+        hasContent: !!response,
+        contentLength: response?.length || 0,
+        finishReason: completion.choices[0]?.finish_reason,
+        model: completion.model,
+      });
+
+      return response || 'No response generated';
     } catch (error) {
       console.error('OpenAI API error:', error);
       throw new Error('Failed to get AI response');
