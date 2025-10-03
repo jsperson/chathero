@@ -94,7 +94,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Failure",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "This was the third flight for the uncrewed Dragon cargo spacecaft and the first SpaceX mission under their Commercial Resupply Services contract with NASA. Dragon delivered various cargo to the staion..."
   },
@@ -105,7 +105,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "This was the fourth flight for SpaceX's uncrewed Dragon cargo spacecraft, the fifth and final flight for the company's two-stage Falcon 9 v1.0 launch vehicle, and the second SpaceX operational mission..."
   },
@@ -127,7 +127,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "SES-8 is a geostationary communications satellite, providing broadcasting and network services for South Asia and India."
   },
@@ -149,7 +149,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "The SpaceX Falcon 9 rocket launched the fifth Dragon spacecraft on the third operational cargo delivery mission to the International Space Station. The flight was  conducted under the Commercial Resup..."
   },
@@ -193,7 +193,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "This was the fourth Dragon mission to the International Spa\u00d1\u0081e Station. It delivered supplies and scientific experiments, including live mice and the first 3D printer in space. The flight was conducte..."
   },
@@ -204,7 +204,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "A SpaceX Falcon 9 rocket launched the seventh Dragon spacecraft on the fifth operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupp..."
   },
@@ -226,7 +226,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "These are both geostationary communication satellites, with Eutelsat 155 West B providing coverage in the Americas, and ABS-3A providing coverage in the Americas, the Middle East, and Africa."
   },
@@ -237,7 +237,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "A SpaceX Falcon 9 rocket launched the eighth Dragon spacecraft on the sixth operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resuppl..."
   },
@@ -259,7 +259,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Failure",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "A SpaceX Falcon 9 rocket launched the ninth Dragon spacecraft on the seventh operational cargo delivery mission to the International Space Station as part of the NASA cargo resupply contract. It was m..."
   },
@@ -292,7 +292,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Containing 81 Ku-Band transponders, SES-9 will be positioned at 108.2 degrees East to provide communication coverage for 22 million homes. The satellite will enhance SES\u00e2\u20ac\u2122s existing coverage in Asia,..."
   },
@@ -303,7 +303,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their eighth operational cargo delivery mission to the International Space Station. Among the cargo was the Bigelow Aerospace\u00e2\u20ac\u2122s BEAM module, which was attach..."
   },
@@ -336,7 +336,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Eutelsat 117 West B and ABS 2A will be launched atop a Falcon 9 Full Thrust. Both sattelites will be launched into a geostationary orbit to provide communications services. Eutelsat 117 West B with 48..."
   },
@@ -347,7 +347,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their ninth operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract wit..."
   },
@@ -380,7 +380,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "SpaceX\u00e2\u20ac\u2122s Falcon 9 rocket will deliver 10 satellites to low Earth orbit for Iridium, a global leader in mobile voice and data satellite communications. This is the first set of 10 satellites in a ser..."
   },
@@ -391,7 +391,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their tenth operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract wit..."
   },
@@ -402,7 +402,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Echostar 23 is a geostationary communications satellite, which will provide direct-to-home television broadcast services over Brazil. Being a flexible Ku-band satellite, it is capable of providing ser..."
   },
@@ -413,7 +413,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "SES-10 is a 5300 kg geostationary communications satellite, which will replace AMC 2 and AMC 3 satellites. It will provide coverage over Mexico, Central and South Americas, and the Caribbean.\n\nThe SES..."
   },
@@ -446,7 +446,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their eleventh operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract ..."
   },
@@ -468,7 +468,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "SpaceX\u00e2\u20ac\u2122s Falcon 9 rocket will deliver 10 satellites to low Earth orbit for Iridium, a global leader in mobile voice and data satellite communications. This is the second set of 10 satellites in a se..."
   },
@@ -479,7 +479,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Intelsat 35e is a geostationary communications satellite for Intelsat. It is the fourth satellite of the EpicNG service, and will cover the Americas, Europe and Sub-Saharan Africa from the 34.5\u00c2\u00b0West ..."
   },
@@ -490,7 +490,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their 12th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -523,7 +523,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "SpaceX\u00e2\u20ac\u2122s Falcon 9 rocket will deliver 10 satellites to low Earth\norbit for Iridium, a global leader in mobile voice and\ndata satellite communications. This is the third set of 10\nsatellites in a ser..."
   },
@@ -534,7 +534,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Echostar 105, also known as SES-11, is a partnership between Echostar and SES for a communications satellite at the orbital position of 105 degrees West. Satellite's Ku-band and C-band capacity will a..."
   },
@@ -556,7 +556,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their 13th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -567,7 +567,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "SpaceX\u00e2\u20ac\u2122s Falcon 9 rocket will deliver 10 satellites to low Earth orbit for Iridium, a global leader in mobile voice and data satellite communications. This is the fourth set of 10 satellites in a se..."
   },
@@ -589,7 +589,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "GovSat, also known as SES-16 is a communications satellite for LuxGovSat S.A., which is a public-private joint venture between the Luxembourg government and SES. Staying in 21.5\u00c2\u00b0 East orbital positio..."
   },
@@ -600,7 +600,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": null,
     "details": "This will be the inaugural flight of the Falcon Heavy. The test payload will be SpaceX CEO Elon Musk's midnight cherry Tesla Roadster playing Space Oddity. Destination: An elliptical, heliocentric orb..."
   },
@@ -633,7 +633,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "SpaceX\u00e2\u20ac\u2122s Falcon 9 rocket will deliver 10 satellites to low Earth orbit for Iridium, a global leader in mobile voice and data satellite communications. This is the fifth set of 10 satellites in a ser..."
   },
@@ -644,7 +644,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their 14th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -677,7 +677,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "SpaceX\u00e2\u20ac\u2122s Falcon 9 rocket will deliver 10 satellites to low Earth orbit for Iridium, a global leader in mobile voice and data satellite communications. This is the sixth set of 10 satellites in a ser..."
   },
@@ -688,7 +688,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "SES-12 is a geostationary communications satellite. It is to provide direct-to-home broadcasting, high throughput satellite data connectivity and other telecommunication servies to Middle East and the..."
   },
@@ -699,7 +699,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their 15th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -710,7 +710,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Telstar 19 VANTAGE, or Telstar 19V, is a communications satellite built by Space Systems Loral for the canadian satellite operator Telesat. The satellite is to be placed into 63\u00c2\u00b0 West orbital slot, w..."
   },
@@ -721,7 +721,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "SpaceX\u00e2\u20ac\u2122s Falcon 9 rocket will deliver 10 satellites to low Earth orbit for Iridium, a global leader in mobile voice and data satellite communications. This is the seventh set of 10 satellites in a s..."
   },
@@ -743,7 +743,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Telstar 18 VANTAGE, or Telstar 18V, is a communications satellite built by Space Systems Loral for the canadian satellite operator Telesat. The satellite is to provide coverage to the Asia Pacific reg..."
   },
@@ -787,7 +787,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their 16th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -798,7 +798,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 4400,
     "customer": null,
     "details": "GPS-IIIA (Global Positioning System) is the first evolution stage of the third generation of the GPS satellites. It consists of the first ten (known as \"tranche\") of GPS III satellites.\n\nThis program ..."
   },
@@ -809,7 +809,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "SpaceX's Falcon 9 rocket will deliver 10 satellites to low Earth orbit for Iridium, a global leader in mobile voice and data satellite communications. This is the eighth set of 10 satellites in a seri..."
   },
@@ -831,7 +831,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "This is the first test flight of Crew Dragon 2 to the International Space Station marking a huge milestone towards the Commercial Crew program."
   },
@@ -842,7 +842,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": null,
     "details": "Arabsat-6A is a Saudi Arabian communications satellite to be positioned at 30.5\u00c2\u00b0East orbital slot. Arabsat-6A was built by Lockheed Martin for Arabsat and will deliver TV, internet and mobile phone s..."
   },
@@ -853,7 +853,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their 17th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -864,7 +864,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "An initial batch of 60 satellites meant to test Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -886,7 +886,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 3700,
     "customer": null,
     "details": "The STP-2 payload is composed of 25 small spacecraft. Included is COSMIC-2 constellation to provide radio occultation data, along with 8 cubesat nanosatellites. \nOther payloads include LightSail carri..."
   },
@@ -897,7 +897,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their 18th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -941,7 +941,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system. Since the demo launch of Starlink satellites, SpaceX has increased spectrum c..."
   },
@@ -952,7 +952,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "SpaceX launched the Dragon spacecraft on their 19th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -974,7 +974,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -996,7 +996,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "Second operational Starlink payload of 2020 and third overall. The Falcon 9 launch vehicle will carry a batch of 60 Starlink satellites that will be insterted in a Low Earth Orbit (LEO) at an altitude..."
   },
@@ -1007,7 +1007,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1018,7 +1018,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "SpaceX launched the Dragon spacecraft on their 20th operational cargo delivery mission to the International Space Station. The flight was conducted under the Commercial Resupply Services contract with..."
   },
@@ -1029,7 +1029,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1040,7 +1040,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1051,7 +1051,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "A new era of human spaceflight is set to begin as American astronauts once again launch on an American rocket from American soil. The Demo-2 mission is the second test flight of Crew Dragon, and the f..."
   },
@@ -1062,7 +1062,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1073,7 +1073,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 58 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system. This launch will also carry three SkySat Earth-imaging satellites as a ridesh..."
   },
@@ -1084,7 +1084,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 4400,
     "customer": null,
     "details": "GPS-IIIA (Global Positioning System) is the first evolution stage of the third generation of the GPS satellites. It consists of the first ten (known as \"tranche\") of GPS III satellites."
   },
@@ -1117,7 +1117,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 57 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system. This launch will also carry two BlackSky Earth-imaging satellites as a ridesh..."
   },
@@ -1128,7 +1128,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 58 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system. This launch will also carry 3 SkySat Earth-imaging satellites as a rideshare."
   },
@@ -1150,7 +1150,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1172,7 +1172,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1183,7 +1183,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1194,7 +1194,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1205,7 +1205,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 4400,
     "customer": null,
     "details": "GPS-IIIA (Global Positioning System) is the first evolution stage of the third generation of the GPS satellites. It consists of the first ten (known as \"tranche\") of GPS III satellites."
   },
@@ -1216,7 +1216,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": null,
     "details": "SpaceX Crew-1 is the first crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -1238,7 +1238,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1249,7 +1249,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "SpaceX will launch the first cargo variant of its Dragon 2 spacecraft on their 21st commercial resupply services mission to the International Space Station. The flight will be conducted under the seco..."
   },
@@ -1304,7 +1304,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1315,7 +1315,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "Transporter 1 mission is a dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -1337,7 +1337,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1348,7 +1348,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1370,7 +1370,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1381,7 +1381,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1392,7 +1392,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1403,7 +1403,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1425,7 +1425,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1436,7 +1436,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": null,
     "details": "SpaceX Crew-2 is the second crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program. It used the same Falcon 9 first stage as..."
   },
@@ -1447,7 +1447,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1458,7 +1458,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1480,7 +1480,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1491,7 +1491,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 52 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system. Two rideshare satellites are also on this flight: a Capella radar observation..."
   },
@@ -1502,7 +1502,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 60 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1513,7 +1513,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "SpaceX will launch the second cargo variant of its Dragon 2 spacecraft on their 22nd commercial resupply services mission to the International Space Station. The flight will be conducted under the sec..."
   },
@@ -1535,7 +1535,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 4400,
     "customer": null,
     "details": "GPS-IIIA (Global Positioning System) is the first evolution stage of the third generation of the GPS satellites. It consists of the first ten (known as \"tranche\") of GPS III satellites."
   },
@@ -1546,7 +1546,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "Transporter 2 mission is a dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -1557,7 +1557,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "SpaceX will launch the cargo variant of its Dragon 2 spacecraft on their 23rd commercial resupply services mission to the International Space Station. The flight will be conducted under the second Com..."
   },
@@ -1568,7 +1568,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 51 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1590,7 +1590,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": null,
     "details": "SpaceX Crew-3 is the third crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -1601,7 +1601,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1623,7 +1623,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 48 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system - as well as 2 BlackSky Earth observation satellites as rideshare payloads..."
   },
@@ -1645,7 +1645,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 52 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1667,7 +1667,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "24th commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -1678,7 +1678,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 49 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1689,7 +1689,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "Transporter 3 mission is a dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -1700,7 +1700,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 49 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1733,7 +1733,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 49 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1744,7 +1744,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 46 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1755,7 +1755,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 50 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1766,7 +1766,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 47 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1777,7 +1777,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 48 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1788,7 +1788,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1799,7 +1799,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "Transporter 4 mission is a dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -1832,7 +1832,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1843,7 +1843,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": null,
     "details": "SpaceX Crew-4 is the fourth crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -1854,7 +1854,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1865,7 +1865,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1876,7 +1876,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1887,7 +1887,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1898,7 +1898,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1909,7 +1909,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "Transporter 5 mission is a dedicated rideshare flight to a sun-synchronous orbit with 59 cubeSats, microsats, non-deploying hosted payloads, and orbital transfer vehicles for commercial and government..."
   },
@@ -1931,7 +1931,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1964,7 +1964,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Geostationary communications satellite"
   },
@@ -1975,7 +1975,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1986,7 +1986,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 46 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -1997,7 +1997,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "25th commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -2008,7 +2008,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2019,7 +2019,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 46 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2030,7 +2030,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2052,7 +2052,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 52 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2063,7 +2063,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 46 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2074,7 +2074,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2085,7 +2085,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 54 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2096,7 +2096,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 46 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2107,7 +2107,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 51 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system. Spaceflight's propulsive Sherpa-LTC2 space tug is also onboard as a rideshare..."
   },
@@ -2118,7 +2118,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 34 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system. BlueWalker 3 is a rideshare test satellite for AST SpaceMobile\u2019s planned spac..."
   },
@@ -2129,7 +2129,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 54 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2140,7 +2140,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 52 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2151,7 +2151,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": null,
     "details": "SpaceX Crew-5 is the fifth crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -2162,7 +2162,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 52 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2195,7 +2195,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 54 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2206,7 +2206,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2217,7 +2217,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": null,
     "details": "Classified US Space Force carrying two payloads directly to geostationary orbit. One is called the Shepherd Demonstration, and the other is LDPE 2 spacecraft that carries three hosted payloads and thr..."
   },
@@ -2250,7 +2250,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Eutelsat 10B is an all-electric geostationary communications satellite equipped with two multi-beam HTS Ku-band payloads able to provide a throughput of approximately 35 Gbps."
   },
@@ -2261,7 +2261,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "26th commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -2272,7 +2272,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "A batch of 40 satellites for the OneWeb satellite constellation, which is intended to provide global Internet broadband service for individual consumers. The constellation is planned to have around 64..."
   },
@@ -2316,7 +2316,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 52 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2327,7 +2327,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2349,7 +2349,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "Dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -2360,7 +2360,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "A batch of 48 satellites for the OneWeb satellite constellation, which is intended to provide global Internet broadband service for individual consumers. The constellation is planned to have around 64..."
   },
@@ -2371,7 +2371,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": null,
     "details": "USSF-67 is a mission for the United States Space Force with two satellites, including the LDPE-3A rapid prototype platform hosting 5 USSF payloads."
   },
@@ -2382,7 +2382,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 4400,
     "customer": null,
     "details": "GPS-IIIA (Global Positioning System) is the first evolution stage of the third generation of the GPS satellites. It consists of the first ten (known as \"tranche\") of GPS III satellites."
   },
@@ -2393,7 +2393,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2404,7 +2404,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 56 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2415,7 +2415,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 49 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system.\r\n\r\nThis launch carries D-Orbit\u2019s ION SCV009 Eclectic Elena as a rideshare..."
   },
@@ -2426,7 +2426,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 53 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2448,7 +2448,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 55 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication."
   },
@@ -2459,7 +2459,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 51 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2481,7 +2481,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": null,
     "details": "A batch of 21 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system. First launch of the \u201cv2 Mini\u201d version of Starlink satellites."
   },
@@ -2492,7 +2492,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": null,
     "details": "SpaceX Crew-6 is the sixth crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -2503,7 +2503,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 51 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2514,7 +2514,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "A batch of 40 satellites for the OneWeb satellite constellation, which is intended to provide global Internet broadband service for individual consumers. The constellation is planned to have around 64..."
   },
@@ -2525,7 +2525,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "27th commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -2536,7 +2536,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 52 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2547,7 +2547,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "SES-18 & SES-19 are two communications satellites built by Northrop Grumman."
   },
@@ -2558,7 +2558,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 56 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2569,7 +2569,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 56 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2591,7 +2591,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "Intelsat 40e is an advanced geostationary satellite that will provide Intelsat\u2019s government and enterprise customers across North and Central America with high-throughput, \u201ccoast-to-coast\u201d services. T..."
   },
@@ -2602,7 +2602,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "Transporter 7 mission is a dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -2613,7 +2613,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": null,
     "details": "A batch of 21 v2 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2635,7 +2635,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 46 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2657,7 +2657,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": "Viasat",
     "details": "The ViaSat-3 is a series of three Ka-band satellites is expected to provide vastly superior capabilities in terms of service speed and flexibility for a satellite platform. Each ViaSat-3 class satelli..."
   },
@@ -2668,7 +2668,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 56 satellites for Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2679,7 +2679,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 51 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2690,7 +2690,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 56 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2701,7 +2701,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": null,
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2712,7 +2712,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 9600,
     "customer": null,
     "details": "5 spare satellites for the Iridium NEXT constellation and 16 satellites for the OneWeb constellation (15 of current generation and 1 demonstration satellite for the next generation) on a share-ride."
   },
@@ -2745,7 +2745,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2756,7 +2756,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": null,
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2767,7 +2767,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "28th commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -2778,7 +2778,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 52 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2789,7 +2789,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": null,
     "details": "Transporter 8 mission is a dedicated rideshare flight to a sun-synchronous orbit with 72 small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -2811,7 +2811,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 47 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2822,7 +2822,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 56 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2844,7 +2844,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 48 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2855,7 +2855,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": null,
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2866,7 +2866,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 15600,
     "customer": null,
     "details": "A batch of 54 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system. This is the last launch of the v1.5 Starlink satellites."
   },
@@ -2877,7 +2877,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": null,
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2888,7 +2888,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": null,
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2899,7 +2899,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": null,
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2910,7 +2910,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": null,
     "details": "Geostationary communications satellite built by Maxar Technologies for EchoStar. With a capacity of 500 Gbps, its purpose is to relieve broadband capacity constraints in the Americas."
   },
@@ -2932,7 +2932,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2943,7 +2943,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 15 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2954,7 +2954,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2965,7 +2965,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2976,7 +2976,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -2987,7 +2987,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": "European Space Agency, Japan Aerospace Exploration Agency, National Aeronautics and Space Administration, Russian Federal Space Agency (ROSCOSMOS)",
     "details": "SpaceX Crew-7 is the seventh crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -2998,7 +2998,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3009,7 +3009,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3031,7 +3031,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3042,7 +3042,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3053,7 +3053,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3064,7 +3064,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3075,7 +3075,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3086,7 +3086,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3097,7 +3097,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3108,7 +3108,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3119,7 +3119,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3130,7 +3130,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3141,7 +3141,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": "National Aeronautics and Space Administration",
     "details": "Psyche is a NASA interplanetary mission to visit the main belt asteroid of the same name, 16 Psyche. Spacecraft will take 4 years and one Mars flyby to reach the asteroid, which is of particular inter..."
   },
@@ -3152,7 +3152,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3163,7 +3163,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3174,7 +3174,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3185,7 +3185,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3196,7 +3196,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3207,7 +3207,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3218,7 +3218,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3229,7 +3229,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3240,7 +3240,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "29th commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -3251,7 +3251,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": "SpaceX",
     "details": "Transporter 9 mission is a dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -3273,7 +3273,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3295,7 +3295,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3306,7 +3306,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3317,7 +3317,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3339,7 +3339,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3350,7 +3350,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3361,7 +3361,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3372,7 +3372,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3383,7 +3383,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3405,7 +3405,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": "United States Space Force",
     "details": "It is the seventh flight of the X-37B program. United States Air Force Orbital Test Vehicle is built by Boeing. It's an uncrewed 5000 kg, 8.8 m-long reusable mini-spaceplane capable of autonomous re-e..."
   },
@@ -3416,7 +3416,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3427,7 +3427,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3449,7 +3449,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3460,7 +3460,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3471,7 +3471,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3493,7 +3493,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3504,7 +3504,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3515,7 +3515,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3526,7 +3526,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration, Northrop Grumman Space Systems",
     "details": "This is the 20th flight of the Orbital ATK's uncrewed resupply spacecraft Cygnus and its 19th flight to the International Space Station under the Commercial Resupply Services contract with NASA."
   },
@@ -3548,7 +3548,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3581,7 +3581,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3603,7 +3603,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3614,7 +3614,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3625,7 +3625,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3636,7 +3636,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": "National Aeronautics and Space Administration, Russian Federal Space Agency (ROSCOSMOS)",
     "details": "SpaceX Crew-8 is the eighth crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -3647,7 +3647,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": "SpaceX",
     "details": "Transporter 10 mission is a dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers.\r\n\r\nThere will be 53 p..."
   },
@@ -3658,7 +3658,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3669,7 +3669,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3680,7 +3680,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3702,7 +3702,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3713,7 +3713,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3724,7 +3724,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "30th commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -3735,7 +3735,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3746,7 +3746,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3757,7 +3757,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": "Eutelsat",
     "details": "Eutelsat 36D is a planned new generation multi-mission geostationary telecommunications satellite for Eutelsat, replacing and enhance capacity at 36\u00b0 East, a key orbital slot for Eutelsat for TV broad..."
   },
@@ -3768,7 +3768,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3779,7 +3779,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3790,7 +3790,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3801,7 +3801,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3823,7 +3823,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3845,7 +3845,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3856,7 +3856,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3867,7 +3867,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3878,7 +3878,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3900,7 +3900,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3922,7 +3922,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3933,7 +3933,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3944,7 +3944,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3955,7 +3955,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3966,7 +3966,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3977,7 +3977,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -3988,7 +3988,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4010,7 +4010,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4021,7 +4021,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4032,7 +4032,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4054,7 +4054,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4065,7 +4065,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4087,7 +4087,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4098,7 +4098,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4109,7 +4109,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4120,7 +4120,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5300,
     "customer": null,
     "details": "ASTRA 1P, a classic wide-beam satellite, will support SES\u2019s prime TV neighbourhood and enable content owners, private and public broadcasters across Germany, France and Spain to continue broadcasting ..."
   },
@@ -4131,7 +4131,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4142,7 +4142,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4153,7 +4153,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": "National Aeronautics and Space Administration",
     "details": "The Geostationary Operational Environmental Satellite-U (GOES-U) is the fourth of the next generation of geostationary weather satellites, known as the GOES-R series. The four satellites of the series..."
   },
@@ -4164,7 +4164,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4186,7 +4186,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4208,7 +4208,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Failure",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4219,7 +4219,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4230,7 +4230,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4241,7 +4241,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4252,7 +4252,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4263,7 +4263,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4274,7 +4274,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": null,
     "details": "This is the 21st flight of the Orbital ATK's uncrewed resupply spacecraft Cygnus and its 20th flight to the International Space Station under the Commercial Resupply Services contract with NASA."
   },
@@ -4285,7 +4285,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4307,7 +4307,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4329,7 +4329,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": "SpaceX",
     "details": "Dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -4340,7 +4340,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4351,7 +4351,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4362,7 +4362,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4373,7 +4373,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4384,7 +4384,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4428,7 +4428,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4450,7 +4450,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4461,7 +4461,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4472,7 +4472,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": "National Aeronautics and Space Administration, Russian Federal Space Agency (ROSCOSMOS)",
     "details": "SpaceX Crew-9 is the ninth crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -4505,7 +4505,7 @@
     "vehicle": "Falcon Heavy",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 6000,
     "customer": "National Aeronautics and Space Administration",
     "details": "Europa Clipper is the first dedicated mission to study Jupiter's moon Europa. Mission is developed by NASA and comprises of an orbiter spacecraft, which, while in orbit around Jupiter, will perform nu..."
   },
@@ -4516,7 +4516,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4527,7 +4527,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4538,7 +4538,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4549,7 +4549,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": "Eutelsat OneWeb",
     "details": "A batch of 20 satellites for the OneWeb satellite constellation, which is intended to provide global Internet broadband service for individual consumers. The constellation is planned to have around 64..."
   },
@@ -4560,7 +4560,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4582,7 +4582,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4593,7 +4593,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4604,7 +4604,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4615,7 +4615,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "31st commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -4626,7 +4626,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4637,7 +4637,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4659,7 +4659,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4670,7 +4670,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4681,7 +4681,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4703,7 +4703,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4736,7 +4736,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4747,7 +4747,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4758,7 +4758,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4769,7 +4769,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4780,7 +4780,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4802,7 +4802,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4813,7 +4813,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 20 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4835,7 +4835,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4846,7 +4846,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4857,7 +4857,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 4400,
     "customer": "United States Space Force",
     "details": "GPS-III (Global Positioning System) is the first evolution stage of the third generation of the GPS satellites. It consists of the first ten (known as \"tranche\") of GPS III satellites.\r\n\r\nThis spacecr..."
   },
@@ -4901,7 +4901,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4912,7 +4912,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4934,7 +4934,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4956,7 +4956,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4967,7 +4967,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -4989,7 +4989,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5000,7 +5000,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5011,7 +5011,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": "SpaceX",
     "details": "Dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -5044,7 +5044,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5055,7 +5055,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5066,7 +5066,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5077,7 +5077,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5099,7 +5099,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5110,7 +5110,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5132,7 +5132,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5143,7 +5143,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5154,7 +5154,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5165,7 +5165,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5176,7 +5176,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system. First Starlink launch to feature a Falcon 9 booster landing within The Ba..."
   },
@@ -5187,7 +5187,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5198,7 +5198,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 22 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5220,7 +5220,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5231,7 +5231,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5264,7 +5264,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5275,7 +5275,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": "Japan Aerospace Exploration Agency, National Aeronautics and Space Administration, Russian Federal Space Agency (ROSCOSMOS)",
     "details": "SpaceX Crew-10 is the tenth crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -5286,7 +5286,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": "SpaceX, Varda Space Industries",
     "details": "Dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -5297,7 +5297,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5308,7 +5308,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5341,7 +5341,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5352,7 +5352,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5374,7 +5374,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5385,7 +5385,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5396,7 +5396,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5418,7 +5418,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 21 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5429,7 +5429,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5451,7 +5451,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "32nd commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -5473,7 +5473,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5484,7 +5484,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5495,7 +5495,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5506,7 +5506,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5517,7 +5517,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5528,7 +5528,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 29 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5539,7 +5539,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5550,7 +5550,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 26 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5561,7 +5561,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5572,7 +5572,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 26 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5583,7 +5583,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5594,7 +5594,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5605,7 +5605,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 26 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5616,7 +5616,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5627,7 +5627,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5638,7 +5638,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5649,7 +5649,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5671,7 +5671,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5682,7 +5682,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 4400,
     "customer": "United States Space Force",
     "details": "Eighth of ten GPS III missions."
   },
@@ -5693,7 +5693,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5704,7 +5704,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5715,7 +5715,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5737,7 +5737,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 26 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5748,7 +5748,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5759,7 +5759,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 26 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5770,7 +5770,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 23 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5781,7 +5781,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 26 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5792,7 +5792,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5803,7 +5803,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5814,7 +5814,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 5000,
     "customer": "SpaceX",
     "details": "Dedicated rideshare flight to a sun-synchronous orbit with dozens of small microsatellites and nanosatellites for commercial and government customers."
   },
@@ -5836,7 +5836,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5847,7 +5847,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5858,7 +5858,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 26 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5880,7 +5880,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 27 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5891,7 +5891,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5913,7 +5913,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 26 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5935,7 +5935,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5968,7 +5968,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5979,7 +5979,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -5990,7 +5990,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6001,7 +6001,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 19 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6012,7 +6012,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 12500,
     "customer": "Japan Aerospace Exploration Agency, National Aeronautics and Space Administration, Russian Federal Space Agency (ROSCOSMOS)",
     "details": "SpaceX Crew-11 is the eleventh crewed operational flight of a Crew Dragon spacecraft to the International Space Station as part of NASA's Commercial Crew Program."
   },
@@ -6023,7 +6023,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6045,7 +6045,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6056,7 +6056,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6067,7 +6067,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6089,7 +6089,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6100,7 +6100,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration",
     "details": "33rd commercial resupply services mission to the International Space Station operated by SpaceX. The flight will be conducted under the second Commercial Resupply Services contract with NASA.\r\n\r\nCargo..."
   },
@@ -6133,7 +6133,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6144,7 +6144,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6155,7 +6155,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6166,7 +6166,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6177,7 +6177,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6188,7 +6188,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6199,7 +6199,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Kennedy Space Center, FL, USA, Launch Complex 39A",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6210,7 +6210,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6243,7 +6243,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6254,7 +6254,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 2500,
     "customer": "National Aeronautics and Space Administration, Northrop Grumman Space Systems",
     "details": "This is the 23rd flight of the Northrop Grumman's uncrewed resupply spacecraft Cygnus and its 22nd flight to the International Space Station under the Commercial Resupply Services contract with NASA."
   },
@@ -6265,7 +6265,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6276,7 +6276,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6287,7 +6287,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6320,7 +6320,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Cape Canaveral SFS, FL, USA, Space Launch Complex 40",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6331,7 +6331,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 24 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6342,7 +6342,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   },
@@ -6353,7 +6353,7 @@
     "vehicle": "Falcon 9",
     "outcome": "Success",
     "site": "Vandenberg SFB, CA, USA, Space Launch Complex 4E",
-    "payload_mass_kg": null,
+    "payload_mass_kg": 17400,
     "customer": "SpaceX",
     "details": "A batch of 28 satellites for the Starlink mega-constellation - SpaceX's project for space-based Internet communication system."
   }
