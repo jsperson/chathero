@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import { clearConfigCache } from '@/lib/config';
 
 export async function POST(request: NextRequest) {
   try {
@@ -50,6 +51,9 @@ export async function POST(request: NextRequest) {
     });
 
     await fs.writeFile(configPath, yamlContent, 'utf-8');
+
+    // Clear the config cache so the new config is loaded on next request
+    clearConfigCache();
 
     return NextResponse.json({
       success: true,

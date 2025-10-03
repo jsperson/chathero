@@ -43,45 +43,86 @@ export default function SchemaAdmin() {
       const response = await fetch('/api/admin/schema');
       const data = await response.json();
 
-      // Transform discovered schema into editable format
-      const categoricalFields = data.discovered.categoricalFields.map((fieldName: string) => {
-        const field = data.discovered.fields.find((f: any) => f.name === fieldName);
-        return {
-          name: fieldName,
-          displayName: formatDisplayName(fieldName),
-          description: `${field?.uniqueCount || 0} unique values`,
-          keywords: [fieldName],
-          sampleValues: field?.sampleValues || [],
-          uniqueCount: field?.uniqueCount || 0,
-          type: field?.type || 'string',
-        };
-      });
+      // If existing config exists, use it
+      if (data.existingConfig) {
+        const config = data.existingConfig;
 
-      const numericFields = data.discovered.numericFields.map((fieldName: string) => {
-        const field = data.discovered.fields.find((f: any) => f.name === fieldName);
-        return {
-          name: fieldName,
-          displayName: formatDisplayName(fieldName),
-          description: 'Numeric field',
-          keywords: [fieldName],
-          sampleValues: field?.sampleValues || [],
-          uniqueCount: field?.uniqueCount || 0,
-          type: 'number',
-        };
-      });
+        // Transform existing config into editable format
+        const categoricalFields = config.dataSchema.categoricalFields.map((field: any) => {
+          const discoveredField = data.discovered.fields.find((f: any) => f.name === field.name);
+          return {
+            name: field.name,
+            displayName: field.displayName,
+            description: field.description,
+            keywords: config.domainKnowledge.fieldKeywords[field.name] || [field.name],
+            sampleValues: discoveredField?.sampleValues || [],
+            uniqueCount: discoveredField?.uniqueCount || 0,
+            type: discoveredField?.type || 'string',
+          };
+        });
 
-      setSchema({
-        project: {
-          name: 'My Project',
-          description: `Dataset with ${data.discovered.totalRecords} records`,
-          domain: 'general data',
-        },
-        categoricalFields,
-        numericFields,
-        dateFields: data.discovered.dateFields || [],
-        primaryDateField: data.discovered.dateFields?.[0] || '',
-        exampleQuestions: [],
-      });
+        const numericFields = (config.dataSchema.numericFields || []).map((field: any) => {
+          const discoveredField = data.discovered.fields.find((f: any) => f.name === field.name);
+          return {
+            name: field.name,
+            displayName: field.displayName,
+            description: field.unit || 'Numeric field',
+            keywords: [field.name],
+            sampleValues: discoveredField?.sampleValues || [],
+            uniqueCount: discoveredField?.uniqueCount || 0,
+            type: 'number',
+          };
+        });
+
+        setSchema({
+          project: config.project,
+          categoricalFields,
+          numericFields,
+          dateFields: data.discovered.dateFields || [],
+          primaryDateField: config.dataSchema.primaryDateField,
+          exampleQuestions: config.exampleQuestions || [],
+        });
+      } else {
+        // No existing config, use discovered schema
+        const categoricalFields = data.discovered.categoricalFields.map((fieldName: string) => {
+          const field = data.discovered.fields.find((f: any) => f.name === fieldName);
+          return {
+            name: fieldName,
+            displayName: formatDisplayName(fieldName),
+            description: `${field?.uniqueCount || 0} unique values`,
+            keywords: [fieldName],
+            sampleValues: field?.sampleValues || [],
+            uniqueCount: field?.uniqueCount || 0,
+            type: field?.type || 'string',
+          };
+        });
+
+        const numericFields = data.discovered.numericFields.map((fieldName: string) => {
+          const field = data.discovered.fields.find((f: any) => f.name === fieldName);
+          return {
+            name: fieldName,
+            displayName: formatDisplayName(fieldName),
+            description: 'Numeric field',
+            keywords: [fieldName],
+            sampleValues: field?.sampleValues || [],
+            uniqueCount: field?.uniqueCount || 0,
+            type: 'number',
+          };
+        });
+
+        setSchema({
+          project: {
+            name: 'My Project',
+            description: `Dataset with ${data.discovered.totalRecords} records`,
+            domain: 'general data',
+          },
+          categoricalFields,
+          numericFields,
+          dateFields: data.discovered.dateFields || [],
+          primaryDateField: data.discovered.dateFields?.[0] || '',
+          exampleQuestions: [],
+        });
+      }
     } catch (error) {
       console.error('Failed to load schema:', error);
     } finally {

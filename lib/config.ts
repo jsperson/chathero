@@ -129,3 +129,8 @@ export function getCachedConfig(): AppConfig | null {
 export function getCachedProjectConfig(): ProjectConfig | null {
   return cachedProjectConfig;
 }
+
+export function clearConfigCache(): void {
+  cachedConfig = null;
+  cachedProjectConfig = null;
+}
