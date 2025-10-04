@@ -20,10 +20,12 @@ ChatHero is a generic framework that allows users to interact with JSON data thr
 - **Context-Aware**: AI knows current date and dataset domain
 
 ### 📊 Data Management
+- **Multi-Dataset Support**: Handle multiple datasets with dropdown selector, each with its own configuration
 - **Automatic Schema Discovery**: Analyzes JSON structure to identify field types, categorical fields, and date fields
 - **Interactive Data Browser**: Sortable, searchable table view with all data
 - **Field Detection**: Automatically identifies strings, numbers, booleans, dates, arrays, objects
 - **Smart Categorization**: Fields with limited unique values marked as categorical
+- **Dataset Persistence**: Last selected dataset saved in localStorage and cookies
 
 ### ⚙️ Admin Interface (`/admin/schema`)
 - **AI-Assisted Configuration**: Built-in AI helps generate field descriptions, keywords, and example questions
@@ -94,10 +96,29 @@ ai:
 
 dataSource:
   type: "json"
-  path: "./data/spacex-launches.json"
+  datasetsPath: "./data"           # Root folder containing dataset subfolders
+  defaultDataset: "spacex-launches" # Default dataset to load
 ```
 
-### Project Configuration (`config/project.yaml`)
+### Dataset Structure
+
+Each dataset is stored in its own folder under `data/`:
+
+```
+data/
+  spacex-launches/
+    data.json          # The dataset (JSON array)
+    project.yaml       # Dataset-specific configuration (optional)
+    README.md          # Dataset description (optional)
+  us-presidents/
+    data.json
+    project.yaml
+    README.md
+```
+
+Datasets are automatically discovered and appear in the dropdown selector on the data page.
+
+### Project Configuration (`data/{dataset-name}/project.yaml`)
 
 Optional - auto-generated if not present:
 
@@ -156,12 +177,13 @@ aiContext:
    echo "OPENAI_API_KEY=your-api-key-here" > .env
    ```
 
-4. **Point to your data**
+4. **Configure datasets**
    Edit `config/app.yaml`:
    ```yaml
    dataSource:
      type: "json"
-     path: "./data/your-data.json"
+     datasetsPath: "./data"
+     defaultDataset: "spacex-launches"  # or "us-presidents"
    ```
 
 5. **Start the application**
@@ -178,8 +200,10 @@ aiContext:
 
 ### Step 1: Prepare Your Data
 - JSON array format: `[{...}, {...}, ...]`
-- Place in `data/` directory
-- Update path in `config/app.yaml`
+- Create a folder: `data/your-dataset-name/`
+- Place JSON file as: `data/your-dataset-name/data.json`
+- Optionally add `README.md` for dataset description
+- Dataset will automatically appear in the dropdown selector
 
 ### Step 2: Configure Schema (Optional)
 
@@ -233,7 +257,7 @@ aiContext:
 ### Schema Configuration (`/admin/schema`)
 
 **Actions (Top of Page)**
-- **Save Configuration**: Writes to `config/project.yaml`
+- **Save Configuration**: Writes to dataset-specific `project.yaml`
 - **Rediscover Schema**: Updates fields from data while preserving metadata
 - **Download YAML**: Get configuration file
 - **Clear Configuration**: Reset to auto-discovery
@@ -250,9 +274,11 @@ aiContext:
 - Configure categorical and numeric fields
 - Set primary date field
 
-## Sample Dataset
+## Sample Datasets
 
-Includes SpaceX launch data (578 missions, 2006-2025):
+ChatHero includes two sample datasets to demonstrate capabilities:
+
+### SpaceX Launches (578 missions, 2006-2025)
 
 **Fields:**
 - `launch_date`: Date of launch
@@ -270,6 +296,24 @@ Includes SpaceX launch data (578 missions, 2006-2025):
 - "What's the total cost of all Falcon 9 launches?"
 - "Average payload mass by vehicle?"
 - "Show successful launches in 2024"
+
+### US Presidents (46 presidents, 1789-present)
+
+**Fields:**
+- `name`: President's full name
+- `spouse`: Spouse's name
+- `birth_date`, `birth_place`: Birth information
+- `death_date`, `cause_of_death`: Death information (null for living presidents)
+- `presidential_start`, `presidential_end`: Terms of office
+- `party`: Political party affiliation
+- `other_offices`: Array of other offices held
+
+**Sample Queries:**
+- "How many presidents by party?"
+- "Show presidents who died in office"
+- "Which presidents served in the military?"
+- "Average age at inauguration by century?"
+- "Which presidents were born in Virginia?"
 
 ## Advanced Features
 
