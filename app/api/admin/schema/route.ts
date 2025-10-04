@@ -21,11 +21,24 @@ export async function GET(request: NextRequest) {
     let existingConfig = null;
     try {
       const datasetName = selectedDataset || config.dataSource.defaultDataset;
-      const configPath = path.join(process.cwd(), config.dataSource.datasetsPath, datasetName, 'project.yaml');
-      await fs.access(configPath);
-      // File exists, load it
-      const projectConfig = await loadProjectConfig(selectedDataset);
-      existingConfig = projectConfig;
+      const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
+
+      // Find dataset in type folders
+      const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
+      const typeFolders = typeEntries.filter(entry => entry.isDirectory());
+
+      for (const typeFolder of typeFolders) {
+        const configPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
+        try {
+          await fs.access(configPath);
+          // File exists, load it
+          const projectConfig = await loadProjectConfig(selectedDataset);
+          existingConfig = projectConfig;
+          break;
+        } catch (e) {
+          // Try next type folder
+        }
+      }
     } catch (error) {
       // File doesn't exist, that's ok
     }

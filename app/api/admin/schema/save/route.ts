@@ -50,7 +50,28 @@ export async function POST(request: NextRequest) {
     // Write to dataset-specific project.yaml
     const config = await loadConfig();
     const datasetName = selectedDataset || config.dataSource.defaultDataset;
-    const configPath = path.join(process.cwd(), config.dataSource.datasetsPath, datasetName, 'project.yaml');
+    const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
+
+    // Find dataset in type folders
+    const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
+    const typeFolders = typeEntries.filter(entry => entry.isDirectory());
+
+    let configPath: string | null = null;
+    for (const typeFolder of typeFolders) {
+      const potentialPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
+      try {
+        await fs.access(potentialPath);
+        configPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
+        break;
+      } catch (e) {
+        // Try next type folder
+      }
+    }
+
+    if (!configPath) {
+      throw new Error(`Dataset '${datasetName}' not found`);
+    }
+
     const yamlContent = yaml.dump(projectConfig, {
       indent: 2,
       lineWidth: 100,

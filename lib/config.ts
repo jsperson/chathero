@@ -97,17 +97,40 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
   try {
     const appConfig = await loadConfig();
     const datasetName = dataset || appConfig.dataSource.defaultDataset;
-    const configPath = path.join(process.cwd(), appConfig.dataSource.datasetsPath, datasetName, 'project.yaml');
+    const datasetsPath = path.join(process.cwd(), appConfig.dataSource.datasetsPath);
+
+    // Find dataset in type folders
+    const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
+    const typeFolders = typeEntries.filter(entry => entry.isDirectory());
+
+    let configPath: string | null = null;
+    let dataPath: string | null = null;
+
+    for (const typeFolder of typeFolders) {
+      const potentialConfigPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
+      const potentialDataPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
+      try {
+        await fs.access(potentialDataPath);
+        configPath = potentialConfigPath;
+        dataPath = potentialDataPath;
+        break;
+      } catch (e) {
+        // Try next type folder
+      }
+    }
+
+    if (!dataPath) {
+      throw new Error(`Dataset '${datasetName}' not found in any type folder`);
+    }
 
     try {
-      const fileContent = await fs.readFile(configPath, 'utf-8');
+      const fileContent = await fs.readFile(configPath!, 'utf-8');
       cachedProjectConfig = yaml.load(fileContent) as ProjectConfig;
       return cachedProjectConfig;
     } catch (readError) {
       // If project.yaml doesn't exist, auto-discover schema from data
       console.log('project.yaml not found, auto-discovering schema from data...');
 
-      const dataPath = path.join(process.cwd(), appConfig.dataSource.datasetsPath, datasetName, 'data.json');
       const dataContent = await fs.readFile(dataPath, 'utf-8');
       const data = JSON.parse(dataContent);
 

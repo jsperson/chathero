@@ -11,21 +11,44 @@ export async function POST(request: NextRequest) {
 
     const config = await loadConfig();
     const datasetName = selectedDataset || config.dataSource.defaultDataset;
-    const configPath = path.join(process.cwd(), config.dataSource.datasetsPath, datasetName, 'project.yaml');
+    const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
+
+    // Find dataset in type folders
+    const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
+    const typeFolders = typeEntries.filter(entry => entry.isDirectory());
+
+    let configPath: string | null = null;
+    for (const typeFolder of typeFolders) {
+      const potentialPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
+      try {
+        await fs.access(potentialPath);
+        configPath = potentialPath;
+        break;
+      } catch (e) {
+        // Try next type folder
+      }
+    }
 
     // Check if file exists
     try {
-      await fs.access(configPath);
-      // File exists, delete it
-      await fs.unlink(configPath);
+      if (configPath) {
+        await fs.access(configPath);
+        // File exists, delete it
+        await fs.unlink(configPath);
 
-      // Clear the config cache so auto-discovery takes over
-      clearConfigCache();
+        // Clear the config cache so auto-discovery takes over
+        clearConfigCache();
 
-      return NextResponse.json({
-        success: true,
-        message: 'Configuration cleared successfully',
-      });
+        return NextResponse.json({
+          success: true,
+          message: 'Configuration cleared successfully',
+        });
+      } else {
+        return NextResponse.json({
+          success: true,
+          message: 'No configuration file to clear',
+        });
+      }
     } catch (error) {
       // File doesn't exist, nothing to clear
       return NextResponse.json({

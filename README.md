@@ -102,21 +102,36 @@ dataSource:
 
 ### Dataset Structure
 
-Each dataset is stored in its own folder under `data/`:
+Datasets are organized by type in folders under `data/`:
 
 ```
 data/
-  spacex-launches/
-    data.json          # The dataset (JSON array)
-    project.yaml       # Dataset-specific configuration (optional)
-    README.md          # Dataset description (optional)
-  us-presidents/
-    data.json
-    project.yaml
-    README.md
+  json/                     # JSON file-based datasets
+    spacex-launches/
+      data.json             # The dataset (JSON array)
+      project.yaml          # Dataset-specific configuration (optional)
+      README.md             # Dataset description (optional)
+    us-presidents/
+      data.json
+      project.yaml
+      README.md
+  url/                      # URL-based datasets (future)
+    live-api-data/
+      config.yaml           # URL and cache settings
+      project.yaml
+      README.md
+  postgres/                 # Database datasets (future)
+    customer-data/
+      config.yaml           # Connection settings
+      project.yaml
+      README.md
 ```
 
-Datasets are automatically discovered and appear in the dropdown selector on the data page.
+**Dataset Type Auto-Detection:**
+- The system scans all type folders (`json/`, `url/`, `postgres/`, etc.)
+- Each dataset automatically appears in the dropdown selector
+- Type is determined by which folder contains the dataset
+- No explicit type configuration needed
 
 ### Project Configuration (`data/{dataset-name}/project.yaml`)
 
@@ -200,8 +215,8 @@ aiContext:
 
 ### Step 1: Prepare Your Data
 - JSON array format: `[{...}, {...}, ...]`
-- Create a folder: `data/your-dataset-name/`
-- Place JSON file as: `data/your-dataset-name/data.json`
+- Create a folder: `data/json/your-dataset-name/`
+- Place JSON file as: `data/json/your-dataset-name/data.json`
 - Optionally add `README.md` for dataset description
 - Dataset will automatically appear in the dropdown selector
 

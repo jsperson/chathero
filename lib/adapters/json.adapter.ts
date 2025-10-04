@@ -15,10 +15,31 @@ export class JSONAdapter implements DataAdapter {
     try {
       let filePath: string;
 
-      // New multi-dataset structure
+      // New multi-dataset structure with type folders
       if ('datasetsPath' in this.config && this.config.datasetsPath) {
         const datasetName = this.dataset || this.config.defaultDataset;
-        filePath = path.join(process.cwd(), this.config.datasetsPath, datasetName, 'data.json');
+
+        // Try to find dataset in type folders (json, url, etc.)
+        const datasetsPath = path.join(process.cwd(), this.config.datasetsPath);
+        const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
+        const typeFolders = typeEntries.filter(entry => entry.isDirectory());
+
+        let found = false;
+        for (const typeFolder of typeFolders) {
+          const potentialPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
+          try {
+            await fs.access(potentialPath);
+            filePath = potentialPath;
+            found = true;
+            break;
+          } catch (e) {
+            // Try next type folder
+          }
+        }
+
+        if (!found) {
+          throw new Error(`Dataset '${datasetName}' not found in any type folder`);
+        }
       }
       // Legacy single file structure (backward compatibility)
       else if ('path' in this.config && this.config.path) {
