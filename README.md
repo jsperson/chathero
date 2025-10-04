@@ -2,6 +2,10 @@
 
 A powerful, AI-powered data exploration platform that works with any JSON dataset. Chat with your data using natural language, browse it in tables, and configure everything through an intelligent admin interface.
 
+## Acknowledgments
+
+Special thanks to **Kelly Lotsu-Morgan** for his excellent work on the enterprise application **CalendarHero**. This project takes inspiration from that innovative platform.
+
 ## Overview
 
 ChatHero is a generic framework that allows users to interact with JSON data through AI-powered chat and direct table browsing. The application features automatic schema discovery, intelligent query processing, and a complete admin interface for configuration - all without writing code.
@@ -368,7 +372,11 @@ Issues and pull requests welcome at: https://github.com/jsperson/chathero
 
 ## License
 
-[License information to be added]
+MIT License - See [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2025 Jason Scott Person and Kelly Lotsu-Morgan
+
+This software is free to use with attribution.
 
 ## Support
 
