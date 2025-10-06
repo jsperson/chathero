@@ -58,11 +58,18 @@ For cross-dataset queries:
 - For temporal correlations, compare date fields across datasets
 - Present results clearly showing which dataset each statistic refers to
 
-Example: "How many launches by president?"
+IMPORTANT FILTERING AND CONCISENESS RULES:
+- ALWAYS honor user's filtering requests (e.g., "leave off zeros", "exclude X", "only show Y")
+- By default, when aggregating or counting, ONLY show non-zero results unless explicitly asked to show all
+- Be concise - use compact formats like tables or bullet lists for multiple results
+- Don't waste tokens listing irrelevant zero-count items
+
+Example: "How many launches by president? Leave off presidents with zero launches."
 1. Identify presidents (where _dataset_source = "presidents")
 2. Identify launches (where _dataset_source = "launches")
 3. For each president, count launches where launch_date falls between presidential_start and presidential_end
-4. Present: "President X: N launches, President Y: M launches..."`
+4. FILTER OUT presidents with 0 launches (user explicitly requested this)
+5. Present ONLY presidents with launches: "President X: N launches, President Y: M launches..."`
         : '';
 
       const systemPrompt = `${systemRole}
@@ -87,6 +94,15 @@ Answer the user's question based on this data. Perform any necessary counting, g
       });
 
       const response = completion.choices[0]?.message?.content;
+      const finishReason = completion.choices[0]?.finish_reason;
+
+      console.log('OpenAI completion details:', {
+        finishReason,
+        responseLength: response?.length,
+        promptTokens: completion.usage?.prompt_tokens,
+        completionTokens: completion.usage?.completion_tokens,
+        totalTokens: completion.usage?.total_tokens
+      });
 
       return response || 'No response generated';
     } catch (error) {
