@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 interface FieldConfig {
   name: string;
@@ -34,6 +35,7 @@ interface Dataset {
 }
 
 export default function SchemaAdmin() {
+  const searchParams = useSearchParams();
   const [schema, setSchema] = useState<SchemaConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -67,8 +69,12 @@ export default function SchemaAdmin() {
 
       setAvailableDatasets(sorted);
 
-      // Load first dataset alphabetically
-      if (sorted.length > 0) {
+      // Check if dataset is specified in URL
+      const datasetFromUrl = searchParams.get('dataset');
+      if (datasetFromUrl && sorted.some((d: Dataset) => d.name === datasetFromUrl)) {
+        setSelectedDataset(datasetFromUrl);
+      } else if (sorted.length > 0) {
+        // Load first dataset alphabetically
         setSelectedDataset(sorted[0].name);
       }
     } catch (error) {

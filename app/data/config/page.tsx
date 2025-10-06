@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface QueryExample {
   question: string;
@@ -16,6 +16,7 @@ interface QueryExample {
 
 export default function DatasetConfigPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [datasetName, setDatasetName] = useState('');
@@ -25,14 +26,20 @@ export default function DatasetConfigPage() {
   const [aiPrompt, setAiPrompt] = useState('');
 
   useEffect(() => {
-    // Get selected dataset from cookie
-    const cookies = document.cookie.split(';');
-    const selectedDatasetCookie = cookies.find(c => c.trim().startsWith('selectedDatasets='));
-    const selectedDatasets = selectedDatasetCookie
-      ? selectedDatasetCookie.split('=')[1].split(',').map(s => s.trim())
-      : [];
+    // Check URL parameter first, then fall back to cookie
+    const datasetFromUrl = searchParams.get('dataset');
 
-    const dataset = selectedDatasets[0] || 'spacex-launches';
+    let dataset = datasetFromUrl;
+    if (!dataset) {
+      // Get selected dataset from cookie
+      const cookies = document.cookie.split(';');
+      const selectedDatasetCookie = cookies.find(c => c.trim().startsWith('selectedDatasets='));
+      const selectedDatasets = selectedDatasetCookie
+        ? selectedDatasetCookie.split('=')[1].split(',').map(s => s.trim())
+        : [];
+      dataset = selectedDatasets[0] || 'spacex-launches';
+    }
+
     setDatasetName(dataset);
 
     // Load current config
