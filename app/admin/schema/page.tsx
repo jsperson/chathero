@@ -50,7 +50,7 @@ export default function SchemaAdmin() {
 
   useEffect(() => {
     loadDatasets();
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     if (selectedDataset) {

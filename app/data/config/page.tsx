@@ -54,7 +54,7 @@ export default function DatasetConfigPage() {
         console.error('Failed to load config:', err);
         setLoading(false);
       });
-  }, []);
+  }, [searchParams]);
 
   const handleSave = async () => {
     setSaving(true);
