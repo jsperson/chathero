@@ -50,8 +50,10 @@ export default function SchemaAdmin() {
   const [selectedDataset, setSelectedDataset] = useState<string>('');
 
   useEffect(() => {
+    const datasetParam = searchParams.get('dataset');
+    console.log('Schema page - dataset from URL:', datasetParam);
     loadDatasets();
-  }, [searchParams]);
+  }, [searchParams.get('dataset')]);
 
   useEffect(() => {
     if (selectedDataset) {
@@ -72,12 +74,17 @@ export default function SchemaAdmin() {
 
       // Check if dataset is specified in URL
       const datasetFromUrl = searchParams.get('dataset');
+      console.log('loadDatasets - URL param:', datasetFromUrl);
+      console.log('loadDatasets - available datasets:', sorted.map(d => d.name));
+
       if (datasetFromUrl && sorted.some((d: Dataset) => d.name === datasetFromUrl)) {
+        console.log('loadDatasets - setting dataset from URL:', datasetFromUrl);
         setSelectedDataset(datasetFromUrl);
         // Also set cookie so API calls use the right dataset
         document.cookie = `selectedDataset=${datasetFromUrl}; path=/; max-age=31536000`;
       } else if (sorted.length > 0) {
         // Load first dataset alphabetically
+        console.log('loadDatasets - setting first dataset:', sorted[0].name);
         setSelectedDataset(sorted[0].name);
         document.cookie = `selectedDataset=${sorted[0].name}; path=/; max-age=31536000`;
       }
