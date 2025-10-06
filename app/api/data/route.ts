@@ -4,12 +4,17 @@ import { JSONAdapter } from '@/lib/adapters/json.adapter';
 
 export async function GET(request: NextRequest) {
   try {
-    // Get selected dataset from cookie or use default
+    // Get selected datasets from cookie (comma-separated) or use default
     const cookies = request.cookies;
-    const selectedDataset = cookies.get('selectedDataset')?.value;
+    const selectedDatasetsStr = cookies.get('selectedDatasets')?.value;
+
+    let selectedDatasets: string[] | undefined;
+    if (selectedDatasetsStr) {
+      selectedDatasets = selectedDatasetsStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    }
 
     const config = await loadConfig();
-    const dataAdapter = new JSONAdapter(config.dataSource, selectedDataset);
+    const dataAdapter = new JSONAdapter(config.dataSource, selectedDatasets);
     const data = await dataAdapter.getData();
 
     return NextResponse.json(data);

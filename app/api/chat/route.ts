@@ -16,16 +16,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get selected dataset from cookie or use default
+    // Get selected datasets from cookie (comma-separated) or use default
     const cookies = request.cookies;
-    const selectedDataset = cookies.get('selectedDataset')?.value;
+    const selectedDatasetsStr = cookies.get('selectedDatasets')?.value;
 
-    // Load configurations
+    let selectedDatasets: string[] | undefined;
+    if (selectedDatasetsStr) {
+      selectedDatasets = selectedDatasetsStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    }
+
+    // Load configurations (use first dataset for project config)
     const config = await loadConfig();
-    const projectConfig = await loadProjectConfig(selectedDataset);
+    const primaryDataset = selectedDatasets && selectedDatasets.length > 0
+      ? selectedDatasets[0]
+      : undefined;
+    const projectConfig = await loadProjectConfig(primaryDataset);
 
-    // Initialize data adapter
-    const dataAdapter = new JSONAdapter(config.dataSource, selectedDataset);
+    // Initialize data adapter with all selected datasets
+    const dataAdapter = new JSONAdapter(config.dataSource, selectedDatasets);
     const rawData = await dataAdapter.getData();
 
     // Initialize AI adapter
@@ -44,10 +52,16 @@ export async function POST(request: NextRequest) {
 
     // Add metadata
     const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    const metadata = {
+    const metadata: any = {
       current_date: currentDate,
       query_analysis: queryAnalysis.explanation,
     };
+
+    // Add dataset info if multiple datasets are selected
+    if (selectedDatasets && selectedDatasets.length > 1) {
+      metadata.datasets_queried = selectedDatasets;
+      metadata.note = 'Data from multiple datasets combined. Use _dataset_source field to identify record origin.';
+    }
 
     // PHASE 3: AI generates final response with processed data
     console.log('Phase 3: Generating final response...');

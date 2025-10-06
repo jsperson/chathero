@@ -34,7 +34,17 @@ export class QueryAnalyzer {
    * Analyze a user question using AI to determine how to process the data
    */
   async analyze(question: string, dataSample: any[]): Promise<QueryAnalysisResult> {
+    // Check if multiple datasets are present
+    const hasMultipleDatasets = dataSample.length > 0 && dataSample.some(record => record._dataset_source);
+    const datasetInfo = hasMultipleDatasets
+      ? `\nIMPORTANT: This data contains records from MULTIPLE datasets combined together.
+Each record has a '_dataset_source' field indicating which dataset it came from.
+Available datasets: ${[...new Set(dataSample.map(r => r._dataset_source).filter(Boolean))].join(', ')}
+You can filter by dataset using the '_dataset_source' field.`
+      : '';
+
     const systemPrompt = `You are a data query analyzer. Your job is to analyze user questions and determine how to process the data to answer them.
+${datasetInfo}
 
 Dataset schema:
 ${JSON.stringify(this.projectConfig.dataSchema, null, 2)}
@@ -43,6 +53,7 @@ Available fields:
 ${this.projectConfig.dataSchema.categoricalFields.map(f => `- ${f.name}: ${f.description}`).join('\n')}
 ${this.projectConfig.dataSchema.numericFields?.map(f => `- ${f.name} (numeric): ${f.displayName}`).join('\n') || ''}
 Primary date field: ${this.projectConfig.dataSchema.primaryDateField}
+${hasMultipleDatasets ? '- _dataset_source (categorical): Source dataset name' : ''}
 
 Sample data (first 3 records):
 ${JSON.stringify(dataSample.slice(0, 3), null, 2)}
