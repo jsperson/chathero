@@ -56,8 +56,12 @@ export class SchemaDiscovery {
       } else if (fieldAnalysis.type === 'date') {
         dateFields.push(fieldName);
       } else if (fieldAnalysis.type === 'string') {
-        // If field has limited unique values (< 10% of records or < 100), it's categorical
-        const threshold = Math.min(100, data.length * 0.1);
+        // If field has limited unique values, it's categorical
+        // Criteria: < 20 unique values OR < 10% of records (whichever is larger)
+        const percentageThreshold = data.length * 0.1;
+        const absoluteThreshold = 20;
+        const threshold = Math.max(absoluteThreshold, percentageThreshold);
+
         if (fieldAnalysis.uniqueCount < threshold) {
           categoricalFields.push(fieldName);
         }
