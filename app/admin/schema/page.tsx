@@ -197,11 +197,13 @@ export default function SchemaAdmin() {
           };
         });
 
-        // Get dataset name from localStorage for display
-        const saved = localStorage.getItem('selectedDataset');
-        const defaultName = saved
-          ? saved.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+        // Get dataset name from selectedDataset state for display
+        const defaultName = selectedDataset
+          ? selectedDataset.split(/[-_]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
           : 'My Project';
+
+        console.log('loadSchema - Using auto-discovered schema for:', selectedDataset);
+        console.log('loadSchema - Display name:', defaultName);
 
         setSchema({
           project: {
