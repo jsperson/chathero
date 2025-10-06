@@ -54,9 +54,21 @@ You MUST check the '_dataset_source' field to distinguish between datasets.
 When counting or aggregating, always separate results by dataset or explicitly state you're counting across all datasets combined.`
         : '';
 
+      // Check if this is a join result
+      const joinInstructions = context.join_results
+        ? `\n\n📊 JOIN RESULT INTERPRETATION:
+The data contains join results from a cross-dataset query.
+- 'results_by_left_record' contains an array where each element represents one record from the left dataset
+- Each element has 'match_count' showing how many records from the right dataset matched
+- 'total_right_records' is the TOTAL count in the right dataset (not just matched records)
+- 'total_matched_right_records' is the sum of all matches
+- When showing counts per record, use the 'match_count' field for each left record
+- The summary field provides context about the join`
+        : '';
+
       const systemPrompt = `${systemRole}
 
-Current date: ${currentDate}${domainContext}${multiDatasetWarning}
+Current date: ${currentDate}${domainContext}${multiDatasetWarning}${joinInstructions}
 
 Data context:
 ${JSON.stringify(context, null, 2)}

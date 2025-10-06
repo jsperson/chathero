@@ -447,12 +447,21 @@ export class DataProcessor {
       });
     }
 
+    // Calculate summary statistics for easier AI interpretation
+    const totalMatches = results.reduce((sum, r) => sum + r.match_count, 0);
+
     return {
       join_type: 'temporal',
       total_left_records: leftData.length,
       total_right_records: rightData.length,
-      matches: results,
-      match_summary: `Found ${results.length} ${strategy.leftDataset} records with matching ${strategy.rightDataset} records`,
+      total_matched_right_records: totalMatches,
+      results_by_left_record: results.map(r => ({
+        left_record: r.left_record,
+        match_count: r.match_count,
+        // Only include sample of matches to save tokens
+        sample_matches: r.matching_right_records.slice(0, 3),
+      })),
+      summary: `${strategy.leftDataset}: ${leftData.length} records, ${strategy.rightDataset}: ${rightData.length} total records, ${totalMatches} ${strategy.rightDataset} records matched to ${strategy.leftDataset} records`,
     };
   }
 
