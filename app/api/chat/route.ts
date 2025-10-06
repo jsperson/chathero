@@ -20,9 +20,15 @@ export async function POST(request: NextRequest) {
     const cookies = request.cookies;
     const selectedDatasetsStr = cookies.get('selectedDatasets')?.value;
 
+    console.log('Chat API - Cookie parsing:');
+    console.log('  Raw cookie value:', selectedDatasetsStr);
+
     let selectedDatasets: string[] | undefined;
     if (selectedDatasetsStr) {
       selectedDatasets = selectedDatasetsStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+      console.log('  Parsed datasets:', selectedDatasets);
+    } else {
+      console.log('  No selectedDatasets cookie found');
     }
 
     // Load configurations (use first dataset for project config)
