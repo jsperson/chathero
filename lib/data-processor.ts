@@ -31,7 +31,7 @@ export class DataProcessor {
     }
 
     // Filter queries
-    if (lowerQ.match(/show|list|find|all|launches? (in|from|during|for)/)) {
+    if (lowerQ.match(/show|list|find|all|\b(in|from|during|for)\b/)) {
       return {
         type: 'filter',
         filters: this.extractFilters(lowerQ),

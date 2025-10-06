@@ -51,6 +51,17 @@ Available datasets: ${uniqueDatasets.join(', ')}
 You can filter by dataset using the '_dataset_source' field.`
       : '';
 
+    // Generate dynamic multi-dataset examples
+    const multiDatasetExamples = hasMultipleDatasets && uniqueDatasets.length >= 1
+      ? `
+Multi-dataset examples (available datasets: ${uniqueDatasets.join(', ')}):
+- "how many ${uniqueDatasets[0]}" → {"operation": "aggregate", "filters": [{"field": "_dataset_source", "operator": "equals", "value": "${uniqueDatasets[0]}"}], "calculations": [{"type": "count"}], "explanation": "Count records from ${uniqueDatasets[0]} dataset only"}
+${uniqueDatasets.length >= 2 ? `- "show ${uniqueDatasets[1]}" → {"operation": "filter", "filters": [{"field": "_dataset_source", "operator": "equals", "value": "${uniqueDatasets[1]}"}], "limit": 50, "explanation": "Show records from ${uniqueDatasets[1]} dataset only"}` : ''}
+- "compare datasets" → {"operation": "aggregate", "groupBy": [{"field": "_dataset_source"}], "calculations": [{"type": "count"}], "explanation": "Group by dataset to compare record counts"}
+
+IMPORTANT: When the user mentions a specific dataset name (${uniqueDatasets.map(d => `"${d}"`).join(', ')}), you MUST add a filter for _dataset_source to isolate that dataset!`
+      : '';
+
     const systemPrompt = `You are a data query analyzer. Your job is to analyze user questions and determine how to process the data to answer them.
 ${datasetInfo}
 
@@ -82,18 +93,12 @@ Return a JSON object with this structure:
   "explanation": "Brief explanation of analysis approach"
 }
 
-Examples:
-- "launches by year" → {"operation": "aggregate", "groupBy": [{"field": "launch_date", "transform": "extract_year"}], "calculations": [{"type": "count"}], "explanation": "Group by year extracted from launch_date"}
-- "launches by day of week" → {"operation": "aggregate", "groupBy": [{"field": "launch_date", "transform": "extract_day_of_week"}], "calculations": [{"type": "count"}], "explanation": "Group by day of week from launch_date"}
-- "show Falcon 9 launches" → {"operation": "filter", "filters": [{"field": "vehicle", "operator": "contains", "value": "Falcon 9"}], "limit": 50, "explanation": "Filter for Falcon 9 vehicles"}
-- "average launches per year" → {"operation": "calculate", "calculations": [{"type": "average"}], "groupBy": [{"field": "launch_date", "transform": "extract_year"}], "explanation": "Calculate average count per year"}
-${hasMultipleDatasets ? `
-Multi-dataset examples:
-- "how many launches" → {"operation": "aggregate", "filters": [{"field": "_dataset_source", "operator": "equals", "value": "launches"}], "calculations": [{"type": "count"}], "explanation": "Count records from launches dataset only"}
-- "presidents by party" → {"operation": "aggregate", "filters": [{"field": "_dataset_source", "operator": "equals", "value": "presidents"}], "groupBy": [{"field": "party"}], "calculations": [{"type": "count"}], "explanation": "Count presidents by party"}
-- "compare launches and presidents" → {"operation": "aggregate", "groupBy": [{"field": "_dataset_source"}], "calculations": [{"type": "count"}], "explanation": "Group by dataset to compare record counts"}
-
-IMPORTANT: When the user mentions a specific dataset name (like "launches" or "presidents"), you MUST add a filter for _dataset_source to isolate that dataset!` : ''}
+General examples:
+- "records by year" → {"operation": "aggregate", "groupBy": [{"field": "date_field", "transform": "extract_year"}], "calculations": [{"type": "count"}], "explanation": "Group by year"}
+- "records by day of week" → {"operation": "aggregate", "groupBy": [{"field": "date_field", "transform": "extract_day_of_week"}], "calculations": [{"type": "count"}], "explanation": "Group by day of week"}
+- "show recent records" → {"operation": "filter", "limit": 50, "explanation": "Show recent records"}
+- "average per year" → {"operation": "calculate", "calculations": [{"type": "average"}], "groupBy": [{"field": "date_field", "transform": "extract_year"}], "explanation": "Calculate average per year"}
+${multiDatasetExamples}
 
 Important: Return ONLY valid JSON, no other text.`;
 
