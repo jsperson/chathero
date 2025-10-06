@@ -87,6 +87,13 @@ Examples:
 - "launches by day of week" → {"operation": "aggregate", "groupBy": [{"field": "launch_date", "transform": "extract_day_of_week"}], "calculations": [{"type": "count"}], "explanation": "Group by day of week from launch_date"}
 - "show Falcon 9 launches" → {"operation": "filter", "filters": [{"field": "vehicle", "operator": "contains", "value": "Falcon 9"}], "limit": 50, "explanation": "Filter for Falcon 9 vehicles"}
 - "average launches per year" → {"operation": "calculate", "calculations": [{"type": "average"}], "groupBy": [{"field": "launch_date", "transform": "extract_year"}], "explanation": "Calculate average count per year"}
+${hasMultipleDatasets ? `
+Multi-dataset examples:
+- "how many launches" → {"operation": "aggregate", "filters": [{"field": "_dataset_source", "operator": "equals", "value": "launches"}], "calculations": [{"type": "count"}], "explanation": "Count records from launches dataset only"}
+- "presidents by party" → {"operation": "aggregate", "filters": [{"field": "_dataset_source", "operator": "equals", "value": "presidents"}], "groupBy": [{"field": "party"}], "calculations": [{"type": "count"}], "explanation": "Count presidents by party"}
+- "compare launches and presidents" → {"operation": "aggregate", "groupBy": [{"field": "_dataset_source"}], "calculations": [{"type": "count"}], "explanation": "Group by dataset to compare record counts"}
+
+IMPORTANT: When the user mentions a specific dataset name (like "launches" or "presidents"), you MUST add a filter for _dataset_source to isolate that dataset!` : ''}
 
 Important: Return ONLY valid JSON, no other text.`;
 

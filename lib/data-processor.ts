@@ -192,25 +192,10 @@ export class DataProcessor {
    * Execute AI-generated query analysis instructions
    */
   executeAnalysis(analysis: QueryAnalysisResult): any {
-    // Check if we have multiple datasets
-    const hasMultipleDatasets = this.data.some(record => record._dataset_source);
-
     const result: any = {
+      total_records: this.data.length,
       analysis_explanation: analysis.explanation,
     };
-
-    // If multiple datasets, break down counts by dataset
-    if (hasMultipleDatasets) {
-      const datasetCounts: Record<string, number> = {};
-      this.data.forEach(record => {
-        const source = record._dataset_source || 'unknown';
-        datasetCounts[source] = (datasetCounts[source] || 0) + 1;
-      });
-      result.records_by_dataset = datasetCounts;
-      result.total_records_all_datasets = this.data.length;
-    } else {
-      result.total_records = this.data.length;
-    }
 
     // Apply filters first if specified
     let workingData = this.data;
