@@ -39,8 +39,8 @@ export default function DataPage() {
 
         // Get display name from datasets API
         const datasetsRes = await fetch('/api/datasets');
-        const allDatasets = await datasetsRes.json();
-        const datasetInfo = allDatasets.find((d: any) => d.name === datasetName);
+        const datasetsResponse = await datasetsRes.json();
+        const datasetInfo = datasetsResponse.datasets?.find((d: any) => d.name === datasetName);
 
         return {
           name: datasetName,
