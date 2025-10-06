@@ -16,9 +16,16 @@ export async function GET(request: NextRequest) {
 
     const selectedDataset = datasetFromUrl || datasetFromCookie;
 
+    console.log('Schema API - URL param:', datasetFromUrl);
+    console.log('Schema API - Cookie:', datasetFromCookie);
+    console.log('Schema API - Selected dataset:', selectedDataset);
+
     const config = await loadConfig();
     const dataAdapter = await createDataAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
     const data = await dataAdapter.getData();
+
+    console.log('Schema API - Data loaded, records:', data.length);
+    console.log('Schema API - First record _dataset_source:', data[0]?._dataset_source);
 
     const discoveredSchema = SchemaDiscovery.discover(data);
 
@@ -27,6 +34,8 @@ export async function GET(request: NextRequest) {
     try {
       const datasetName = selectedDataset || config.dataSource.defaultDataset;
       const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
+
+      console.log('Schema API - Looking for project.yaml for dataset:', datasetName);
 
       // Find dataset in type folders
       const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
@@ -37,7 +46,9 @@ export async function GET(request: NextRequest) {
         try {
           await fs.access(configPath);
           // File exists, load it
+          console.log('Schema API - Found project.yaml at:', configPath);
           const projectConfig = await loadProjectConfig(selectedDataset);
+          console.log('Schema API - Loaded project config:', projectConfig.project.name);
           existingConfig = projectConfig;
           break;
         } catch (e) {
@@ -46,7 +57,10 @@ export async function GET(request: NextRequest) {
       }
     } catch (error) {
       // File doesn't exist, that's ok
+      console.log('Schema API - No project.yaml found, will use auto-discovered schema');
     }
+
+    console.log('Schema API - Returning response with existingConfig:', existingConfig?.project?.name || 'null');
 
     return NextResponse.json({
       discovered: discoveredSchema,
