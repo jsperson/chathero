@@ -3,6 +3,8 @@ import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
 import { JSONAdapter } from '@/lib/adapters/json.adapter';
 import { QueryAnalyzer } from '@/lib/query-analyzer';
+import { CodeValidator } from '@/lib/code-validator';
+import { CodeExecutor } from '@/lib/code-executor';
 import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
@@ -69,6 +71,32 @@ export async function POST(request: NextRequest) {
     const queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes, config.ai.queryAnalyzerModel);
     await logger.chatQuery(requestId, 'PHASE_1_RESULT', queryAnalysis);
 
+    // PHASE 1.5: Validate generated code if present
+    let codeValidation = null;
+    if (queryAnalysis.generatedCode) {
+      await logger.chatQuery(requestId, 'PHASE_1.5_START', {
+        codeLength: queryAnalysis.generatedCode.length,
+        description: queryAnalysis.codeDescription
+      });
+
+      const codeValidator = new CodeValidator(aiAdapter);
+      codeValidation = await codeValidator.validate(
+        queryAnalysis.generatedCode,
+        queryAnalysis.codeDescription || 'No description provided'
+      );
+
+      await logger.chatQuery(requestId, 'PHASE_1.5_RESULT', codeValidation);
+
+      if (!codeValidation.approved) {
+        await logger.chatQuery(requestId, 'PHASE_1.5_REJECTED', {
+          reason: codeValidation.reason,
+          risks: codeValidation.risks
+        });
+        // Continue without code execution
+        queryAnalysis.generatedCode = undefined;
+      }
+    }
+
     // PHASE 2: Apply basic filters to get the requested data
     await logger.chatQuery(requestId, 'PHASE_2_START', { filtersToApply: queryAnalysis.filters?.length || 0 });
     let filteredData = rawData;
@@ -119,15 +147,39 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Execute approved code if present
+    let processedData = filteredData;
+    if (queryAnalysis.generatedCode && codeValidation?.approved) {
+      await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_START', {
+        dataRecords: filteredData.length
+      });
+
+      const executor = new CodeExecutor();
+      const executionResult = await executor.execute(queryAnalysis.generatedCode, filteredData);
+
+      if (executionResult.success) {
+        processedData = executionResult.result;
+        await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_SUCCESS', {
+          inputRecords: filteredData.length,
+          outputRecords: Array.isArray(processedData) ? processedData.length : 1
+        });
+      } else {
+        await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_FAILED', {
+          error: executionResult.error
+        });
+        // Fall back to unprocessed data
+      }
+    }
+
     await logger.chatQuery(requestId, 'PHASE_2_RESULT', {
-      filteredRecords: filteredData.length,
+      filteredRecords: processedData.length,
       originalRecords: rawData.length
     });
 
     const contextData = {
-      data: filteredData,
-      total_records: filteredData.length,
-      data_explanation: queryAnalysis.explanation,
+      data: processedData,
+      total_records: Array.isArray(processedData) ? processedData.length : 1,
+      data_explanation: queryAnalysis.codeDescription || queryAnalysis.explanation,
     };
 
     // Add metadata

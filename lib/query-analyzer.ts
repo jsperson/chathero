@@ -11,6 +11,8 @@ export interface QueryAnalysisResult {
   }>;
   limit?: number;
   fieldsToInclude?: string[];
+  generatedCode?: string;
+  codeDescription?: string;
   explanation: string;
 }
 
@@ -90,6 +92,8 @@ Return a JSON object:
   "filters": [{"field": "field_name", "operator": "equals|contains|greater_than|less_than", "value": "value"}],
   "limit": 100,
   "fieldsToInclude": ["field1", "field2"],
+  "generatedCode": "optional JavaScript code for deterministic operations",
+  "codeDescription": "optional description of what the code does",
   "explanation": "What data is needed and why"
 }
 
@@ -119,6 +123,30 @@ Example: "List launch count by president"
 - Need for processing: presidential_start, presidential_end, launch_date, _dataset_source
 - Need for output: name (to label each president in the result)
 - Final: ["_dataset_source", "launch_date", "presidential_start", "presidential_end", "name"]
+
+CODE GENERATION (Optional but recommended for complex operations):
+When a query requires DETERMINISTIC operations that AIs struggle with, generate JavaScript code to perform the operation.
+
+WHEN TO GENERATE CODE:
+- Temporal correlation (date range overlaps, date comparisons)
+- Complex mathematical calculations
+- Precise counting/aggregation across datasets
+- Any operation requiring exact logical precision
+
+CODE REQUIREMENTS:
+- Must be pure JavaScript (ES6+)
+- Input: "data" array containing filtered records
+- Output: Must return array of result objects
+- Only use: filter(), map(), reduce(), basic comparisons, date operations
+- NO external libraries, NO async operations, NO side effects
+- Keep code concise and readable
+
+CODE EXAMPLE for temporal correlation:
+{
+  "generatedCode": "const presidents = data.filter(r => r._dataset_source === 'us-presidents'); const launches = data.filter(r => r._dataset_source === 'spacex-launches'); return presidents.map(p => ({ name: p.name, launch_count: launches.filter(l => l.launch_date >= p.presidential_start && l.launch_date <= (p.presidential_end || '9999-12-31')).length })).filter(p => p.launch_count > 0);",
+  "codeDescription": "Correlates launches with presidential terms by comparing launch_date against presidential_start/end ranges, returns array of {name, launch_count} for presidents with >0 launches",
+  "fieldsToInclude": ["_dataset_source", "name", "launch_date", "presidential_start", "presidential_end"]
+}
 
 IMPORTANT RULES:
 - Do NOT add a limit for counting, aggregation, or "how many" queries - these need ALL records to count accurately
