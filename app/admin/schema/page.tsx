@@ -34,9 +34,16 @@ export default function SchemaAdmin() {
   const [aiResponse, setAiResponse] = useState('');
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [rediscovering, setRediscovering] = useState(false);
+  const [datasetName, setDatasetName] = useState<string>('');
 
   useEffect(() => {
     loadSchema();
+
+    // Get dataset name from localStorage
+    const saved = localStorage.getItem('selectedDataset');
+    if (saved) {
+      setDatasetName(saved);
+    }
   }, []);
 
   const loadSchema = async () => {
@@ -302,7 +309,16 @@ export default function SchemaAdmin() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <h1 className="text-3xl font-bold mb-6">Schema Configuration</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Schema Configuration</h1>
+        {datasetName && (
+          <div className="text-lg text-gray-600">
+            Dataset: <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>
+              {datasetName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* Actions */}
       <div className="flex gap-4 flex-wrap mb-6">
