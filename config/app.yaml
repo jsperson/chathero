@@ -10,7 +10,7 @@ theme:
 
 ai:
   provider: "openai"
-  model: "gpt-4o-mini"
+  model: "gpt-4o"  # Testing with gpt-4o for all phases
   queryAnalyzerModel: "gpt-4o"  # Use more capable model for Phase 1 query analysis
   apiKey: "${OPENAI_API_KEY}"
 
