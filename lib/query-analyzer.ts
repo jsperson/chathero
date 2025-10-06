@@ -83,7 +83,7 @@ Sample data (first 3 records):
 ${JSON.stringify(dataSample.slice(0, 3), null, 2)}
 
 Your task: Determine what filters (if any) should be applied to get the relevant data for answering the question.
-Additionally, determine which fields are needed - this significantly reduces data size sent to Phase 3.
+You MUST also specify which fields are needed - this significantly reduces data size sent to Phase 3.
 
 Return a JSON object:
 {
@@ -93,12 +93,17 @@ Return a JSON object:
   "explanation": "What data is needed and why"
 }
 
+CRITICAL: The "fieldsToInclude" field is REQUIRED in every response.
+
 FIELD SELECTION RULES:
-- For counting/aggregation queries: Include ONLY the fields needed for correlation (e.g., date fields, category fields, _dataset_source)
-- For browsing/listing queries: Omit "fieldsToInclude" to send all fields
-- Always include "_dataset_source" if present in the data
-- Always include key identifier fields (id, name) for reference
-- Exclude verbose fields not needed for the analysis (descriptions, long text fields, etc.)
+- For counting/aggregation queries: Include ONLY the minimal fields needed for correlation
+  * Example: For temporal correlation, include date fields and identifier fields only
+  * Example: For category counting, include the category field and _dataset_source only
+- For browsing/listing queries where user wants to see details: Include all relevant display fields
+- ALWAYS include "_dataset_source" if present in the data (required for multi-dataset queries)
+- ALWAYS include key identifier fields (id, name, title) for reference
+- NEVER include verbose fields not needed for the analysis (descriptions, URLs, long text fields, etc.)
+- When in doubt, include fewer fields rather than more - Phase 3 can work with minimal data
 
 IMPORTANT RULES:
 - Do NOT add a limit for counting, aggregation, or "how many" queries - these need ALL records to count accurately
@@ -106,12 +111,14 @@ IMPORTANT RULES:
 - For questions like "how many X", "count of X", "total X", "X by year/category" - omit the limit field or set it very high
 
 Examples:
+- "How many records?" → {"filters": [], "fieldsToInclude": ["id", "_dataset_source"], "explanation": "Need all records for counting, only ID field needed"}
+- "Show recent records" → {"filters": [], "limit": 100, "fieldsToInclude": ["id", "name", "date", "status"], "explanation": "Show recent records with display fields"}
+- "Count by category" → {"filters": [], "fieldsToInclude": ["category", "_dataset_source"], "explanation": "Need category field for grouping"}
 ${this.projectConfig.queryExamples && this.projectConfig.queryExamples.length > 0
-  ? this.projectConfig.queryExamples.map(ex =>
-      `- "${ex.question}" → ${JSON.stringify({filters: ex.filters || [], limit: ex.limit, fieldsToInclude: ex.fieldsToInclude, explanation: ex.explanation})}`
+  ? '\n' + this.projectConfig.queryExamples.map(ex =>
+      `- "${ex.question}" → ${JSON.stringify({filters: ex.filters || [], limit: ex.limit, fieldsToInclude: ex.fieldsToInclude || ["id"], explanation: ex.explanation})}`
     ).join('\n')
-  : `- "How many records?" → {"filters": [], "fieldsToInclude": ["id", "_dataset_source"], "explanation": "Need all records for counting, only ID field needed"}
-- "Show recent records" → {"filters": [], "limit": 100, "explanation": "Show recent records with all fields"}`}
+  : ''}
 ${multiDatasetExamples ? '\n' + multiDatasetExamples : ''}
 
 Important:
@@ -129,6 +136,13 @@ Important:
       // Parse JSON response
       const cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const analysis: QueryAnalysisResult = JSON.parse(cleanResponse);
+
+      // Ensure fieldsToInclude is always present - if missing, extract all field names from sample
+      if (!analysis.fieldsToInclude || analysis.fieldsToInclude.length === 0) {
+        console.warn('Phase 1 did not specify fieldsToInclude - using all fields as fallback');
+        const allFields = dataSample.length > 0 ? Object.keys(dataSample[0]) : [];
+        analysis.fieldsToInclude = allFields;
+      }
 
       return analysis;
     } catch (error) {
