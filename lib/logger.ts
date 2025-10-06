@@ -6,7 +6,7 @@ class Logger {
   private logFile: string;
 
   constructor() {
-    this.logDir = path.join(process.cwd(), 'app', 'logs');
+    this.logDir = path.join(process.cwd(), 'logs');
     this.logFile = path.join(this.logDir, `app-${new Date().toISOString().split('T')[0]}.log`);
     this.ensureLogDir();
   }
