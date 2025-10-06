@@ -163,6 +163,9 @@ export class CSVAdapter implements DataAdapter {
       value = value.slice(1, -1).replace(/""/g, '"');
     }
 
+    // Trim whitespace
+    value = value.trim();
+
     // Empty string
     if (value === '') return '';
 
@@ -170,8 +173,28 @@ export class CSVAdapter implements DataAdapter {
     if (value.toLowerCase() === 'true') return true;
     if (value.toLowerCase() === 'false') return false;
 
-    // Number
-    if (!isNaN(Number(value)) && value.trim() !== '') {
+    // Percentage (e.g., "45.00%", "0.00%")
+    if (value.endsWith('%')) {
+      const numStr = value.slice(0, -1).trim();
+      const num = Number(numStr);
+      if (!isNaN(num)) {
+        return num / 100; // Convert to decimal
+      }
+    }
+
+    // Currency with possible negative in parentheses (e.g., "$408.30", "$(122.80)")
+    const currencyMatch = value.match(/^\$?\(?([0-9,]+\.?\d*)\)?$/);
+    if (currencyMatch) {
+      const numStr = currencyMatch[1].replace(/,/g, '');
+      const num = Number(numStr);
+      if (!isNaN(num)) {
+        // If wrapped in parentheses, it's negative
+        return value.includes('(') ? -num : num;
+      }
+    }
+
+    // Plain number (including negatives)
+    if (!isNaN(Number(value)) && value !== '') {
       return Number(value);
     }
 

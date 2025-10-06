@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loadConfig, loadProjectConfig } from '@/lib/config';
-import { JSONAdapter } from '@/lib/adapters/json.adapter';
+import { createDataAdapter } from '@/lib/adapters/adapter-factory';
 import { SchemaDiscovery } from '@/lib/schema-discovery';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const selectedDataset = cookies.get('selectedDataset')?.value;
 
     const config = await loadConfig();
-    const dataAdapter = new JSONAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
+    const dataAdapter = await createDataAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
     const data = await dataAdapter.getData();
 
     const discoveredSchema = SchemaDiscovery.discover(data);
