@@ -38,12 +38,16 @@ export default function DatasetManagementPage() {
       const value = selectedCookie.split('=')[1];
       setSelectedDatasets(value.split(',').map(s => s.trim()).filter(s => s.length > 0));
     }
+  }, []);
 
-    // Close dropdown when clicking outside
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!openMenuDataset) return;
+
     const handleClickOutside = () => setOpenMenuDataset(null);
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+  }, [openMenuDataset]);
 
   const handleToggleDataset = (datasetName: string) => {
     setSelectedDatasets(prev => {
