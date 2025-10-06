@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 interface FieldConfig {
   name: string;
@@ -35,6 +35,7 @@ interface Dataset {
 }
 
 export default function SchemaAdmin() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [schema, setSchema] = useState<SchemaConfig | null>(null);
   const [loading, setLoading] = useState(true);
@@ -86,6 +87,8 @@ export default function SchemaAdmin() {
     // Set cookie so the API knows which dataset to load
     document.cookie = `selectedDataset=${datasetName}; path=/; max-age=31536000`;
     setSelectedDataset(datasetName);
+    // Update URL to reflect the selected dataset
+    router.push(`/admin/schema?dataset=${datasetName}`);
   };
 
   const loadSchema = async () => {
@@ -376,24 +379,10 @@ export default function SchemaAdmin() {
             ← Back to Datasets
           </button>
         </div>
-        <h1 className="text-3xl font-bold mb-4">Schema Configuration</h1>
-
-        {/* Dataset Selector */}
-        <div className="flex items-center gap-3 mb-4">
-          <label className="text-sm font-medium text-gray-700">Select Dataset:</label>
-          <select
-            value={selectedDataset}
-            onChange={(e) => handleDatasetChange(e.target.value)}
-            className="border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2"
-            style={{ '--tw-ring-color': 'var(--color-primary)' } as any}
-          >
-            {availableDatasets.map((dataset) => (
-              <option key={dataset.name} value={dataset.name}>
-                {dataset.displayName} ({dataset.recordCount} records)
-              </option>
-            ))}
-          </select>
-        </div>
+        <h1 className="text-3xl font-bold mb-4">
+          Schema Configuration
+          {datasetName && <span className="text-lg text-gray-600 ml-3">— {availableDatasets.find(d => d.name === selectedDataset)?.displayName || datasetName}</span>}
+        </h1>
 
         {datasetName && (
           <div className="text-lg text-gray-600">
