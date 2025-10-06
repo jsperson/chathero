@@ -1,0 +1,62 @@
+project:
+  name: Test Presidents
+  description: Dataset containing profiles of U.S. Presidents with key attributes.
+  domain: historical figures
+dataSchema:
+  primaryDateField: birth_date
+  categoricalFields:
+    - name: name
+      displayName: Name
+      description: Unique names of U.S. Presidents, totaling 45 distinct entries.
+    - name: spouse
+      displayName: Spouse
+      description: Full names of spouses of U.S. Presidents, with 44 distinct entries.
+    - name: birth_place
+      displayName: Birth Place
+      description: The locations where U.S. Presidents were born, with 42 distinct entries.
+    - name: cause_of_death
+      displayName: Cause Of Death
+      description: >-
+        The medical conditions or events leading to the deaths of U.S. Presidents, with 27 distinct
+        entries.
+    - name: party
+      displayName: Political Party
+      description: The political affiliations of U.S. Presidents, with 6 distinct entries.
+  numericFields: []
+domainKnowledge:
+  fieldKeywords:
+    name:
+      - name
+      - president's name
+      - individual
+    spouse:
+      - spouse
+      - wife
+      - partner
+      - presidential spouse
+    birth_place:
+      - birth place
+      - location of birth
+      - city
+      - state
+    cause_of_death:
+      - cause of death
+      - death reason
+      - medical condition
+      - health issue
+    party:
+      - party
+      - political affiliation
+      - political party
+      - presidential party
+exampleQuestions:
+  - Which U.S. President was born in Virginia?
+  - What were the causes of death of Thomas Jefferson and John Adams?
+  - How many Presidents were affiliated with the Federalist Party?
+  - Who were the spouses of the first five U.S. Presidents?
+  - What years did James Monroe serve as President?
+aiContext:
+  systemRole: You are a helpful assistant that answers questions about Test Presidents data.
+  domainContext: >-
+    This dataset contains data in the historical figures domain. Dataset containing profiles of U.S.
+    Presidents with key attributes.

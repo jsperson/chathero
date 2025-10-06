@@ -1,97 +1,59 @@
-# Project-specific configuration for data fields and domain knowledge
-
 project:
-  name: "SpaceX Launch History"
-  description: "Complete history of SpaceX rocket launches"
-  domain: "space launches"
-
-# Define the data schema and important fields
+  name: SpaceX Launch History
+  description: Complete history of SpaceX rocket launches
+  domain: space launches
 dataSchema:
-  primaryDateField: "launch_date"
-
-  # Fields to use for common aggregations
+  primaryDateField: launch_date
   categoricalFields:
-    - name: "vehicle"
-      displayName: "Vehicle/Rocket"
-      description: "Type of rocket used"
-    - name: "outcome"
-      displayName: "Outcome"
-      description: "Success or failure of launch"
-    - name: "site"
-      displayName: "Launch Site"
-      description: "Location of launch"
-    - name: "customer"
-      displayName: "Customer"
-      description: "Customer or payload owner"
-
-  # Numeric fields for statistics
+    - name: vehicle
+      displayName: Vehicle/Rocket
+      description: Type of rocket used
+    - name: outcome
+      displayName: Outcome
+      description: Success or failure of launch
+    - name: site
+      displayName: Launch Site
+      description: Location of launch
+    - name: customer
+      displayName: Customer
+      description: Customer or payload owner
   numericFields:
-    - name: "payload_mass_kg"
-      displayName: "Payload Mass"
-      unit: "kg"
-
-# Domain-specific knowledge for query parsing
+    - name: payload_mass_kg
+      displayName: Payload Mass
+      unit: ''
 domainKnowledge:
-  # Specific values to recognize in queries
-  vehicleTypes:
-    - "Falcon 1"
-    - "Falcon 9"
-    - "Falcon Heavy"
-    - "Starship"
-
-  outcomeTypes:
-    - "Success"
-    - "Failure"
-    - "Partial Success"
-
-  # Keywords that indicate specific field queries
   fieldKeywords:
-    vehicle: ["vehicle", "rocket", "falcon", "starship"]
-    outcome: ["outcome", "success", "failure", "successful", "failed"]
-    site: ["site", "location", "where", "launch site", "pad"]
-    customer: ["customer", "client", "payload owner", "operator"]
-
-# Example questions for the UI
+    vehicle:
+      - vehicle
+      - rocket
+      - falcon
+      - starship
+    outcome:
+      - outcome
+      - success
+      - failure
+      - successful
+      - failed
+    site:
+      - site
+      - location
+      - where
+      - launch site
+      - pad
+    customer:
+      - customer
+      - client
+      - payload owner
+      - operator
 exampleQuestions:
-  - "How many launches were there in 2024?"
-  - "Show me all Falcon Heavy missions"
-  - "What was the success rate?"
-  - "Launches by year"
-  - "How many Starship test flights?"
-  - "Show me recent launches"
-
-# Examples for AI query analyzer (Phase 1)
-queryExamples:
-  - question: "How many launches?"
-    filters: []
-    explanation: "Need all launch records"
-
-  - question: "Launches by year"
-    filters: []
-    explanation: "Need all launches to group by year"
-
-  - question: "Show Falcon 9 launches"
-    filters:
-      - field: "vehicle"
-        operator: "contains"
-        value: "Falcon 9"
-    limit: 100
-    explanation: "Filter for Falcon 9 launches only"
-
-  - question: "Launches in 2024"
-    filters:
-      - field: "launch_date"
-        operator: "contains"
-        value: "2024"
-    limit: 100
-    explanation: "Filter for 2024 launches"
-
-# AI assistant context
+  - How many launches were there in 2024?
+  - Show me all Falcon Heavy missions
+  - What was the success rate?
+  - Launches by year
+  - How many Starship test flights?
+  - Show me recent launches
 aiContext:
-  systemRole: "You are a helpful assistant that answers questions about SpaceX launch data."
-  domainContext: |
-    This dataset contains SpaceX rocket launches from 2006 to present, including:
-    - Falcon 1: First orbital rocket (5 launches, 2006-2009)
-    - Falcon 9: Workhorse vehicle with reusable boosters (540+ launches)
-    - Falcon Heavy: Heavy-lift vehicle (11 launches)
-    - Starship: Next-generation fully reusable system (test flights)
+  systemRole: You are a helpful assistant that answers questions about SpaceX Launch History data.
+  domainContext: >-
+    This dataset contains data in the space launches domain. Complete history of SpaceX rocket
+    launches
