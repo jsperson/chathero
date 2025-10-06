@@ -141,10 +141,17 @@ CODE REQUIREMENTS:
 - NO external libraries, NO async operations, NO side effects
 - Keep code concise and readable
 
+DATE RANGE COMPARISON RULES:
+- ALWAYS use inclusive start (>=) and exclusive end (<) to avoid double-counting boundary dates
+- Format: date >= start_date && date < end_date
+- For current/open-ended ranges: date >= start_date && date < (end_date || '9999-12-31')
+- NEVER use <= for end date comparisons - this causes overlaps at boundaries
+- Example: If a term ends "2021-01-20", the next term starts "2021-01-20" - use < to prevent counting the same date twice
+
 CODE EXAMPLE for temporal correlation:
 {
-  "generatedCode": "const presidents = data.filter(r => r._dataset_source === 'us-presidents'); const launches = data.filter(r => r._dataset_source === 'spacex-launches'); return presidents.map(p => ({ name: p.name, launch_count: launches.filter(l => l.launch_date >= p.presidential_start && l.launch_date <= (p.presidential_end || '9999-12-31')).length })).filter(p => p.launch_count > 0);",
-  "codeDescription": "Correlates launches with presidential terms by comparing launch_date against presidential_start/end ranges, returns array of {name, launch_count} for presidents with >0 launches",
+  "generatedCode": "const presidents = data.filter(r => r._dataset_source === 'us-presidents'); const launches = data.filter(r => r._dataset_source === 'spacex-launches'); return presidents.map(p => ({ name: p.name, launch_count: launches.filter(l => l.launch_date >= p.presidential_start && l.launch_date < (p.presidential_end || '9999-12-31')).length })).filter(p => p.launch_count > 0);",
+  "codeDescription": "Correlates launches with presidential terms by comparing launch_date against presidential_start/end ranges (inclusive start, exclusive end), returns array of {name, launch_count} for presidents with >0 launches",
   "fieldsToInclude": ["_dataset_source", "name", "launch_date", "presidential_start", "presidential_end"]
 }
 
