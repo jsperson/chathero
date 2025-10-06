@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     const rawData = await dataAdapter.getData();
 
     // Initialize AI adapter
-    const aiAdapter = new OpenAIAdapter(config.ai, projectConfig);
+    const aiAdapter = new OpenAIAdapter(config.ai, projectConfig, logger);
 
     // Load READMEs for all selected datasets
     const datasetReadmes: Record<string, string> = {};
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
       dataRecords: filteredData.length,
       datasets: metadata.datasets_queried
     });
-    const response = await aiAdapter.chat(message, { ...contextData, ...metadata });
+    const response = await aiAdapter.chat(message, { ...contextData, ...metadata, requestId });
 
     await logger.chatQuery(requestId, 'PHASE_3_RESULT', {
       responseLength: response.length,

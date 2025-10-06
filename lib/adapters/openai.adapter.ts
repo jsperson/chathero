@@ -6,13 +6,15 @@ export class OpenAIAdapter implements AIAdapter {
   private client: OpenAI;
   private model: string;
   private projectConfig?: ProjectConfig;
+  private logger?: any;
 
-  constructor(config: AIConfig, projectConfig?: ProjectConfig) {
+  constructor(config: AIConfig, projectConfig?: ProjectConfig, logger?: any) {
     this.client = new OpenAI({
       apiKey: config.apiKey,
     });
     this.model = config.model;
     this.projectConfig = projectConfig;
+    this.logger = logger;
   }
 
   async chat(message: string, context: any): Promise<string> {
@@ -96,13 +98,19 @@ Answer the user's question based on this data. Perform any necessary counting, g
       const response = completion.choices[0]?.message?.content;
       const finishReason = completion.choices[0]?.finish_reason;
 
-      console.log('OpenAI completion details:', {
+      const completionDetails = {
         finishReason,
         responseLength: response?.length,
         promptTokens: completion.usage?.prompt_tokens,
         completionTokens: completion.usage?.completion_tokens,
         totalTokens: completion.usage?.total_tokens
-      });
+      };
+
+      console.log('OpenAI completion details:', completionDetails);
+
+      if (this.logger && context.requestId) {
+        await this.logger.info(`OpenAI completion [${context.requestId}]`, completionDetails);
+      }
 
       return response || 'No response generated';
     } catch (error) {
