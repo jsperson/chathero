@@ -460,7 +460,7 @@ export default function SchemaAdmin() {
             <li>Generate better descriptions for all fields</li>
             <li>Suggest keywords for the {schema.categoricalFields[0]?.name} field</li>
             <li>Create 5 example questions for this dataset</li>
-            <li>What's a good domain name for this data?</li>
+            <li>What&apos;s a good domain name for this data?</li>
           </ul>
         </div>
       </div>

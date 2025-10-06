@@ -273,7 +273,7 @@ export default function DatasetConfigPage() {
 
           {queryExamples.length === 0 && (
             <p className="text-center text-gray-500 py-8">
-              No examples yet. Click "Add Example" or use AI assistance to generate them.
+              No examples yet. Click &quot;Add Example&quot; or use AI assistance to generate them.
             </p>
           )}
         </div>

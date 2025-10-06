@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     // Load current data and discover schema
     const config = await loadConfig();
-    const dataAdapter = new JSONAdapter(config.dataSource, selectedDataset);
+    const dataAdapter = new JSONAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
     const data = await dataAdapter.getData();
     const discoveredSchema = SchemaDiscovery.discover(data);
 

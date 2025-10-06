@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const selectedDataset = cookies.get('selectedDataset')?.value;
 
     const config = await loadConfig();
-    const dataAdapter = new JSONAdapter(config.dataSource, selectedDataset);
+    const dataAdapter = new JSONAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
     const data = await dataAdapter.getData();
 
     const discoveredSchema = SchemaDiscovery.discover(data);

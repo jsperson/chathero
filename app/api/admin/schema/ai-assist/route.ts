@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const projectConfig = await loadProjectConfig(selectedDataset);
 
     // Load data for context
-    const dataAdapter = new JSONAdapter(config.dataSource, selectedDataset);
+    const dataAdapter = new JSONAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
     const data = await dataAdapter.getData();
 
     // Build AI prompt
