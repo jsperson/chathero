@@ -83,7 +83,7 @@ Answer the user's question based on this data. Perform any necessary counting, g
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 2000,
+        max_tokens: 4000,
       });
 
       const response = completion.choices[0]?.message?.content;
