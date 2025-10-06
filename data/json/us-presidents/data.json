@@ -547,8 +547,20 @@
     "death_date": null,
     "cause_of_death": null,
     "presidential_start": "2021-01-20",
-    "presidential_end": null,
+    "presidential_end": "2025-01-20",
     "party": "Democratic",
     "other_offices": ["Vice President", "U.S. Senator from Delaware"]
+  },
+  {
+    "name": "Donald Trump",
+    "spouse": "Melania Knauss",
+    "birth_date": "1946-06-14",
+    "birth_place": "New York City, New York",
+    "death_date": null,
+    "cause_of_death": null,
+    "presidential_start": "2025-01-20",
+    "presidential_end": null,
+    "party": "Republican",
+    "other_offices": ["45th President of the United States"]
   }
 ]
