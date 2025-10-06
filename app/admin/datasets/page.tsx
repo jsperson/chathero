@@ -106,7 +106,10 @@ export default function DatasetManagementPage() {
                   <input
                     type="checkbox"
                     checked={selectedDatasets.includes(dataset.name)}
-                    onChange={() => handleToggleDataset(dataset.name)}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      handleToggleDataset(dataset.name);
+                    }}
                     className="w-5 h-5"
                     style={{ accentColor: 'var(--color-primary)' }}
                   />
