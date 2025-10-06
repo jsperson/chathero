@@ -11,9 +11,12 @@ export async function POST(request: NextRequest) {
   const requestId = `chat-${Date.now()}`;
 
   try {
-    const { message } = await request.json();
+    const { message, conversationHistory = [] } = await request.json();
 
-    await logger.chatQuery(requestId, 'REQUEST', { question: message });
+    await logger.chatQuery(requestId, 'REQUEST', {
+      question: message,
+      historyLength: conversationHistory.length
+    });
 
     if (!message) {
       return NextResponse.json(
@@ -200,7 +203,7 @@ export async function POST(request: NextRequest) {
       dataRecords: filteredData.length,
       datasets: metadata.datasets_queried
     });
-    const response = await aiAdapter.chat(message, { ...contextData, ...metadata, requestId });
+    const response = await aiAdapter.chat(message, { ...contextData, ...metadata, requestId, conversationHistory });
 
     await logger.chatQuery(requestId, 'PHASE_3_RESULT', {
       responseLength: response.length,
@@ -209,8 +212,16 @@ export async function POST(request: NextRequest) {
 
     await logger.chatQuery(requestId, 'COMPLETE', { success: true });
 
+    // Return response with updated conversation history
+    const updatedHistory = [
+      ...conversationHistory,
+      { role: 'user', content: message },
+      { role: 'assistant', content: response }
+    ];
+
     return NextResponse.json({
       response,
+      conversationHistory: updatedHistory,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

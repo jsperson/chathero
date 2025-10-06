@@ -48,7 +48,10 @@ export default function Home() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({
+          message: userMessage,
+          conversationHistory: messages  // Send conversation history
+        }),
       });
 
       const data = await response.json();
@@ -69,9 +72,25 @@ export default function Home() {
     }
   };
 
+  const clearConversation = () => {
+    setMessages([]);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="bg-white rounded-lg shadow-lg p-6 h-[calc(100vh-12rem)] flex flex-col">
+        {/* Header with Clear button */}
+        {messages.length > 0 && (
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={clearConversation}
+              className="text-sm text-gray-500 hover:text-gray-700 px-3 py-1 rounded border border-gray-300 hover:border-gray-400"
+            >
+              Clear Conversation
+            </button>
+          </div>
+        )}
+
         {/* Messages */}
         <div className="flex-1 overflow-y-auto mb-4 space-y-4">
           {messages.length === 0 ? (
