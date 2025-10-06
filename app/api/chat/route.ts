@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
-import { JSONAdapter } from '@/lib/adapters/json.adapter';
+import { createDataAdapter } from '@/lib/adapters/adapter-factory';
 import { QueryAnalyzer } from '@/lib/query-analyzer';
 import { CodeValidator } from '@/lib/code-validator';
 import { CodeExecutor } from '@/lib/code-executor';
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     const projectConfig = await loadProjectConfig(primaryDataset);
 
     // Initialize data adapter with all selected datasets
-    const dataAdapter = new JSONAdapter(config.dataSource, selectedDatasets);
+    const dataAdapter = await createDataAdapter(config.dataSource, selectedDatasets);
     const rawData = await dataAdapter.getData();
 
     // Initialize AI adapter

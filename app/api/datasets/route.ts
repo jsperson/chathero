@@ -27,7 +27,8 @@ export async function GET() {
         const datasetName = dataset.name;
         const datasetPath = path.join(typePath, datasetName);
 
-        const dataPath = path.join(datasetPath, 'data.json');
+        const jsonPath = path.join(datasetPath, 'data.json');
+        const csvPath = path.join(datasetPath, 'data.csv');
         const readmePath = path.join(datasetPath, 'README.md');
         const projectPath = path.join(datasetPath, 'project.yaml');
 
@@ -36,11 +37,19 @@ export async function GET() {
         let hasProject = false;
         let displayName = datasetName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
+        // Try JSON first, then CSV
         try {
-          const data = JSON.parse(await fs.readFile(dataPath, 'utf-8'));
+          const data = JSON.parse(await fs.readFile(jsonPath, 'utf-8'));
           recordCount = Array.isArray(data) ? data.length : 0;
         } catch (e) {
-          // Couldn't read data file
+          // Try CSV
+          try {
+            const csvContent = await fs.readFile(csvPath, 'utf-8');
+            const lines = csvContent.split('\n').filter(line => line.trim().length > 0);
+            recordCount = Math.max(0, lines.length - 1); // Subtract header row
+          } catch (csvError) {
+            // Couldn't read data file
+          }
         }
 
         try {

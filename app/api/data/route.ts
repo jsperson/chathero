@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loadConfig } from '@/lib/config';
-import { JSONAdapter } from '@/lib/adapters/json.adapter';
+import { createDataAdapter } from '@/lib/adapters/adapter-factory';
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     // If a specific dataset is requested, fetch only that one
     if (specificDataset) {
       const config = await loadConfig();
-      const dataAdapter = new JSONAdapter(config.dataSource, [specificDataset]);
+      const dataAdapter = await createDataAdapter(config.dataSource, [specificDataset]);
       const data = await dataAdapter.getData();
       return NextResponse.json(data);
     }
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     }
 
     const config = await loadConfig();
-    const dataAdapter = new JSONAdapter(config.dataSource, selectedDatasets);
+    const dataAdapter = await createDataAdapter(config.dataSource, selectedDatasets);
     const data = await dataAdapter.getData();
 
     return NextResponse.json(data);
