@@ -81,14 +81,17 @@ export default function SchemaAdmin() {
       console.log('loadDatasets - URL param:', datasetParam);
       console.log('loadDatasets - available datasets:', sorted.map(d => d.name));
 
-      if (datasetParam && sorted.some((d: Dataset) => d.name === datasetParam)) {
+      if (datasetParam) {
+        // URL parameter takes priority - use it even if not found in list
         console.log('loadDatasets - setting dataset from URL:', datasetParam);
+        const exists = sorted.some((d: Dataset) => d.name === datasetParam);
+        console.log('loadDatasets - dataset exists in list:', exists);
         setSelectedDataset(datasetParam);
         // Also set cookie so API calls use the right dataset
         document.cookie = `selectedDataset=${datasetParam}; path=/; max-age=31536000`;
       } else if (sorted.length > 0) {
-        // Load first dataset alphabetically
-        console.log('loadDatasets - setting first dataset:', sorted[0].name);
+        // Load first dataset alphabetically only if no URL parameter
+        console.log('loadDatasets - no URL param, setting first dataset:', sorted[0].name);
         setSelectedDataset(sorted[0].name);
         document.cookie = `selectedDataset=${sorted[0].name}; path=/; max-age=31536000`;
       }
