@@ -102,14 +102,11 @@ export default function DatasetManagementPage() {
               onClick={() => handleToggleDataset(dataset.name)}
             >
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 mt-1">
+                <div className="flex-shrink-0 mt-1" onClick={(e) => e.stopPropagation()}>
                   <input
                     type="checkbox"
                     checked={selectedDatasets.includes(dataset.name)}
-                    onChange={(e) => {
-                      e.stopPropagation();
-                      handleToggleDataset(dataset.name);
-                    }}
+                    onChange={() => handleToggleDataset(dataset.name)}
                     className="w-5 h-5"
                     style={{ accentColor: 'var(--color-primary)' }}
                   />
