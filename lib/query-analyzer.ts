@@ -25,7 +25,7 @@ export class QueryAnalyzer {
   /**
    * Analyze a user question using AI to determine how to process the data
    */
-  async analyze(question: string, dataSample: any[], datasetReadmes?: Record<string, string>): Promise<QueryAnalysisResult> {
+  async analyze(question: string, dataSample: any[], datasetReadmes?: Record<string, string>, modelOverride?: string): Promise<QueryAnalysisResult> {
     // Check if multiple datasets are present
     const hasMultipleDatasets = dataSample.length > 0 && dataSample.some(record => record._dataset_source);
     const uniqueDatasets = [...new Set(dataSample.map(r => r._dataset_source).filter(Boolean))];
@@ -40,7 +40,12 @@ export class QueryAnalyzer {
       ? `\nIMPORTANT: This data contains records from MULTIPLE datasets combined together.
 Each record has a '_dataset_source' field indicating which dataset it came from.
 Available datasets: ${uniqueDatasets.join(', ')}
-You can filter by dataset using the '_dataset_source' field.`
+You can filter by dataset using the '_dataset_source' field.
+
+⚠️ MULTI-DATASET OPTIMIZATION:
+With ${dataSample.length} total records from ${uniqueDatasets.length} datasets, Phase 3 will receive a LARGE amount of data.
+If the user's question only needs data from ONE dataset, add a filter for _dataset_source to reduce data size.
+If the user's question needs correlation between datasets (e.g., "launches by president"), return NO filters - Phase 3 needs all data.`
       : '';
 
     // Add README documentation for datasets if available
@@ -109,6 +114,7 @@ Important:
       const response = await this.aiAdapter.chat(question, {
         system_instruction: systemPrompt,
         require_json: true,
+        model: modelOverride, // Use more capable model if provided
       });
 
       // Parse JSON response

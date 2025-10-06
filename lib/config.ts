@@ -18,6 +18,7 @@ export interface AppConfig {
     provider: string;
     model: string;
     apiKey: string;
+    queryAnalyzerModel?: string; // Optional: Use different model for Phase 1 query analysis
   };
   dataSource: {
     type: string;

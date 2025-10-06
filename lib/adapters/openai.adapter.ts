@@ -26,8 +26,11 @@ export class OpenAIAdapter implements AIAdapter {
 
       if (isJsonMode) {
         // Query analysis mode - return structured JSON
+        // Use the model specified in context, or fall back to default
+        const modelToUse = context.model || this.model;
+
         const completion = await this.client.chat.completions.create({
-          model: this.model,
+          model: modelToUse,
           messages: [
             { role: 'system', content: context.system_instruction },
             { role: 'user', content: message }

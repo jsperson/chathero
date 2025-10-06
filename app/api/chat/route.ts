@@ -61,9 +61,12 @@ export async function POST(request: NextRequest) {
     }
 
     // PHASE 1: AI determines what data is needed
-    await logger.chatQuery(requestId, 'PHASE_1_START', { totalRecords: rawData.length });
+    await logger.chatQuery(requestId, 'PHASE_1_START', {
+      totalRecords: rawData.length,
+      model: config.ai.queryAnalyzerModel || config.ai.model
+    });
     const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
-    const queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes);
+    const queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes, config.ai.queryAnalyzerModel);
     await logger.chatQuery(requestId, 'PHASE_1_RESULT', queryAnalysis);
 
     // PHASE 2: Apply basic filters to get the requested data
