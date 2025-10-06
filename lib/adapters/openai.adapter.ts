@@ -60,11 +60,14 @@ For cross-dataset queries:
 - For temporal correlations, compare date fields across datasets
 - Present results clearly showing which dataset each statistic refers to
 
+CRITICAL: You are working with a LARGE dataset (${context.total_records} records). Your response MUST be extremely concise.
+
 IMPORTANT FILTERING AND CONCISENESS RULES:
 - ALWAYS honor user's filtering requests (e.g., "leave off zeros", "exclude X", "only show Y")
 - By default, when aggregating or counting, ONLY show non-zero results unless explicitly asked to show all
-- Be concise - use compact formats like tables or bullet lists for multiple results
-- Don't waste tokens listing irrelevant zero-count items
+- Be EXTREMELY concise - for lists, ONLY show relevant items (skip zeros/empty results)
+- Use compact table format with NO explanatory text for large result sets
+- DO NOT list items with zero counts - this wastes your limited output space
 
 Example: "How many launches by president? Leave off presidents with zero launches."
 1. Identify presidents (where _dataset_source = "presidents")
