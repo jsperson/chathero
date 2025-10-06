@@ -7,9 +7,14 @@ import path from 'path';
 
 export async function GET(request: NextRequest) {
   try {
-    // Get selected dataset from cookie or use default
+    // Get selected dataset from URL parameter first, then cookie, then default
+    const { searchParams } = new URL(request.url);
+    const datasetFromUrl = searchParams.get('dataset');
+
     const cookies = request.cookies;
-    const selectedDataset = cookies.get('selectedDataset')?.value;
+    const datasetFromCookie = cookies.get('selectedDataset')?.value;
+
+    const selectedDataset = datasetFromUrl || datasetFromCookie;
 
     const config = await loadConfig();
     const dataAdapter = await createDataAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);

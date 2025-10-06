@@ -74,9 +74,12 @@ export default function SchemaAdmin() {
       const datasetFromUrl = searchParams.get('dataset');
       if (datasetFromUrl && sorted.some((d: Dataset) => d.name === datasetFromUrl)) {
         setSelectedDataset(datasetFromUrl);
+        // Also set cookie so API calls use the right dataset
+        document.cookie = `selectedDataset=${datasetFromUrl}; path=/; max-age=31536000`;
       } else if (sorted.length > 0) {
         // Load first dataset alphabetically
         setSelectedDataset(sorted[0].name);
+        document.cookie = `selectedDataset=${sorted[0].name}; path=/; max-age=31536000`;
       }
     } catch (error) {
       console.error('Failed to load datasets:', error);
