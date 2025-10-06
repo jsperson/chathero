@@ -16,6 +16,7 @@ export default function DatasetManagementPage() {
   const [selectedDatasets, setSelectedDatasets] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [openMenuDataset, setOpenMenuDataset] = useState<string | null>(null);
 
   useEffect(() => {
     // Load available datasets
@@ -37,6 +38,11 @@ export default function DatasetManagementPage() {
       const value = selectedCookie.split('=')[1];
       setSelectedDatasets(value.split(',').map(s => s.trim()).filter(s => s.length > 0));
     }
+
+    // Close dropdown when clicking outside
+    const handleClickOutside = () => setOpenMenuDataset(null);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   const handleToggleDataset = (datasetName: string) => {
@@ -117,28 +123,41 @@ export default function DatasetManagementPage() {
                     <span>📁 Type: {dataset.type}</span>
                     <span>📊 Records: {dataset.recordCount.toLocaleString()}</span>
                   </div>
-                  <div className="flex gap-2 mt-3">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        router.push(`/admin/schema?dataset=${dataset.name}`);
-                      }}
-                      className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-                    >
-                      📝 Schema Editor
-                    </button>
-                    {dataset.hasProjectConfig && (
+                </div>
+                <div className="relative ml-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenMenuDataset(openMenuDataset === dataset.name ? null : dataset.name);
+                    }}
+                    className="p-2 hover:bg-gray-100 rounded transition-colors"
+                  >
+                    <span className="text-gray-600 font-bold">⋯</span>
+                  </button>
+                  {openMenuDataset === dataset.name && (
+                    <div className="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          router.push(`/data/config?dataset=${dataset.name}`);
+                          router.push(`/admin/schema?dataset=${dataset.name}`);
                         }}
-                        className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
                       >
-                        🔧 Configuration
+                        📝 Schema Editor
                       </button>
-                    )}
-                  </div>
+                      {dataset.hasProjectConfig && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/data/config?dataset=${dataset.name}`);
+                          }}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                        >
+                          🔧 Configuration
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
