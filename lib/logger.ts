@@ -68,3 +68,27 @@ class Logger {
 
 // Singleton instance
 export const logger = new Logger();
+
+// Setup global error handlers
+if (typeof process !== 'undefined') {
+  process.on('uncaughtException', (error: Error) => {
+    logger.error('Uncaught Exception', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
+    console.error('Uncaught Exception:', error);
+  });
+
+  process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
+    logger.error('Unhandled Promise Rejection', {
+      reason: reason instanceof Error ? {
+        message: reason.message,
+        stack: reason.stack,
+        name: reason.name,
+      } : reason,
+      promise: String(promise),
+    });
+    console.error('Unhandled Promise Rejection:', reason);
+  });
+}
