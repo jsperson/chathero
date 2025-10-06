@@ -431,13 +431,14 @@ export class DataProcessor {
       // Similar to date_overlap but expects both start and end dates
       leftData.forEach(leftRecord => {
         const startDate = leftRecord[condition.leftFields![0]];
-        const endDate = leftRecord[condition.leftFields![1]];
+        const endDate = leftRecord[condition.leftFields![1]] || new Date().toISOString(); // Use current date if still in office
 
         const matchingRightRecords = rightData.filter(rightRecord => {
           const rightDate = rightRecord[condition.rightFields![0]];
           return rightDate >= startDate && rightDate <= endDate;
         });
 
+        // Always include the record to show count (even if 0)
         results.push({
           left_record: leftRecord,
           matching_right_records: matchingRightRecords,

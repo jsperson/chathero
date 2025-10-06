@@ -83,9 +83,11 @@ Return a JSON object:
 
 Examples:
 - "Which presidents were alive during Apollo launches?" → {"needsJoin": true, "joinType": "temporal", "leftDataset": "presidents", "rightDataset": "launches", "joinCondition": {"type": "date_overlap", "leftFields": ["birth_date", "death_date"], "rightFields": ["launch_date"]}, "explanation": "Need temporal join to find presidents whose lifespan overlaps with launch dates"}
-- "How many launches per president term?" → {"needsJoin": true, "joinType": "temporal", "leftDataset": "presidents", "rightDataset": "launches", "joinCondition": {"type": "date_range", "leftFields": ["term_start", "term_end"], "rightFields": ["launch_date"]}, "explanation": "Count launches that occurred during each president's term"}
+- "How many launches per president?" or "launches by president" → {"needsJoin": true, "joinType": "temporal", "leftDataset": "presidents", "rightDataset": "launches", "joinCondition": {"type": "date_range", "leftFields": ["presidential_start", "presidential_end"], "rightFields": ["launch_date"]}, "explanation": "Count launches that occurred during each president's term"}
 - "Compare average of dataset A vs dataset B" → {"needsJoin": true, "joinType": "nested_aggregation", "leftDataset": "datasetA", "rightDataset": "datasetB", "joinCondition": {"type": "nested"}, "explanation": "Calculate separate aggregations then compare"}
 - "How many launches?" → {"needsJoin": false, "joinType": "none", "explanation": "Single dataset query, no join needed"}
+
+IMPORTANT: When joining by presidential term, use "presidential_start" and "presidential_end" fields, NOT "term_start" and "term_end".
 
 Important: Return ONLY valid JSON, no other text.`;
 
