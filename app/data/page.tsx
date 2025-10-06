@@ -101,6 +101,12 @@ export default function DataPage() {
               {sortedData.length} of {data.length} records
             </div>
             <a
+              href="/data/config"
+              className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 font-medium"
+            >
+              Configure Dataset
+            </a>
+            <a
               href="/admin/schema"
               className="px-4 py-2 rounded-lg text-white font-medium"
               style={{ backgroundColor: 'var(--color-primary)' }}
