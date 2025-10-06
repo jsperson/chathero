@@ -3,10 +3,15 @@ import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
 import { JSONAdapter } from '@/lib/adapters/json.adapter';
 import { QueryAnalyzer } from '@/lib/query-analyzer';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
+  const requestId = `chat-${Date.now()}`;
+
   try {
     const { message } = await request.json();
+
+    await logger.chatQuery(requestId, 'REQUEST', { question: message });
 
     if (!message) {
       return NextResponse.json(
@@ -19,16 +24,12 @@ export async function POST(request: NextRequest) {
     const cookies = request.cookies;
     const selectedDatasetsStr = cookies.get('selectedDatasets')?.value;
 
-    console.log('Chat API - Cookie parsing:');
-    console.log('  Raw cookie value:', selectedDatasetsStr);
-
     let selectedDatasets: string[] | undefined;
     if (selectedDatasetsStr) {
       selectedDatasets = selectedDatasetsStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
-      console.log('  Parsed datasets:', selectedDatasets);
-    } else {
-      console.log('  No selectedDatasets cookie found');
     }
+
+    await logger.chatQuery(requestId, 'DATASETS', { selectedDatasets });
 
     // Load configurations (use first dataset for project config)
     const config = await loadConfig();
@@ -60,13 +61,13 @@ export async function POST(request: NextRequest) {
     }
 
     // PHASE 1: AI determines what data is needed
-    console.log('Phase 1: Determining data requirements...');
+    await logger.chatQuery(requestId, 'PHASE_1_START', { totalRecords: rawData.length });
     const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
     const queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes);
-    console.log('Data request:', JSON.stringify(queryAnalysis, null, 2));
+    await logger.chatQuery(requestId, 'PHASE_1_RESULT', queryAnalysis);
 
     // PHASE 2: Apply basic filters to get the requested data
-    console.log('Phase 2: Filtering data...');
+    await logger.chatQuery(requestId, 'PHASE_2_START', { filtersToApply: queryAnalysis.filters?.length || 0 });
     let filteredData = rawData;
 
     if (queryAnalysis.filters && queryAnalysis.filters.length > 0) {
@@ -95,7 +96,10 @@ export async function POST(request: NextRequest) {
       filteredData = filteredData.slice(0, queryAnalysis.limit);
     }
 
-    console.log(`Filtered to ${filteredData.length} records`);
+    await logger.chatQuery(requestId, 'PHASE_2_RESULT', {
+      filteredRecords: filteredData.length,
+      originalRecords: rawData.length
+    });
 
     const contextData = {
       data: filteredData,
@@ -117,15 +121,25 @@ export async function POST(request: NextRequest) {
     }
 
     // PHASE 3: AI generates final response with processed data
-    console.log('Phase 3: Generating final response...');
+    await logger.chatQuery(requestId, 'PHASE_3_START', {
+      dataRecords: filteredData.length,
+      datasets: metadata.datasets_queried
+    });
     const response = await aiAdapter.chat(message, { ...contextData, ...metadata });
+
+    await logger.chatQuery(requestId, 'PHASE_3_RESULT', {
+      responseLength: response.length,
+      response: response.substring(0, 500) // Log first 500 chars
+    });
+
+    await logger.chatQuery(requestId, 'COMPLETE', { success: true });
 
     return NextResponse.json({
       response,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Chat API error:', error);
+    await logger.error(`Chat API error [${requestId}]`, error);
     return NextResponse.json(
       { error: 'Failed to process chat request' },
       { status: 500 }
