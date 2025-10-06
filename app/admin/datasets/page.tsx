@@ -117,6 +117,28 @@ export default function DatasetManagementPage() {
                     <span>📁 Type: {dataset.type}</span>
                     <span>📊 Records: {dataset.recordCount.toLocaleString()}</span>
                   </div>
+                  <div className="flex gap-2 mt-3">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(`/admin/schema?dataset=${dataset.name}`);
+                      }}
+                      className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                    >
+                      📝 Schema Editor
+                    </button>
+                    {dataset.hasProjectConfig && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/data/config?dataset=${dataset.name}`);
+                        }}
+                        className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                      >
+                        🔧 Configuration
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

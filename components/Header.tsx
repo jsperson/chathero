@@ -94,20 +94,6 @@ export default function Header() {
                 >
                   📦 Dataset Selection
                 </Link>
-                <Link
-                  href="/admin/schema"
-                  className="block px-4 py-2 hover:bg-gray-100 transition-colors"
-                  onClick={() => setAdminMenuOpen(false)}
-                >
-                  📝 Schema Editor
-                </Link>
-                <Link
-                  href="/data/config"
-                  className="block px-4 py-2 hover:bg-gray-100 transition-colors"
-                  onClick={() => setAdminMenuOpen(false)}
-                >
-                  🔧 Data Configuration
-                </Link>
               </div>
             )}
           </div>
