@@ -38,12 +38,6 @@ export default function SchemaAdmin() {
 
   useEffect(() => {
     loadSchema();
-
-    // Get dataset name from localStorage
-    const saved = localStorage.getItem('selectedDataset');
-    if (saved) {
-      setDatasetName(saved);
-    }
   }, []);
 
   const loadSchema = async () => {
@@ -91,6 +85,11 @@ export default function SchemaAdmin() {
           primaryDateField: config.dataSchema.primaryDateField,
           exampleQuestions: config.exampleQuestions || [],
         });
+
+        // Set display name from project config
+        if (config.project?.name) {
+          setDatasetName(config.project.name);
+        }
       } else {
         // No existing config, use discovered schema
         // Show ALL fields, not just automatically categorized ones
@@ -121,9 +120,15 @@ export default function SchemaAdmin() {
           };
         });
 
+        // Get dataset name from localStorage for display
+        const saved = localStorage.getItem('selectedDataset');
+        const defaultName = saved
+          ? saved.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+          : 'My Project';
+
         setSchema({
           project: {
-            name: 'My Project',
+            name: defaultName,
             description: `Dataset with ${data.discovered.totalRecords} records`,
             domain: 'general data',
           },
@@ -133,6 +138,9 @@ export default function SchemaAdmin() {
           primaryDateField: data.discovered.dateFields?.[0] || '',
           exampleQuestions: [],
         });
+
+        // Set display name
+        setDatasetName(defaultName);
       }
     } catch (error) {
       console.error('Failed to load schema:', error);

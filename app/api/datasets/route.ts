@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
+import yaml from 'js-yaml';
 import { loadConfig } from '@/lib/config';
 
 export async function GET() {
@@ -33,6 +34,7 @@ export async function GET() {
         let recordCount = 0;
         let description = '';
         let hasProject = false;
+        let displayName = datasetName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
         try {
           const data = JSON.parse(await fs.readFile(dataPath, 'utf-8'));
@@ -52,6 +54,16 @@ export async function GET() {
         try {
           await fs.access(projectPath);
           hasProject = true;
+          // Try to load project name from project.yaml
+          try {
+            const projectContent = await fs.readFile(projectPath, 'utf-8');
+            const projectConfig = yaml.load(projectContent) as any;
+            if (projectConfig?.project?.name) {
+              displayName = projectConfig.project.name;
+            }
+          } catch (e) {
+            // Couldn't parse project.yaml, use default display name
+          }
         } catch (e) {
           // No project.yaml
         }
@@ -59,7 +71,7 @@ export async function GET() {
         allDatasets.push({
           name: datasetName,
           type: type,
-          displayName: datasetName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+          displayName: displayName,
           recordCount,
           description,
           hasProjectConfig: hasProject,
