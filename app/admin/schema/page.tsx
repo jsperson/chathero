@@ -25,6 +25,14 @@ interface SchemaConfig {
   exampleQuestions: string[];
 }
 
+interface Dataset {
+  name: string;
+  displayName: string;
+  recordCount: number;
+  description: string;
+  hasProjectConfig: boolean;
+}
+
 export default function SchemaAdmin() {
   const [schema, setSchema] = useState<SchemaConfig | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,10 +43,44 @@ export default function SchemaAdmin() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [rediscovering, setRediscovering] = useState(false);
   const [datasetName, setDatasetName] = useState<string>('');
+  const [availableDatasets, setAvailableDatasets] = useState<Dataset[]>([]);
+  const [selectedDataset, setSelectedDataset] = useState<string>('');
 
   useEffect(() => {
-    loadSchema();
+    loadDatasets();
   }, []);
+
+  useEffect(() => {
+    if (selectedDataset) {
+      loadSchema();
+    }
+  }, [selectedDataset]);
+
+  const loadDatasets = async () => {
+    try {
+      const response = await fetch('/api/datasets');
+      const data = await response.json();
+
+      const sorted = (data.datasets || []).sort((a: Dataset, b: Dataset) =>
+        a.displayName.localeCompare(b.displayName)
+      );
+
+      setAvailableDatasets(sorted);
+
+      // Load first dataset alphabetically
+      if (sorted.length > 0) {
+        setSelectedDataset(sorted[0].name);
+      }
+    } catch (error) {
+      console.error('Failed to load datasets:', error);
+    }
+  };
+
+  const handleDatasetChange = (datasetName: string) => {
+    // Set cookie so the API knows which dataset to load
+    document.cookie = `selectedDataset=${datasetName}; path=/; max-age=31536000`;
+    setSelectedDataset(datasetName);
+  };
 
   const loadSchema = async () => {
     try {
@@ -319,12 +361,30 @@ export default function SchemaAdmin() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Schema Configuration</h1>
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold mb-4">Schema Configuration</h1>
+
+        {/* Dataset Selector */}
+        <div className="flex items-center gap-3 mb-4">
+          <label className="text-sm font-medium text-gray-700">Select Dataset:</label>
+          <select
+            value={selectedDataset}
+            onChange={(e) => handleDatasetChange(e.target.value)}
+            className="border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2"
+            style={{ '--tw-ring-color': 'var(--color-primary)' } as any}
+          >
+            {availableDatasets.map((dataset) => (
+              <option key={dataset.name} value={dataset.name}>
+                {dataset.displayName} ({dataset.recordCount} records)
+              </option>
+            ))}
+          </select>
+        </div>
+
         {datasetName && (
           <div className="text-lg text-gray-600">
-            Dataset: <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>
-              {datasetName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+            Configuring: <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>
+              {datasetName}
             </span>
           </div>
         )}

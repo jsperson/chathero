@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Dataset {
   name: string;
@@ -11,16 +11,30 @@ interface Dataset {
 }
 
 interface DatasetSelectorProps {
-  onDatasetChange?: (datasetName: string) => void;
+  onDatasetChange?: (datasetNames: string[]) => void;
 }
 
 export default function DatasetSelector({ onDatasetChange }: DatasetSelectorProps) {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
-  const [selectedDataset, setSelectedDataset] = useState<string>('');
+  const [selectedDatasets, setSelectedDatasets] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     loadDatasets();
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setExpanded(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const loadDatasets = async () => {
@@ -30,14 +44,26 @@ export default function DatasetSelector({ onDatasetChange }: DatasetSelectorProp
 
       setDatasets(data.datasets || []);
 
-      // Load last selected dataset from localStorage, or use default
-      const saved = localStorage.getItem('selectedDataset');
-      const initial = saved || data.default;
-      setSelectedDataset(initial);
+      // Load last selected datasets from localStorage, or use default
+      const saved = localStorage.getItem('selectedDatasets');
+      let initial: string[] = [];
 
-      // Ensure cookie is set for server-side access
-      if (initial) {
-        document.cookie = `selectedDataset=${initial}; path=/; max-age=31536000`; // 1 year
+      if (saved) {
+        try {
+          initial = JSON.parse(saved);
+        } catch {
+          // If parsing fails, use default
+          initial = [data.default];
+        }
+      } else {
+        initial = [data.default];
+      }
+
+      setSelectedDatasets(initial);
+
+      // Ensure cookie is set for server-side access (comma-separated)
+      if (initial.length > 0) {
+        document.cookie = `selectedDatasets=${initial.join(',')}; path=/; max-age=31536000`; // 1 year
       }
     } catch (error) {
       console.error('Failed to load datasets:', error);
@@ -46,18 +72,54 @@ export default function DatasetSelector({ onDatasetChange }: DatasetSelectorProp
     }
   };
 
-  const handleChange = (datasetName: string) => {
-    setSelectedDataset(datasetName);
-    localStorage.setItem('selectedDataset', datasetName);
+  const toggleDataset = (datasetName: string) => {
+    const newSelection = selectedDatasets.includes(datasetName)
+      ? selectedDatasets.filter(d => d !== datasetName)
+      : [...selectedDatasets, datasetName];
 
-    // Set cookie for server-side access
-    document.cookie = `selectedDataset=${datasetName}; path=/; max-age=31536000`; // 1 year
-
-    if (onDatasetChange) {
-      onDatasetChange(datasetName);
+    // Ensure at least one dataset is selected
+    if (newSelection.length === 0) {
+      return;
     }
 
-    // Reload page to apply new dataset
+    setSelectedDatasets(newSelection);
+    localStorage.setItem('selectedDatasets', JSON.stringify(newSelection));
+
+    // Set cookie for server-side access (comma-separated)
+    document.cookie = `selectedDatasets=${newSelection.join(',')}; path=/; max-age=31536000`; // 1 year
+
+    if (onDatasetChange) {
+      onDatasetChange(newSelection);
+    }
+
+    // Reload page to apply new dataset selection
+    window.location.reload();
+  };
+
+  const selectAll = () => {
+    const allDatasetNames = datasets.map(d => d.name);
+    setSelectedDatasets(allDatasetNames);
+    localStorage.setItem('selectedDatasets', JSON.stringify(allDatasetNames));
+    document.cookie = `selectedDatasets=${allDatasetNames.join(',')}; path=/; max-age=31536000`;
+
+    if (onDatasetChange) {
+      onDatasetChange(allDatasetNames);
+    }
+
+    window.location.reload();
+  };
+
+  const clearAll = () => {
+    // Keep first dataset to ensure at least one is selected
+    const firstDataset = datasets.length > 0 ? [datasets[0].name] : [];
+    setSelectedDatasets(firstDataset);
+    localStorage.setItem('selectedDatasets', JSON.stringify(firstDataset));
+    document.cookie = `selectedDatasets=${firstDataset.join(',')}; path=/; max-age=31536000`;
+
+    if (onDatasetChange) {
+      onDatasetChange(firstDataset);
+    }
+
     window.location.reload();
   };
 
@@ -74,19 +136,70 @@ export default function DatasetSelector({ onDatasetChange }: DatasetSelectorProp
   }
 
   return (
-    <div className="inline-block">
-      <select
-        value={selectedDataset}
-        onChange={(e) => handleChange(e.target.value)}
-        className="border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2"
-        style={{ '--tw-ring-color': 'var(--color-primary)' } as any}
+    <div className="inline-block relative" ref={dropdownRef}>
+      {/* Collapsed State */}
+      <div
+        className="border rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-50 transition-colors"
+        onClick={() => setExpanded(!expanded)}
       >
-        {datasets.map((dataset) => (
-          <option key={dataset.name} value={dataset.name}>
-            {dataset.displayName} ({dataset.recordCount} records)
-          </option>
-        ))}
-      </select>
+        <div className="flex items-center gap-2">
+          <span className="text-sm">📊 Datasets</span>
+          <span
+            className="px-2 py-1 rounded-full text-xs font-medium text-white"
+            style={{ backgroundColor: 'var(--color-primary)' }}
+          >
+            {selectedDatasets.length}
+          </span>
+          <span className="text-xs text-gray-500">{expanded ? '▲' : '▼'}</span>
+        </div>
+      </div>
+
+      {/* Expanded State */}
+      {expanded && (
+        <div className="absolute top-full left-0 mt-1 bg-white border rounded-lg shadow-lg z-50 min-w-[300px]">
+          {/* Action Buttons */}
+          <div className="flex gap-2 p-3 border-b">
+            <button
+              onClick={(e) => { e.stopPropagation(); selectAll(); }}
+              className="flex-1 px-3 py-1 text-xs border rounded hover:bg-gray-50"
+            >
+              Select All
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); clearAll(); }}
+              className="flex-1 px-3 py-1 text-xs border rounded hover:bg-gray-50"
+            >
+              Clear All
+            </button>
+          </div>
+
+          {/* Dataset List */}
+          <div className="max-h-[400px] overflow-y-auto">
+            {datasets.map((dataset) => (
+              <div
+                key={dataset.name}
+                className="flex items-start gap-3 p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0"
+                onClick={(e) => { e.stopPropagation(); toggleDataset(dataset.name); }}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedDatasets.includes(dataset.name)}
+                  onChange={() => {}}
+                  className="mt-1"
+                  style={{ accentColor: 'var(--color-primary)' }}
+                />
+                <div className="flex-1">
+                  <div className="font-medium text-sm">{dataset.displayName}</div>
+                  <div className="text-xs text-gray-500">{dataset.recordCount} records</div>
+                  {dataset.description && (
+                    <div className="text-xs text-gray-400 mt-1">{dataset.description}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
