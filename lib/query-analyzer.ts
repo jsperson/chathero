@@ -86,6 +86,11 @@ Return a JSON object:
   "explanation": "What data is needed and why"
 }
 
+IMPORTANT RULES:
+- Do NOT add a limit for counting, aggregation, or "how many" queries - these need ALL records to count accurately
+- Only use limit for browsing/listing queries like "show me", "list", "display"
+- For questions like "how many X", "count of X", "total X", "X by year/category" - omit the limit field or set it very high
+
 Examples:
 ${this.projectConfig.queryExamples && this.projectConfig.queryExamples.length > 0
   ? this.projectConfig.queryExamples.map(ex =>
