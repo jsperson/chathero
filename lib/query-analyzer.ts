@@ -95,15 +95,30 @@ Return a JSON object:
 
 CRITICAL: The "fieldsToInclude" field is REQUIRED in every response.
 
-FIELD SELECTION RULES:
-- For counting/aggregation queries: Include ONLY the minimal fields needed for correlation
-  * Example: For temporal correlation, include date fields and identifier fields only
-  * Example: For category counting, include the category field and _dataset_source only
-- For browsing/listing queries where user wants to see details: Include all relevant display fields
-- ALWAYS include "_dataset_source" if present in the data (required for multi-dataset queries)
-- ALWAYS include key identifier fields (id, name, title) for reference
-- NEVER include verbose fields not needed for the analysis (descriptions, URLs, long text fields, etc.)
-- When in doubt, include fewer fields rather than more - Phase 3 can work with minimal data
+FIELD SELECTION RULES - Include fields needed for BOTH processing AND displaying results:
+
+1. **Fields needed to answer the question** (correlation/filtering):
+   - Date fields for temporal correlation
+   - Category fields for grouping/counting
+   - Any fields used in WHERE conditions
+
+2. **Fields needed to display the answer** (output):
+   - Identifier fields that appear in the result (name, title, id)
+   - Any fields the user specifically asks to see
+   - Fields needed to label/describe the results
+
+3. **Always include**:
+   - "_dataset_source" if present (required for multi-dataset queries)
+   - Key identifier fields (name, title, id) unless the query is a pure count
+
+4. **Always exclude**:
+   - Verbose text fields not needed (descriptions, long text, URLs)
+   - Fields not mentioned and not needed for processing or output
+
+Example: "List launch count by president"
+- Need for processing: presidential_start, presidential_end, launch_date, _dataset_source
+- Need for output: name (to label each president in the result)
+- Final: ["_dataset_source", "launch_date", "presidential_start", "presidential_end", "name"]
 
 IMPORTANT RULES:
 - Do NOT add a limit for counting, aggregation, or "how many" queries - these need ALL records to count accurately
