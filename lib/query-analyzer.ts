@@ -1,9 +1,10 @@
 // AI-powered query analyzer that determines how to process data
 import { AIAdapter } from './adapters/ai.adapter';
 import { ProjectConfig } from './config';
+import { JoinStrategy } from './join-analyzer';
 
 export interface QueryAnalysisResult {
-  operation: 'aggregate' | 'filter' | 'calculate' | 'raw';
+  operation: 'aggregate' | 'filter' | 'calculate' | 'raw' | 'join';
   groupBy?: Array<{
     field: string;
     transform?: 'extract_year' | 'extract_month' | 'extract_day_of_week' | 'extract_quarter' | 'none';
@@ -19,6 +20,7 @@ export interface QueryAnalysisResult {
   }>;
   limit?: number;
   explanation: string;
+  joinStrategy?: JoinStrategy;
 }
 
 export class QueryAnalyzer {

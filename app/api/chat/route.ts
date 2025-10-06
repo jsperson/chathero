@@ -4,6 +4,7 @@ import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
 import { JSONAdapter } from '@/lib/adapters/json.adapter';
 import { DataProcessor } from '@/lib/data-processor';
 import { QueryAnalyzer } from '@/lib/query-analyzer';
+import { JoinAnalyzer } from '@/lib/join-analyzer';
 
 export async function POST(request: NextRequest) {
   try {
@@ -50,6 +51,20 @@ export async function POST(request: NextRequest) {
     const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
     const queryAnalysis = await queryAnalyzer.analyze(message, rawData);
     console.log('Query analysis:', JSON.stringify(queryAnalysis, null, 2));
+
+    // PHASE 1.5: Detect if cross-dataset join is needed (only for multi-dataset queries)
+    if (selectedDatasets && selectedDatasets.length > 1) {
+      console.log('Phase 1.5: Analyzing for cross-dataset joins...');
+      const joinAnalyzer = new JoinAnalyzer(aiAdapter, projectConfig);
+      const joinStrategy = await joinAnalyzer.analyzeJoin(message, rawData, selectedDatasets);
+      console.log('Join strategy:', JSON.stringify(joinStrategy, null, 2));
+
+      // If join is needed, update query analysis to use join operation
+      if (joinStrategy.needsJoin) {
+        queryAnalysis.operation = 'join';
+        queryAnalysis.joinStrategy = joinStrategy;
+      }
+    }
 
     // PHASE 2: Execute the analysis instructions to process data
     console.log('Phase 2: Executing data processing instructions...');

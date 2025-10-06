@@ -1,6 +1,7 @@
 // Data processor for intelligent query handling
 import { ProjectConfig } from './config';
 import { QueryAnalysisResult } from './query-analyzer';
+import { JoinStrategy } from './join-analyzer';
 
 export interface QueryAnalysis {
   type: 'aggregate' | 'filter' | 'specific' | 'search' | 'full';
@@ -230,6 +231,12 @@ export class DataProcessor {
       case 'raw':
         result.results = workingData.slice(0, analysis.limit || 100);
         break;
+
+      case 'join':
+        if (analysis.joinStrategy && analysis.joinStrategy.needsJoin) {
+          result.join_results = this.executeJoin(workingData, analysis.joinStrategy);
+        }
+        break;
     }
 
     // Add small sample for context
@@ -364,5 +371,156 @@ export class DataProcessor {
       default:
         return null;
     }
+  }
+
+  /**
+   * Execute a join between datasets based on join strategy
+   */
+  private executeJoin(data: any[], strategy: JoinStrategy): any {
+    const leftDataset = data.filter(r => r._dataset_source === strategy.leftDataset);
+    const rightDataset = data.filter(r => r._dataset_source === strategy.rightDataset);
+
+    console.log(`Executing ${strategy.joinType} join between ${strategy.leftDataset} (${leftDataset.length}) and ${strategy.rightDataset} (${rightDataset.length})`);
+
+    switch (strategy.joinType) {
+      case 'temporal':
+        return this.executeTemporalJoin(leftDataset, rightDataset, strategy);
+
+      case 'key_match':
+        return this.executeKeyMatchJoin(leftDataset, rightDataset, strategy);
+
+      case 'nested_aggregation':
+        return this.executeNestedAggregation(leftDataset, rightDataset, strategy);
+
+      default:
+        return { error: 'Unknown join type' };
+    }
+  }
+
+  /**
+   * Execute temporal join (date overlap or date range)
+   */
+  private executeTemporalJoin(leftData: any[], rightData: any[], strategy: JoinStrategy): any {
+    const results: any[] = [];
+    const condition = strategy.joinCondition;
+
+    if (!condition || !condition.leftFields || !condition.rightFields) {
+      return { error: 'Missing temporal join fields' };
+    }
+
+    if (condition.type === 'date_overlap') {
+      // For each left record, find right records where date falls within range
+      leftData.forEach(leftRecord => {
+        const startDate = leftRecord[condition.leftFields![0]];
+        const endDate = leftRecord[condition.leftFields![1]] || new Date().toISOString(); // Use current date if no end date
+
+        const matchingRightRecords = rightData.filter(rightRecord => {
+          const rightDate = rightRecord[condition.rightFields![0]];
+          return rightDate >= startDate && rightDate <= endDate;
+        });
+
+        if (matchingRightRecords.length > 0) {
+          results.push({
+            left_record: leftRecord,
+            matching_right_records: matchingRightRecords,
+            match_count: matchingRightRecords.length,
+          });
+        }
+      });
+    } else if (condition.type === 'date_range') {
+      // Similar to date_overlap but expects both start and end dates
+      leftData.forEach(leftRecord => {
+        const startDate = leftRecord[condition.leftFields![0]];
+        const endDate = leftRecord[condition.leftFields![1]];
+
+        const matchingRightRecords = rightData.filter(rightRecord => {
+          const rightDate = rightRecord[condition.rightFields![0]];
+          return rightDate >= startDate && rightDate <= endDate;
+        });
+
+        results.push({
+          left_record: leftRecord,
+          matching_right_records: matchingRightRecords,
+          match_count: matchingRightRecords.length,
+        });
+      });
+    }
+
+    return {
+      join_type: 'temporal',
+      total_left_records: leftData.length,
+      total_right_records: rightData.length,
+      matches: results,
+      match_summary: `Found ${results.length} ${strategy.leftDataset} records with matching ${strategy.rightDataset} records`,
+    };
+  }
+
+  /**
+   * Execute key match join (join on matching field values)
+   */
+  private executeKeyMatchJoin(leftData: any[], rightData: any[], strategy: JoinStrategy): any {
+    const results: any[] = [];
+    const condition = strategy.joinCondition;
+
+    if (!condition || !condition.matchField) {
+      return { error: 'Missing match field for key join' };
+    }
+
+    leftData.forEach(leftRecord => {
+      const leftValue = leftRecord[condition.matchField!];
+
+      const matchingRightRecords = rightData.filter(rightRecord => {
+        const rightValue = rightRecord[condition.matchField!];
+        return this.valuesMatch(leftValue, rightValue);
+      });
+
+      if (matchingRightRecords.length > 0) {
+        results.push({
+          left_record: leftRecord,
+          matching_right_records: matchingRightRecords,
+          match_count: matchingRightRecords.length,
+        });
+      }
+    });
+
+    return {
+      join_type: 'key_match',
+      match_field: condition.matchField,
+      total_left_records: leftData.length,
+      total_right_records: rightData.length,
+      matches: results,
+      match_summary: `Found ${results.length} matches on field '${condition.matchField}'`,
+    };
+  }
+
+  /**
+   * Execute nested aggregation (compute stats per dataset then return both)
+   */
+  private executeNestedAggregation(leftData: any[], rightData: any[], strategy: JoinStrategy): any {
+    return {
+      join_type: 'nested_aggregation',
+      left_dataset: {
+        name: strategy.leftDataset,
+        count: leftData.length,
+        sample: leftData.slice(0, 5),
+      },
+      right_dataset: {
+        name: strategy.rightDataset,
+        count: rightData.length,
+        sample: rightData.slice(0, 5),
+      },
+      summary: `${strategy.leftDataset}: ${leftData.length} records, ${strategy.rightDataset}: ${rightData.length} records`,
+    };
+  }
+
+  /**
+   * Helper to check if two values match (case-insensitive for strings)
+   */
+  private valuesMatch(val1: any, val2: any): boolean {
+    if (typeof val1 === 'string' && typeof val2 === 'string') {
+      return val1.toLowerCase().includes(val2.toLowerCase()) ||
+             val2.toLowerCase().includes(val1.toLowerCase());
+    }
+    return val1 === val2;
   }
 }
