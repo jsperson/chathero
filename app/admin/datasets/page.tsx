@@ -22,7 +22,7 @@ export default function DatasetManagementPage() {
     fetch('/api/datasets')
       .then(res => res.json())
       .then(data => {
-        setDatasets(data);
+        setDatasets(data.datasets || []);
         setLoading(false);
       })
       .catch(err => {
