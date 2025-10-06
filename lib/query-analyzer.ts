@@ -80,11 +80,13 @@ Return a JSON object:
 }
 
 Examples:
-- "How many launches?" → {"filters": [{"field": "_dataset_source", "operator": "equals", "value": "launches"}], "explanation": "Need all launch records"}
-- "Launches by year" → {"filters": [{"field": "_dataset_source", "operator": "equals", "value": "launches"}], "explanation": "Need all launches to group by year"}
-- "Show SpaceX launches in 2020" → {"filters": [{"field": "_dataset_source", "operator": "equals", "value": "launches"}, {"field": "launch_date", "operator": "contains", "value": "2020"}], "limit": 100, "explanation": "Filter for 2020 launches"}
-- "Presidents and launches" → {"filters": [], "explanation": "Need all data from both datasets for cross-dataset analysis"}
-- "How many launches by president?" → {"filters": [], "explanation": "Need all presidents and all launches to correlate by date"}
+${this.projectConfig.queryExamples && this.projectConfig.queryExamples.length > 0
+  ? this.projectConfig.queryExamples.map(ex =>
+      `- "${ex.question}" → ${JSON.stringify({filters: ex.filters || [], limit: ex.limit, explanation: ex.explanation})}`
+    ).join('\n')
+  : `- "How many records?" → {"filters": [], "explanation": "Need all records"}
+- "Show recent records" → {"filters": [], "limit": 100, "explanation": "Show recent records"}`}
+${multiDatasetExamples ? '\n' + multiDatasetExamples : ''}
 
 Important:
 - Only filter to reduce data size or isolate specific records

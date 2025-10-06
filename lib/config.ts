@@ -52,6 +52,16 @@ export interface ProjectConfig {
     fieldKeywords: Record<string, string[]>;
   };
   exampleQuestions: string[];
+  queryExamples?: Array<{
+    question: string;
+    filters?: Array<{
+      field: string;
+      operator: string;
+      value: any;
+    }>;
+    limit?: number;
+    explanation: string;
+  }>;
   aiContext: {
     systemRole: string;
     domainContext: string;

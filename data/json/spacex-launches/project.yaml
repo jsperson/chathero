@@ -60,6 +60,44 @@ exampleQuestions:
   - "How many Starship test flights?"
   - "Show me recent launches"
 
+# Examples for AI query analyzer (Phase 1)
+queryExamples:
+  - question: "How many launches?"
+    filters:
+      - field: "_dataset_source"
+        operator: "equals"
+        value: "spacex-launches"
+    explanation: "Need all launch records"
+
+  - question: "Launches by year"
+    filters:
+      - field: "_dataset_source"
+        operator: "equals"
+        value: "spacex-launches"
+    explanation: "Need all launches to group by year"
+
+  - question: "Show Falcon 9 launches"
+    filters:
+      - field: "_dataset_source"
+        operator: "equals"
+        value: "spacex-launches"
+      - field: "vehicle"
+        operator: "contains"
+        value: "Falcon 9"
+    limit: 100
+    explanation: "Filter for Falcon 9 launches only"
+
+  - question: "Launches in 2024"
+    filters:
+      - field: "_dataset_source"
+        operator: "equals"
+        value: "spacex-launches"
+      - field: "launch_date"
+        operator: "contains"
+        value: "2024"
+    limit: 100
+    explanation: "Filter for 2024 launches"
+
 # AI assistant context
 aiContext:
   systemRole: "You are a helpful assistant that answers questions about SpaceX launch data."
