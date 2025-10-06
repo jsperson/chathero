@@ -36,10 +36,18 @@ export class QueryAnalyzer {
   async analyze(question: string, dataSample: any[]): Promise<QueryAnalysisResult> {
     // Check if multiple datasets are present
     const hasMultipleDatasets = dataSample.length > 0 && dataSample.some(record => record._dataset_source);
+    const uniqueDatasets = [...new Set(dataSample.map(r => r._dataset_source).filter(Boolean))];
+
+    console.log('Query Analyzer - Multi-dataset detection:');
+    console.log('  Has multiple datasets:', hasMultipleDatasets);
+    console.log('  Sample data count:', dataSample.length);
+    console.log('  Unique datasets:', uniqueDatasets);
+    console.log('  First record has _dataset_source:', dataSample[0]?._dataset_source);
+
     const datasetInfo = hasMultipleDatasets
       ? `\nIMPORTANT: This data contains records from MULTIPLE datasets combined together.
 Each record has a '_dataset_source' field indicating which dataset it came from.
-Available datasets: ${[...new Set(dataSample.map(r => r._dataset_source).filter(Boolean))].join(', ')}
+Available datasets: ${uniqueDatasets.join(', ')}
 You can filter by dataset using the '_dataset_source' field.`
       : '';
 

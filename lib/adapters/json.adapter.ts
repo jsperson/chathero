@@ -23,9 +23,16 @@ export class JSONAdapter implements DataAdapter {
         ? this.datasets
         : [this.config.defaultDataset];
 
+      console.log('JSONAdapter.getData():');
+      console.log('  Datasets to load:', datasetsToLoad);
+      console.log('  Count:', datasetsToLoad.length);
+
       // If only one dataset, return data without source field (backward compatibility)
       if (datasetsToLoad.length === 1) {
-        return await this.loadSingleDataset(datasetsToLoad[0]);
+        const data = await this.loadSingleDataset(datasetsToLoad[0]);
+        console.log('  Single dataset mode - no _dataset_source field added');
+        console.log('  Records loaded:', Array.isArray(data) ? data.length : 0);
+        return data;
       }
 
       // Multiple datasets: load all and combine with _dataset_source field
@@ -39,8 +46,12 @@ export class JSONAdapter implements DataAdapter {
           ? data.map(record => ({ ...record, _dataset_source: datasetName }))
           : [];
 
+        console.log(`  Loaded dataset '${datasetName}': ${taggedData.length} records`);
         allData.push(...taggedData);
       }
+
+      console.log('  Total combined records:', allData.length);
+      console.log('  Sample record has _dataset_source:', allData[0]?._dataset_source);
 
       return allData;
     } catch (error) {
