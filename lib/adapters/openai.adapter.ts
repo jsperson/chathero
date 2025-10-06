@@ -121,7 +121,16 @@ Answer the user's question based on this data. Perform any necessary counting, g
       return response || 'No response generated';
     } catch (error) {
       console.error('OpenAI API error:', error);
-      throw new Error('Failed to get AI response');
+
+      // Log detailed error information
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
+
+      // Re-throw the original error with more context
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to get AI response: ${errorMessage}`);
     }
   }
 }
