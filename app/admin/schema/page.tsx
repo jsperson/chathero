@@ -49,11 +49,13 @@ export default function SchemaAdmin() {
   const [availableDatasets, setAvailableDatasets] = useState<Dataset[]>([]);
   const [selectedDataset, setSelectedDataset] = useState<string>('');
 
+  // Track the dataset URL parameter
+  const datasetParam = searchParams.get('dataset');
+
   useEffect(() => {
-    const datasetParam = searchParams.get('dataset');
     console.log('Schema page - dataset from URL:', datasetParam);
     loadDatasets();
-  }, [searchParams.get('dataset')]);
+  }, [datasetParam]);
 
   useEffect(() => {
     if (selectedDataset) {
@@ -72,16 +74,15 @@ export default function SchemaAdmin() {
 
       setAvailableDatasets(sorted);
 
-      // Check if dataset is specified in URL
-      const datasetFromUrl = searchParams.get('dataset');
-      console.log('loadDatasets - URL param:', datasetFromUrl);
+      // Check if dataset is specified in URL using the extracted parameter
+      console.log('loadDatasets - URL param:', datasetParam);
       console.log('loadDatasets - available datasets:', sorted.map(d => d.name));
 
-      if (datasetFromUrl && sorted.some((d: Dataset) => d.name === datasetFromUrl)) {
-        console.log('loadDatasets - setting dataset from URL:', datasetFromUrl);
-        setSelectedDataset(datasetFromUrl);
+      if (datasetParam && sorted.some((d: Dataset) => d.name === datasetParam)) {
+        console.log('loadDatasets - setting dataset from URL:', datasetParam);
+        setSelectedDataset(datasetParam);
         // Also set cookie so API calls use the right dataset
-        document.cookie = `selectedDataset=${datasetFromUrl}; path=/; max-age=31536000`;
+        document.cookie = `selectedDataset=${datasetParam}; path=/; max-age=31536000`;
       } else if (sorted.length > 0) {
         // Load first dataset alphabetically
         console.log('loadDatasets - setting first dataset:', sorted[0].name);
