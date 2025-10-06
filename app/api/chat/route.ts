@@ -101,51 +101,10 @@ export async function POST(request: NextRequest) {
       originalRecords: rawData.length
     });
 
-    // For large multi-dataset queries, pre-process correlations to avoid overwhelming AI
-    let processedData = filteredData;
-    let dataExplanation = queryAnalysis.explanation;
-
-    if (selectedDatasets && selectedDatasets.length > 1 && filteredData.length > 400) {
-      // Check if this is a president/launch correlation query
-      const hasPresidents = filteredData.some(r => r._dataset_source === 'us-presidents');
-      const hasLaunches = filteredData.some(r => r._dataset_source === 'spacex-launches');
-
-      if (hasPresidents && hasLaunches && (message.toLowerCase().includes('president') || message.toLowerCase().includes('term'))) {
-        await logger.chatQuery(requestId, 'CORRELATION_PREPROCESSING', {
-          reason: 'President-launch temporal correlation detected'
-        });
-
-        // Extract presidents and launches
-        const presidents = filteredData.filter(r => r._dataset_source === 'us-presidents');
-        const launches = filteredData.filter(r => r._dataset_source === 'spacex-launches');
-
-        // Count launches per president based on date ranges
-        const presidentLaunchCounts = presidents.map(p => {
-          const launchCount = launches.filter(l => {
-            const launchDate = new Date(l.launch_date);
-            const termStart = new Date(p.term_start || p.presidential_start || p.start_date);
-            const termEnd = new Date(p.term_end || p.presidential_end || p.end_date);
-            return launchDate >= termStart && launchDate <= termEnd;
-          }).length;
-
-          return {
-            president: p.name || p.president,
-            term_start: p.term_start || p.presidential_start || p.start_date,
-            term_end: p.term_end || p.presidential_end || p.end_date,
-            launch_count: launchCount,
-            _dataset_source: 'correlation-result'
-          };
-        });
-
-        processedData = presidentLaunchCounts;
-        dataExplanation = 'Pre-computed launch counts per president based on temporal correlation of launch dates with presidential terms';
-      }
-    }
-
     const contextData = {
-      data: processedData,
-      total_records: processedData.length,
-      data_explanation: dataExplanation,
+      data: filteredData,
+      total_records: filteredData.length,
+      data_explanation: queryAnalysis.explanation,
     };
 
     // Add metadata
