@@ -127,6 +127,10 @@ Example: "List launch count by president"
 CODE GENERATION (Optional but recommended for complex operations):
 When a query requires DETERMINISTIC operations that AIs struggle with, generate JavaScript code to perform the operation.
 
+⚠️ CRITICAL: When generating code, you MUST include ALL fields referenced in the code in the "fieldsToInclude" array.
+If your code accesses fields like "presidential_start", "presidential_end", "launch_date", etc., ALL of those fields must be in fieldsToInclude.
+Otherwise Phase 2 will strip out those fields and your code will fail.
+
 WHEN TO GENERATE CODE:
 - Temporal correlation (date range overlaps, date comparisons)
 - Complex mathematical calculations
