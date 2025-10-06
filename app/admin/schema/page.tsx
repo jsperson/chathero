@@ -362,6 +362,14 @@ export default function SchemaAdmin() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="mb-6">
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={() => window.location.href = '/admin/datasets'}
+            className="text-gray-600 hover:text-gray-900 flex items-center gap-1"
+          >
+            ← Back to Datasets
+          </button>
+        </div>
         <h1 className="text-3xl font-bold mb-4">Schema Configuration</h1>
 
         {/* Dataset Selector */}
