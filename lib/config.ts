@@ -120,14 +120,25 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
 
     for (const typeFolder of typeFolders) {
       const potentialConfigPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
-      const potentialDataPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
+      const potentialJsonPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
+      const potentialCsvPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.csv');
+
+      // Try JSON first, then CSV
       try {
-        await fs.access(potentialDataPath);
+        await fs.access(potentialJsonPath);
         configPath = potentialConfigPath;
-        dataPath = potentialDataPath;
+        dataPath = potentialJsonPath;
         break;
       } catch (e) {
-        // Try next type folder
+        // Try CSV
+        try {
+          await fs.access(potentialCsvPath);
+          configPath = potentialConfigPath;
+          dataPath = potentialCsvPath;
+          break;
+        } catch (csvError) {
+          // Try next type folder
+        }
       }
     }
 
@@ -142,13 +153,15 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
       // If project.yaml doesn't exist, auto-discover schema from data
       console.log('project.yaml not found, auto-discovering schema from data...');
 
-      const dataContent = await fs.readFile(dataPath, 'utf-8');
-      const data = JSON.parse(dataContent);
+      // Use the appropriate adapter to load the data
+      const { createDataAdapter } = await import('./adapters/adapter-factory');
+      const adapter = await createDataAdapter(appConfig.dataSource, datasetName);
+      const data = await adapter.getData();
 
       // Extract project name from dataset folder name
       const fileName = datasetName;
       const projectName = fileName
-        .split('-')
+        .split(/[-_]/)
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 
