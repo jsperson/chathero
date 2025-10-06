@@ -104,8 +104,11 @@ export default function SchemaAdmin() {
   const loadSchema = async () => {
     try {
       setLoading(true);
+      console.log('loadSchema - selected dataset:', selectedDataset);
+      console.log('loadSchema - fetching /api/admin/schema');
       const response = await fetch('/api/admin/schema');
       const data = await response.json();
+      console.log('loadSchema - response:', data);
 
       // If existing config exists, use it
       if (data.existingConfig) {

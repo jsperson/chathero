@@ -154,7 +154,10 @@ export default function DatasetManagementPage() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          router.push(`/admin/schema?dataset=${dataset.name}`);
+                          const url = `/admin/schema?dataset=${dataset.name}`;
+                          console.log('Navigating to schema editor:', url);
+                          console.log('Dataset name:', dataset.name);
+                          router.push(url);
                         }}
                         className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
                       >
