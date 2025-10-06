@@ -56,7 +56,7 @@ export default function SchemaAdmin() {
 
   useEffect(() => {
     console.log('EFFECT - dataset from URL:', datasetParam);
-    loadDatasets();
+    loadDatasets(datasetParam);
   }, [datasetParam]);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function SchemaAdmin() {
     }
   }, [selectedDataset]);
 
-  const loadDatasets = async () => {
+  const loadDatasets = async (urlParam: string | null) => {
     try {
       const response = await fetch('/api/datasets');
       const data = await response.json();
@@ -77,18 +77,18 @@ export default function SchemaAdmin() {
 
       setAvailableDatasets(sorted);
 
-      // Check if dataset is specified in URL using the extracted parameter
-      console.log('loadDatasets - URL param:', datasetParam);
+      // Check if dataset is specified in URL using the passed parameter
+      console.log('loadDatasets - URL param:', urlParam);
       console.log('loadDatasets - available datasets:', sorted.map(d => d.name));
 
-      if (datasetParam) {
+      if (urlParam) {
         // URL parameter takes priority - use it even if not found in list
-        console.log('loadDatasets - setting dataset from URL:', datasetParam);
-        const exists = sorted.some((d: Dataset) => d.name === datasetParam);
+        console.log('loadDatasets - setting dataset from URL:', urlParam);
+        const exists = sorted.some((d: Dataset) => d.name === urlParam);
         console.log('loadDatasets - dataset exists in list:', exists);
-        setSelectedDataset(datasetParam);
+        setSelectedDataset(urlParam);
         // Also set cookie so API calls use the right dataset
-        document.cookie = `selectedDataset=${datasetParam}; path=/; max-age=31536000`;
+        document.cookie = `selectedDataset=${urlParam}; path=/; max-age=31536000`;
       } else if (sorted.length > 0) {
         // Load first dataset alphabetically only if no URL parameter
         console.log('loadDatasets - no URL param, setting first dataset:', sorted[0].name);
