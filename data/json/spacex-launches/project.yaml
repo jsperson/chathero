@@ -63,24 +63,15 @@ exampleQuestions:
 # Examples for AI query analyzer (Phase 1)
 queryExamples:
   - question: "How many launches?"
-    filters:
-      - field: "_dataset_source"
-        operator: "equals"
-        value: "spacex-launches"
+    filters: []
     explanation: "Need all launch records"
 
   - question: "Launches by year"
-    filters:
-      - field: "_dataset_source"
-        operator: "equals"
-        value: "spacex-launches"
+    filters: []
     explanation: "Need all launches to group by year"
 
   - question: "Show Falcon 9 launches"
     filters:
-      - field: "_dataset_source"
-        operator: "equals"
-        value: "spacex-launches"
       - field: "vehicle"
         operator: "contains"
         value: "Falcon 9"
@@ -89,9 +80,6 @@ queryExamples:
 
   - question: "Launches in 2024"
     filters:
-      - field: "_dataset_source"
-        operator: "equals"
-        value: "spacex-launches"
       - field: "launch_date"
         operator: "contains"
         value: "2024"
