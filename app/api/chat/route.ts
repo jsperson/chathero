@@ -44,10 +44,25 @@ export async function POST(request: NextRequest) {
     // Initialize AI adapter
     const aiAdapter = new OpenAIAdapter(config.ai, projectConfig);
 
+    // Load READMEs for all selected datasets
+    const datasetReadmes: Record<string, string> = {};
+    if (selectedDatasets && selectedDatasets.length > 0) {
+      for (const datasetName of selectedDatasets) {
+        try {
+          const datasetConfig = await loadProjectConfig(datasetName);
+          if (datasetConfig.readme) {
+            datasetReadmes[datasetName] = datasetConfig.readme;
+          }
+        } catch (error) {
+          // README is optional, continue without it
+        }
+      }
+    }
+
     // PHASE 1: AI determines what data is needed
     console.log('Phase 1: Determining data requirements...');
     const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
-    const queryAnalysis = await queryAnalyzer.analyze(message, rawData);
+    const queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes);
     console.log('Data request:', JSON.stringify(queryAnalysis, null, 2));
 
     // PHASE 2: Apply basic filters to get the requested data

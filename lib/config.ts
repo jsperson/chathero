@@ -66,6 +66,7 @@ export interface ProjectConfig {
     systemRole: string;
     domainContext: string;
   };
+  readme?: string; // README content if available
 }
 
 let cachedConfig: AppConfig | null = null;
@@ -136,7 +137,6 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
     try {
       const fileContent = await fs.readFile(configPath!, 'utf-8');
       cachedProjectConfig = yaml.load(fileContent) as ProjectConfig;
-      return cachedProjectConfig;
     } catch (readError) {
       // If project.yaml doesn't exist, auto-discover schema from data
       console.log('project.yaml not found, auto-discovering schema from data...');
@@ -154,9 +154,18 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
       cachedProjectConfig = SchemaDiscovery.generateProjectConfig(data, projectName);
 
       console.log(`Auto-discovered schema with ${cachedProjectConfig.dataSchema.categoricalFields.length} categorical fields and ${cachedProjectConfig.dataSchema.numericFields?.length || 0} numeric fields`);
-
-      return cachedProjectConfig;
     }
+
+    // Try to load README if it exists
+    const readmePath = path.join(path.dirname(dataPath), 'README.md');
+    try {
+      const readmeContent = await fs.readFile(readmePath, 'utf-8');
+      cachedProjectConfig!.readme = readmeContent;
+    } catch (readmeError) {
+      // README is optional, continue without it
+    }
+
+    return cachedProjectConfig!;
   } catch (error) {
     console.error('Error loading project config:', error);
     throw new Error('Failed to load project configuration');

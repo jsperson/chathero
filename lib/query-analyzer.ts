@@ -25,7 +25,7 @@ export class QueryAnalyzer {
   /**
    * Analyze a user question using AI to determine how to process the data
    */
-  async analyze(question: string, dataSample: any[]): Promise<QueryAnalysisResult> {
+  async analyze(question: string, dataSample: any[], datasetReadmes?: Record<string, string>): Promise<QueryAnalysisResult> {
     // Check if multiple datasets are present
     const hasMultipleDatasets = dataSample.length > 0 && dataSample.some(record => record._dataset_source);
     const uniqueDatasets = [...new Set(dataSample.map(r => r._dataset_source).filter(Boolean))];
@@ -43,6 +43,13 @@ Available datasets: ${uniqueDatasets.join(', ')}
 You can filter by dataset using the '_dataset_source' field.`
       : '';
 
+    // Add README documentation for datasets if available
+    const readmeInfo = datasetReadmes && Object.keys(datasetReadmes).length > 0
+      ? `\n\nDataset Documentation:\n` + Object.entries(datasetReadmes)
+          .map(([datasetName, readme]) => `\n### ${datasetName}\n${readme}`)
+          .join('\n')
+      : '';
+
     // Generate dynamic multi-dataset examples
     const multiDatasetExamples = hasMultipleDatasets && uniqueDatasets.length >= 1
       ? `
@@ -55,7 +62,7 @@ IMPORTANT: When the user mentions a specific dataset name (${uniqueDatasets.map(
       : '';
 
     const systemPrompt = `You are a data request analyzer. Your job is to determine what data filters are needed to answer the user's question.
-${datasetInfo}
+${datasetInfo}${readmeInfo}
 
 Dataset schema:
 ${JSON.stringify(this.projectConfig.dataSchema, null, 2)}
