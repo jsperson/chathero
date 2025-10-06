@@ -140,15 +140,6 @@ export default function DatasetManagementPage() {
                   </button>
                   {openMenuDataset === dataset.name && (
                     <div className="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/admin/schema?dataset=${dataset.name}`);
-                        }}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
-                      >
-                        📝 Schema Editor
-                      </button>
                       {dataset.hasProjectConfig && (
                         <button
                           onClick={(e) => {
@@ -160,6 +151,15 @@ export default function DatasetManagementPage() {
                           🔧 Configuration
                         </button>
                       )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/admin/schema?dataset=${dataset.name}`);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                      >
+                        📝 Schema Editor
+                      </button>
                     </div>
                   )}
                 </div>
