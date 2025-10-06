@@ -4,23 +4,13 @@ import { ProjectConfig } from './config';
 import { JoinStrategy } from './join-analyzer';
 
 export interface QueryAnalysisResult {
-  operation: 'aggregate' | 'filter' | 'calculate' | 'raw' | 'join';
-  groupBy?: Array<{
-    field: string;
-    transform?: 'extract_year' | 'extract_month' | 'extract_day_of_week' | 'extract_quarter' | 'none';
-  }>;
   filters?: Array<{
     field: string;
     operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'between';
     value: any;
   }>;
-  calculations?: Array<{
-    type: 'count' | 'sum' | 'average' | 'min' | 'max' | 'time_between';
-    field?: string;
-  }>;
   limit?: number;
   explanation: string;
-  joinStrategy?: JoinStrategy;
 }
 
 export class QueryAnalyzer {
@@ -64,7 +54,7 @@ ${uniqueDatasets.length >= 2 ? `- "show ${uniqueDatasets[1]}" → {"operation": 
 IMPORTANT: When the user mentions a specific dataset name (${uniqueDatasets.map(d => `"${d}"`).join(', ')}), you MUST add a filter for _dataset_source to isolate that dataset!`
       : '';
 
-    const systemPrompt = `You are a data query analyzer. Your job is to analyze user questions and determine how to process the data to answer them.
+    const systemPrompt = `You are a data request analyzer. Your job is to determine what data filters are needed to answer the user's question.
 ${datasetInfo}
 
 Dataset schema:
@@ -79,30 +69,26 @@ ${hasMultipleDatasets ? '- _dataset_source (categorical): Source dataset name' :
 Sample data (first 3 records):
 ${JSON.stringify(dataSample.slice(0, 3), null, 2)}
 
-Available transformations for date fields:
-- extract_year: Extract year from date (e.g., "2024-03-15" → "2024")
-- extract_month: Extract month from date (e.g., "2024-03-15" → "March" or "03")
-- extract_day_of_week: Extract day name from date (e.g., "2024-03-15" → "Friday")
-- extract_quarter: Extract quarter from date (e.g., "2024-03-15" → "Q1")
+Your task: Determine what filters (if any) should be applied to get the relevant data for answering the question.
+The AI will receive the filtered data and perform the analysis itself.
 
-Return a JSON object with this structure:
+Return a JSON object:
 {
-  "operation": "aggregate|filter|calculate|raw",
-  "groupBy": [{"field": "field_name", "transform": "extract_year"}],
-  "filters": [{"field": "field_name", "operator": "equals", "value": "value"}],
-  "calculations": [{"type": "count|sum|average|min|max", "field": "field_name"}],
-  "limit": 50,
-  "explanation": "Brief explanation of analysis approach"
+  "filters": [{"field": "field_name", "operator": "equals|contains|greater_than|less_than", "value": "value"}],
+  "limit": 100,
+  "explanation": "What data is needed and why"
 }
 
-General examples:
-- "records by year" → {"operation": "aggregate", "groupBy": [{"field": "date_field", "transform": "extract_year"}], "calculations": [{"type": "count"}], "explanation": "Group by year"}
-- "records by day of week" → {"operation": "aggregate", "groupBy": [{"field": "date_field", "transform": "extract_day_of_week"}], "calculations": [{"type": "count"}], "explanation": "Group by day of week"}
-- "show recent records" → {"operation": "filter", "limit": 50, "explanation": "Show recent records"}
-- "average per year" → {"operation": "calculate", "calculations": [{"type": "average"}], "groupBy": [{"field": "date_field", "transform": "extract_year"}], "explanation": "Calculate average per year"}
-${multiDatasetExamples}
+Examples:
+- "How many launches?" → {"filters": [{"field": "_dataset_source", "operator": "equals", "value": "launches"}], "explanation": "Need all launch records"}
+- "Show SpaceX launches in 2020" → {"filters": [{"field": "_dataset_source", "operator": "equals", "value": "launches"}, {"field": "launch_date", "operator": "contains", "value": "2020"}], "limit": 100, "explanation": "Filter for 2020 launches"}
+- "Presidents and launches" → {"filters": [], "explanation": "Need all data from both datasets for cross-dataset analysis"}
+- "How many launches by president?" → {"filters": [], "explanation": "Need all presidents and all launches to correlate by date"}
 
-Important: Return ONLY valid JSON, no other text.`;
+Important:
+- Only filter to reduce data size or isolate specific records
+- For cross-dataset analysis, return empty filters array to get all data
+- Return ONLY valid JSON, no other text.`;
 
     try {
       const response = await this.aiAdapter.chat(question, {
@@ -117,14 +103,10 @@ Important: Return ONLY valid JSON, no other text.`;
       return analysis;
     } catch (error) {
       console.error('Query analysis error:', error);
-      // Fallback to basic analysis
+      // Fallback: return all data
       return {
-        operation: 'aggregate',
-        groupBy: [
-          { field: this.projectConfig.dataSchema.categoricalFields[0]?.name || 'vehicle', transform: 'none' }
-        ],
-        calculations: [{ type: 'count' }],
-        explanation: 'Fallback: basic aggregation',
+        filters: [],
+        explanation: 'Fallback: returning all available data',
       };
     }
   }

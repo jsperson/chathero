@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
 import { JSONAdapter } from '@/lib/adapters/json.adapter';
-import { DataProcessor } from '@/lib/data-processor';
 import { QueryAnalyzer } from '@/lib/query-analyzer';
-import { JoinAnalyzer } from '@/lib/join-analyzer';
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,30 +44,49 @@ export async function POST(request: NextRequest) {
     // Initialize AI adapter
     const aiAdapter = new OpenAIAdapter(config.ai, projectConfig);
 
-    // PHASE 1: AI analyzes the query with a data sample
-    console.log('Phase 1: Analyzing query with AI...');
+    // PHASE 1: AI determines what data is needed
+    console.log('Phase 1: Determining data requirements...');
     const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
     const queryAnalysis = await queryAnalyzer.analyze(message, rawData);
-    console.log('Query analysis:', JSON.stringify(queryAnalysis, null, 2));
+    console.log('Data request:', JSON.stringify(queryAnalysis, null, 2));
 
-    // PHASE 1.5: Detect if cross-dataset join is needed (only for multi-dataset queries)
-    if (selectedDatasets && selectedDatasets.length > 1) {
-      console.log('Phase 1.5: Analyzing for cross-dataset joins...');
-      const joinAnalyzer = new JoinAnalyzer(aiAdapter, projectConfig);
-      const joinStrategy = await joinAnalyzer.analyzeJoin(message, rawData, selectedDatasets);
-      console.log('Join strategy:', JSON.stringify(joinStrategy, null, 2));
+    // PHASE 2: Apply basic filters to get the requested data
+    console.log('Phase 2: Filtering data...');
+    let filteredData = rawData;
 
-      // If join is needed, update query analysis to use join operation
-      if (joinStrategy.needsJoin) {
-        queryAnalysis.operation = 'join';
-        queryAnalysis.joinStrategy = joinStrategy;
-      }
+    if (queryAnalysis.filters && queryAnalysis.filters.length > 0) {
+      queryAnalysis.filters.forEach(filter => {
+        filteredData = filteredData.filter(record => {
+          const value = record[filter.field];
+
+          switch (filter.operator) {
+            case 'equals':
+              return value === filter.value;
+            case 'contains':
+              return value?.toString().toLowerCase().includes(filter.value.toLowerCase());
+            case 'greater_than':
+              return value > filter.value;
+            case 'less_than':
+              return value < filter.value;
+            default:
+              return true;
+          }
+        });
+      });
     }
 
-    // PHASE 2: Execute the analysis instructions to process data
-    console.log('Phase 2: Executing data processing instructions...');
-    const processor = new DataProcessor(rawData, projectConfig);
-    const contextData = processor.executeAnalysis(queryAnalysis);
+    // Apply limit if specified
+    if (queryAnalysis.limit) {
+      filteredData = filteredData.slice(0, queryAnalysis.limit);
+    }
+
+    console.log(`Filtered to ${filteredData.length} records`);
+
+    const contextData = {
+      data: filteredData,
+      total_records: filteredData.length,
+      data_explanation: queryAnalysis.explanation,
+    };
 
     // Add metadata
     const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD

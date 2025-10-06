@@ -47,33 +47,35 @@ export class OpenAIAdapter implements AIAdapter {
         `\n\n${this.projectConfig.aiContext.domainContext}` : '';
 
       // Check if multiple datasets are being queried
-      const multiDatasetWarning = context.datasets_queried && context.datasets_queried.length > 1
-        ? `\n\n⚠️ CRITICAL: You are analyzing data from ${context.datasets_queried.length} DIFFERENT datasets combined together: ${context.datasets_queried.join(', ')}.
-Each record in the data has a '_dataset_source' field that identifies which dataset it came from.
-You MUST check the '_dataset_source' field to distinguish between datasets.
-When counting or aggregating, always separate results by dataset or explicitly state you're counting across all datasets combined.`
-        : '';
+      const multiDatasetInstructions = context.datasets_queried && context.datasets_queried.length > 1
+        ? `\n\n📊 MULTI-DATASET ANALYSIS:
+You are analyzing data from ${context.datasets_queried.length} different datasets: ${context.datasets_queried.join(', ')}.
+Each record has a '_dataset_source' field showing which dataset it came from.
 
-      // Check if this is a join result
-      const joinInstructions = context.join_results
-        ? `\n\n📊 JOIN RESULT INTERPRETATION:
-The data contains join results from a cross-dataset query.
-- 'results_by_left_record' contains an array where each element represents one record from the left dataset
-- Each element has 'match_count' showing how many records from the right dataset matched
-- 'total_right_records' is the TOTAL count in the right dataset (not just matched records)
-- 'total_matched_right_records' is the sum of all matches
-- When showing counts per record, use the 'match_count' field for each left record
-- The summary field provides context about the join`
+For cross-dataset queries:
+- You can correlate records by comparing field values (e.g., dates, names, IDs)
+- When counting, grouping, or aggregating, consider which dataset each record belongs to
+- For temporal correlations, compare date fields across datasets
+- Present results clearly showing which dataset each statistic refers to
+
+Example: "How many launches by president?"
+1. Identify presidents (where _dataset_source = "presidents")
+2. Identify launches (where _dataset_source = "launches")
+3. For each president, count launches where launch_date falls between presidential_start and presidential_end
+4. Present: "President X: N launches, President Y: M launches..."`
         : '';
 
       const systemPrompt = `${systemRole}
 
-Current date: ${currentDate}${domainContext}${multiDatasetWarning}${joinInstructions}
+Current date: ${currentDate}${domainContext}${multiDatasetInstructions}
 
-Data context:
-${JSON.stringify(context, null, 2)}
+Data:
+${JSON.stringify(context.data, null, 2)}
 
-Answer the user's question based on this data. Be concise and accurate. If the data doesn't contain relevant information, say so. When discussing dates, remember that today is ${currentDate}.`;
+Total records: ${context.total_records}
+${context.data_explanation ? `Data context: ${context.data_explanation}` : ''}
+
+Answer the user's question based on this data. Perform any necessary counting, grouping, filtering, or correlation yourself. Be concise and accurate. When discussing dates, remember that today is ${currentDate}.`;
 
       const completion = await this.client.chat.completions.create({
         model: this.model,
