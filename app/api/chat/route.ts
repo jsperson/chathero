@@ -214,7 +214,11 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    await logger.error(`Chat API error [${requestId}]`, error);
+    const errorDetails = error instanceof Error
+      ? { message: error.message, stack: error.stack }
+      : { error: String(error) };
+    await logger.error(`Chat API error [${requestId}]`, errorDetails);
+    console.error('Chat API error:', error);
     return NextResponse.json(
       { error: 'Failed to process chat request' },
       { status: 500 }
