@@ -10,6 +10,7 @@ export interface QueryAnalysisResult {
     value: any;
   }>;
   limit?: number;
+  fieldsToInclude?: string[];
   explanation: string;
 }
 
@@ -82,14 +83,22 @@ Sample data (first 3 records):
 ${JSON.stringify(dataSample.slice(0, 3), null, 2)}
 
 Your task: Determine what filters (if any) should be applied to get the relevant data for answering the question.
-The AI will receive the filtered data and perform the analysis itself.
+Additionally, determine which fields are needed - this significantly reduces data size sent to Phase 3.
 
 Return a JSON object:
 {
   "filters": [{"field": "field_name", "operator": "equals|contains|greater_than|less_than", "value": "value"}],
   "limit": 100,
+  "fieldsToInclude": ["field1", "field2"],
   "explanation": "What data is needed and why"
 }
+
+FIELD SELECTION RULES:
+- For counting/aggregation queries: Include ONLY the fields needed for correlation (e.g., date fields, category fields, _dataset_source)
+- For browsing/listing queries: Omit "fieldsToInclude" to send all fields
+- Always include "_dataset_source" if present in the data
+- Always include key identifier fields (id, name) for reference
+- Exclude verbose fields not needed for the analysis (descriptions, long text fields, etc.)
 
 IMPORTANT RULES:
 - Do NOT add a limit for counting, aggregation, or "how many" queries - these need ALL records to count accurately
@@ -99,10 +108,10 @@ IMPORTANT RULES:
 Examples:
 ${this.projectConfig.queryExamples && this.projectConfig.queryExamples.length > 0
   ? this.projectConfig.queryExamples.map(ex =>
-      `- "${ex.question}" → ${JSON.stringify({filters: ex.filters || [], limit: ex.limit, explanation: ex.explanation})}`
+      `- "${ex.question}" → ${JSON.stringify({filters: ex.filters || [], limit: ex.limit, fieldsToInclude: ex.fieldsToInclude, explanation: ex.explanation})}`
     ).join('\n')
-  : `- "How many records?" → {"filters": [], "explanation": "Need all records"}
-- "Show recent records" → {"filters": [], "limit": 100, "explanation": "Show recent records"}`}
+  : `- "How many records?" → {"filters": [], "fieldsToInclude": ["id", "_dataset_source"], "explanation": "Need all records for counting, only ID field needed"}
+- "Show recent records" → {"filters": [], "limit": 100, "explanation": "Show recent records with all fields"}`}
 ${multiDatasetExamples ? '\n' + multiDatasetExamples : ''}
 
 Important:

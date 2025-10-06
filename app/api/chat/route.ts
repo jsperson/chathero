@@ -99,6 +99,26 @@ export async function POST(request: NextRequest) {
       filteredData = filteredData.slice(0, queryAnalysis.limit);
     }
 
+    // Apply field selection if specified (reduces token usage for Phase 3)
+    if (queryAnalysis.fieldsToInclude && queryAnalysis.fieldsToInclude.length > 0) {
+      const fieldsToKeep = queryAnalysis.fieldsToInclude;
+      filteredData = filteredData.map(record => {
+        const reduced: any = {};
+        fieldsToKeep.forEach(field => {
+          if (field in record) {
+            reduced[field] = record[field];
+          }
+        });
+        return reduced;
+      });
+
+      await logger.chatQuery(requestId, 'PHASE_2_FIELD_SELECTION', {
+        originalFields: Object.keys(rawData[0] || {}).length,
+        selectedFields: fieldsToKeep.length,
+        fields: fieldsToKeep
+      });
+    }
+
     await logger.chatQuery(requestId, 'PHASE_2_RESULT', {
       filteredRecords: filteredData.length,
       originalRecords: rawData.length
