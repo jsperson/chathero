@@ -46,9 +46,17 @@ export class OpenAIAdapter implements AIAdapter {
       const domainContext = this.projectConfig?.aiContext.domainContext ?
         `\n\n${this.projectConfig.aiContext.domainContext}` : '';
 
+      // Check if multiple datasets are being queried
+      const multiDatasetWarning = context.datasets_queried && context.datasets_queried.length > 1
+        ? `\n\n⚠️ CRITICAL: You are analyzing data from ${context.datasets_queried.length} DIFFERENT datasets combined together: ${context.datasets_queried.join(', ')}.
+Each record in the data has a '_dataset_source' field that identifies which dataset it came from.
+You MUST check the '_dataset_source' field to distinguish between datasets.
+When counting or aggregating, always separate results by dataset or explicitly state you're counting across all datasets combined.`
+        : '';
+
       const systemPrompt = `${systemRole}
 
-Current date: ${currentDate}${domainContext}
+Current date: ${currentDate}${domainContext}${multiDatasetWarning}
 
 Data context:
 ${JSON.stringify(context, null, 2)}
