@@ -93,18 +93,20 @@ export default function SchemaAdmin() {
         });
       } else {
         // No existing config, use discovered schema
-        const categoricalFields = data.discovered.categoricalFields.map((fieldName: string) => {
-          const field = data.discovered.fields.find((f: any) => f.name === fieldName);
-          return {
-            name: fieldName,
-            displayName: formatDisplayName(fieldName),
-            description: `${field?.uniqueCount || 0} unique values`,
-            keywords: [fieldName],
-            sampleValues: field?.sampleValues || [],
-            uniqueCount: field?.uniqueCount || 0,
-            type: field?.type || 'string',
-          };
-        });
+        // Show ALL fields, not just automatically categorized ones
+        const categoricalFields = data.discovered.fields
+          .filter((field: any) => field.type === 'string')
+          .map((field: any) => {
+            return {
+              name: field.name,
+              displayName: formatDisplayName(field.name),
+              description: `${field.uniqueCount || 0} unique values`,
+              keywords: [field.name],
+              sampleValues: field.sampleValues || [],
+              uniqueCount: field.uniqueCount || 0,
+              type: field.type || 'string',
+            };
+          });
 
         const numericFields = data.discovered.numericFields.map((fieldName: string) => {
           const field = data.discovered.fields.find((f: any) => f.name === fieldName);
