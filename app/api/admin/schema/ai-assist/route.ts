@@ -25,6 +25,12 @@ export async function POST(request: NextRequest) {
     const dataAdapter = new JSONAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
     const data = await dataAdapter.getData();
 
+    // Load README if available
+    let readmeContext = '';
+    if (projectConfig.readme) {
+      readmeContext = `\n\nDataset README (for additional context):\n${projectConfig.readme}`;
+    }
+
     // Build AI prompt
     const systemPrompt = `You are a helpful assistant that helps users configure their data schema.
 
@@ -32,7 +38,7 @@ Current schema configuration:
 ${JSON.stringify(currentSchema, null, 2)}
 
 Data sample (first 5 records):
-${JSON.stringify(data.slice(0, 5), null, 2)}
+${JSON.stringify(data.slice(0, 5), null, 2)}${readmeContext}
 
 The user is asking for help with their schema configuration. Based on their request:
 1. Provide a helpful text response explaining your suggestions
@@ -40,7 +46,12 @@ The user is asking for help with their schema configuration. Based on their requ
 
 Guidelines:
 - For field descriptions: be concise but informative
-- For keywords: include synonyms, plural/singular forms, common variations
+- For keywords: include synonyms, plural/singular forms, common variations, abbreviations, related terms
+  * Consider the dataset domain and README context when generating keywords
+  * Think about how users might naturally refer to these fields in questions
+  * Include both formal and informal terms
+  * For date fields: include variations like "when", "date", temporal keywords
+  * For categorical fields: include category-specific terms from the README
 - For domain: identify the business/data domain (e.g., "space launches", "e-commerce sales", "user analytics")
 - For example questions: create 3-5 natural language questions users might ask about this data
 - For display names: use proper Title Case and expand abbreviations

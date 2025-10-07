@@ -431,7 +431,7 @@ export default function SchemaAdmin() {
         <p className="text-sm text-gray-600 mb-2">
           Ask AI to help improve your schema configuration
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-2">
           <input
             type="text"
             value={aiPrompt}
@@ -454,6 +454,40 @@ export default function SchemaAdmin() {
             style={{ backgroundColor: 'var(--color-primary)' }}
           >
             {aiLoading ? 'Generating...' : 'Generate'}
+          </button>
+        </div>
+
+        {/* Quick action buttons */}
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => {
+              setAiPrompt('Generate comprehensive keywords and synonyms for all fields based on the dataset context');
+              setTimeout(() => handleAiAssist(), 100);
+            }}
+            disabled={aiLoading}
+            className="text-xs px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
+          >
+            Generate Keywords
+          </button>
+          <button
+            onClick={() => {
+              setAiPrompt('Rediscover schema from data, preserving existing display names and descriptions');
+              setTimeout(() => handleAiAssist(), 100);
+            }}
+            disabled={aiLoading}
+            className="text-xs px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
+          >
+            Rediscover Schema
+          </button>
+          <button
+            onClick={() => {
+              setAiPrompt('Generate better descriptions for all fields');
+              setTimeout(() => handleAiAssist(), 100);
+            }}
+            disabled={aiLoading}
+            className="text-xs px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
+          >
+            Improve Descriptions
           </button>
         </div>
 
