@@ -53,6 +53,8 @@ Return ONLY valid JSON array, no other text.`;
     const cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     let examples;
 
+    console.log('AI assist raw response:', cleanResponse.substring(0, 500));
+
     try {
       examples = JSON.parse(cleanResponse);
     } catch (parseError) {
@@ -63,16 +65,30 @@ Return ONLY valid JSON array, no other text.`;
       );
     }
 
-    // Ensure examples is an array
-    if (!Array.isArray(examples)) {
-      console.error('AI returned non-array:', examples);
-      return NextResponse.json(
-        { error: 'AI returned invalid format (not an array)' },
-        { status: 500 }
-      );
+    console.log('AI assist parsed response type:', typeof examples, Array.isArray(examples) ? 'array' : 'not array');
+
+    // Handle both array and object with examples property (from JSON mode)
+    if (Array.isArray(examples)) {
+      return NextResponse.json({ examples });
+    } else if (examples && Array.isArray(examples.examples)) {
+      // JSON mode sometimes wraps the array in an object
+      return NextResponse.json({ examples: examples.examples });
+    } else if (examples && typeof examples === 'object') {
+      // Try to extract array from any property
+      const keys = Object.keys(examples);
+      for (const key of keys) {
+        if (Array.isArray(examples[key])) {
+          console.log(`Found array in property: ${key}`);
+          return NextResponse.json({ examples: examples[key] });
+        }
+      }
     }
 
-    return NextResponse.json({ examples });
+    console.error('AI returned non-array and no array found in object:', JSON.stringify(examples));
+    return NextResponse.json(
+      { error: 'AI returned invalid format (not an array)' },
+      { status: 500 }
+    );
   } catch (error) {
     console.error('AI assist error:', error);
     return NextResponse.json(
