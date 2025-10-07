@@ -36,7 +36,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {logo && (
-            <img src={logo} alt={appName} className="h-8 w-auto" />
+            <img src={logo} alt={appName} className="h-16 w-auto" />
           )}
         </div>
 
