@@ -102,9 +102,13 @@ Return ONLY the JSON array, no other text.`;
       // JSON mode sometimes wraps the array in an object
       await logger.info(`[${requestId}] Success - found examples in .examples property (${examples.examples.length})`);
       return NextResponse.json({ examples: examples.examples });
+    } else if (examples && typeof examples === 'object' && examples.question && examples.explanation) {
+      // AI returned a single example object instead of an array - wrap it
+      await logger.info(`[${requestId}] Success - wrapping single example object in array`);
+      return NextResponse.json({ examples: [examples] });
     } else if (examples && typeof examples === 'object') {
-      // Try to extract array from any property
-      const keys = Object.keys(examples);
+      // Try to extract array from any property (but not 'filters' which is part of the example structure)
+      const keys = Object.keys(examples).filter(k => k !== 'filters' && k !== 'limit');
       for (const key of keys) {
         if (Array.isArray(examples[key])) {
           await logger.info(`[${requestId}] Success - found array in .${key} property (${examples[key].length})`);
