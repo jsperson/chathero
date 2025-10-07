@@ -179,7 +179,6 @@ export default function DatasetConfigPage() {
 
         if (saveResponse.ok) {
           alert('Configuration generated and saved! You can now use this dataset for queries.');
-          router.push('/admin/datasets');
         } else {
           alert('Configuration generated but failed to save. Please try saving manually.');
         }
