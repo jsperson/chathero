@@ -27,7 +27,9 @@ export default function Home() {
 
     if (savedMessages) {
       try {
-        setMessages(JSON.parse(savedMessages));
+        const parsed = JSON.parse(savedMessages);
+        console.log('Loaded messages from localStorage:', parsed.length);
+        setMessages(parsed);
       } catch (err) {
         console.error('Failed to parse saved messages:', err);
       }
@@ -35,28 +37,28 @@ export default function Home() {
 
     if (savedPhases) {
       try {
-        setPhases(JSON.parse(savedPhases));
+        const parsed = JSON.parse(savedPhases);
+        console.log('Loaded phases from localStorage:', parsed.length);
+        setPhases(parsed);
       } catch (err) {
         console.error('Failed to parse saved phases:', err);
       }
     }
   }, []);
 
-  // Save messages to localStorage whenever they change
+  // Save messages to localStorage whenever they change (skip initial empty state)
   useEffect(() => {
     if (messages.length > 0) {
+      console.log('Saving messages to localStorage:', messages.length);
       localStorage.setItem('chatHistory', JSON.stringify(messages));
-    } else {
-      localStorage.removeItem('chatHistory');
     }
   }, [messages]);
 
-  // Save phases to localStorage whenever they change
+  // Save phases to localStorage whenever they change (skip initial empty state)
   useEffect(() => {
     if (phases.length > 0) {
+      console.log('Saving phases to localStorage:', phases.length);
       localStorage.setItem('chatPhases', JSON.stringify(phases));
-    } else {
-      localStorage.removeItem('chatPhases');
     }
   }, [phases]);
 
@@ -276,6 +278,8 @@ export default function Home() {
   const clearConversation = () => {
     setMessages([]);
     setPhases([]);
+    localStorage.removeItem('chatHistory');
+    localStorage.removeItem('chatPhases');
   };
 
   return (
