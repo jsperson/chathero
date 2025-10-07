@@ -106,8 +106,45 @@ If you're just providing advice without modifying the schema, return:
     // Additional cleaning to fix common JSON issues
     // Remove trailing commas before closing braces/brackets
     cleanResponse = cleanResponse.replace(/,(\s*[}\]])/g, '$1');
-    // Fix unescaped quotes in strings (naive approach - only handles simple cases)
-    // This is risky but might help with the apostrophe issue
+
+    // Fix unterminated strings by removing literal newlines within JSON strings
+    // This handles the case where AI puts newlines in description/keyword values
+    const lines = cleanResponse.split('\n');
+    const fixedLines: string[] = [];
+    let inString = false;
+    let currentLine = '';
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      currentLine += line;
+
+      // Count quotes to determine if we're inside a string
+      let quoteCount = 0;
+      for (let j = 0; j < line.length; j++) {
+        if (line[j] === '"' && (j === 0 || line[j-1] !== '\\')) {
+          quoteCount++;
+        }
+      }
+
+      // If odd number of quotes, we're starting/ending a string
+      if (quoteCount % 2 === 1) {
+        inString = !inString;
+      }
+
+      if (!inString) {
+        fixedLines.push(currentLine);
+        currentLine = '';
+      } else {
+        // We're in a string that spans lines - add a space instead of newline
+        currentLine += ' ';
+      }
+    }
+
+    if (currentLine) {
+      fixedLines.push(currentLine);
+    }
+
+    cleanResponse = fixedLines.join('\n');
 
     let aiResult;
     try {
