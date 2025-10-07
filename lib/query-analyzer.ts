@@ -198,6 +198,32 @@ Important:
         analysis.fieldsToInclude = allFields;
       }
 
+      // CRITICAL FIX: Ensure all fields used in filters are also in fieldsToInclude
+      // Otherwise Phase 2 will filter data but then strip out the filter field, causing Phase 3 to fail
+      if (analysis.filters && analysis.filters.length > 0) {
+        const filterFields = analysis.filters.map(f => f.field);
+        const missingFields = filterFields.filter(f => !analysis.fieldsToInclude.includes(f));
+
+        if (missingFields.length > 0) {
+          console.warn(`Phase 1 used filters on fields not in fieldsToInclude: ${missingFields.join(', ')}. Auto-adding them.`);
+          analysis.fieldsToInclude.push(...missingFields);
+        }
+      }
+
+      // Also ensure fields used in generated code are included
+      if (analysis.generatedCode && analysis.fieldsToInclude) {
+        // Extract field names from code (basic heuristic: look for r.fieldname or record.fieldname patterns)
+        const codeFieldMatches = analysis.generatedCode.match(/[rp]\.\w+/g) || [];
+        const codeFields = codeFieldMatches.map(m => m.split('.')[1]).filter(f => f && f !== 'length' && f !== 'filter' && f !== 'map');
+        const uniqueCodeFields = [...new Set(codeFields)];
+        const missingCodeFields = uniqueCodeFields.filter(f => !analysis.fieldsToInclude.includes(f));
+
+        if (missingCodeFields.length > 0) {
+          console.warn(`Phase 1 generated code uses fields not in fieldsToInclude: ${missingCodeFields.join(', ')}. Auto-adding them.`);
+          analysis.fieldsToInclude.push(...missingCodeFields);
+        }
+      }
+
       return analysis;
     } catch (error) {
       console.error('Query analysis error:', error);
