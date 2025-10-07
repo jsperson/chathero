@@ -46,110 +46,14 @@ export default function Home() {
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setLoading(true);
 
-    // Initialize phases with sample expanded details
+    // Initialize phases - just show loading state
     setPhases([
-      {
-        id: 'phase1',
-        name: 'Plan',
-        status: 'active',
-        details: 'Analyzing query',
-        expandedDetails: [
-          { label: 'Status', value: 'Analyzing query structure...', type: 'text' }
-        ]
-      },
+      { id: 'phase1', name: 'Plan', status: 'active', details: 'Analyzing...' },
       { id: 'phase1.5', name: 'Validate', status: 'pending' },
       { id: 'phase2', name: 'Wrangle', status: 'pending' },
       { id: 'phase2.5', name: 'Optimize', status: 'pending' },
       { id: 'phase3', name: 'Answer', status: 'pending' },
     ]);
-
-    // Simulate phase progression (we'll replace this with real backend events later)
-    const simulatePhases = async () => {
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase1' ? {
-          ...p,
-          status: 'completed',
-          expandedDetails: [
-            { label: 'Filters Applied', value: 0, type: 'number' },
-            { label: 'Fields Selected', value: 'All fields', type: 'text' },
-            { label: 'Code Generated', value: 'No', type: 'text' }
-          ]
-        } :
-        p.id === 'phase1.5' ? {
-          ...p,
-          status: 'active',
-          details: 'Validating code',
-          expandedDetails: [
-            { label: 'Status', value: 'Checking for security risks...', type: 'text' }
-          ]
-        } : p
-      ));
-
-      await new Promise(resolve => setTimeout(resolve, 600));
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase1.5' ? {
-          ...p,
-          status: 'completed',
-          expandedDetails: [
-            { label: 'Approved', value: 'Yes', type: 'text' },
-            { label: 'Risks Found', value: 0, type: 'number' }
-          ]
-        } :
-        p.id === 'phase2' ? {
-          ...p,
-          status: 'active',
-          details: 'Filtering data',
-          expandedDetails: [
-            { label: 'Status', value: 'Applying filters and executing code...', type: 'text' }
-          ]
-        } : p
-      ));
-
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase2' ? {
-          ...p,
-          status: 'completed',
-          expandedDetails: [
-            { label: 'Input Records', value: '10,303', type: 'text' },
-            { label: 'Output Records', value: '10,303', type: 'text' },
-            { label: 'Filters Applied', value: 0, type: 'number' }
-          ]
-        } :
-        p.id === 'phase2.5' ? {
-          ...p,
-          status: 'active',
-          details: 'Checking limits',
-          expandedDetails: [
-            { label: 'Status', value: 'Checking record limits...', type: 'text' }
-          ]
-        } : p
-      ));
-
-      await new Promise(resolve => setTimeout(resolve, 300));
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase2.5' ? {
-          ...p,
-          status: 'completed',
-          expandedDetails: [
-            { label: 'Records to Phase 3', value: 500, type: 'number' },
-            { label: 'Sampling Applied', value: 'Yes', type: 'text' },
-            { label: 'Total Records', value: '10,303', type: 'text' }
-          ]
-        } :
-        p.id === 'phase3' ? {
-          ...p,
-          status: 'active',
-          details: 'Generating response',
-          expandedDetails: [
-            { label: 'Status', value: 'AI is composing answer...', type: 'text' }
-          ]
-        } : p
-      ));
-    };
-
-    simulatePhases();
 
     try {
       const response = await fetch('/api/chat', {
