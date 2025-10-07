@@ -76,6 +76,7 @@ export class OpenAIAdapter implements AIAdapter {
             { role: 'user', content: message }
           ],
           response_format: { type: 'json_object' },
+          temperature: 0,
           max_tokens: 1000,
         });
 
