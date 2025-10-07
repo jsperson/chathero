@@ -12,12 +12,16 @@ export async function GET(request: NextRequest) {
       selectedDatasets = selectedDatasetsStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
     }
 
+    console.log('Config API - selected datasets:', selectedDatasets);
+
     const config = await loadConfig();
     const primaryDataset = selectedDatasets && selectedDatasets.length > 0
       ? selectedDatasets[0]
       : undefined;
 
+    console.log('Config API - loading primary dataset:', primaryDataset);
     const projectConfig = await loadProjectConfig(primaryDataset);
+    console.log('Config API - projectConfig loaded:', projectConfig ? 'yes' : 'NO (null)');
 
     // Collect example questions from all selected datasets
     const allExampleQuestions: string[] = [];
@@ -26,7 +30,7 @@ export async function GET(request: NextRequest) {
       for (const datasetName of selectedDatasets) {
         try {
           const datasetConfig = await loadProjectConfig(datasetName);
-          if (datasetConfig.exampleQuestions) {
+          if (datasetConfig?.exampleQuestions) {
             allExampleQuestions.push(...datasetConfig.exampleQuestions);
           }
         } catch (error) {
@@ -35,7 +39,7 @@ export async function GET(request: NextRequest) {
       }
     } else {
       // Fallback to primary dataset questions
-      if (projectConfig.exampleQuestions) {
+      if (projectConfig?.exampleQuestions) {
         allExampleQuestions.push(...projectConfig.exampleQuestions);
       }
     }
@@ -53,8 +57,8 @@ export async function GET(request: NextRequest) {
       app: config.app,
       theme: config.theme,
       project: {
-        name: projectConfig.project.name,
-        description: projectConfig.project.description,
+        name: projectConfig?.project?.name || config.app.name,
+        description: projectConfig?.project?.description || '',
         exampleQuestions: allExampleQuestions,
       },
     });
