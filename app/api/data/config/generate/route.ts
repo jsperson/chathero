@@ -123,8 +123,21 @@ Return ONLY a JSON array of question strings, nothing else. Example format:
       explanation: 'Auto-generated example query'
     }));
 
+    // Generate full project config using auto-discovery
+    const projectName = dataset
+      .split(/[-_]/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
+    const fullProjectConfig = SchemaDiscovery.generateProjectConfig(data, projectName);
+
+    // Override the auto-generated example questions with AI-generated ones
+    fullProjectConfig.exampleQuestions = exampleQuestions.slice(0, 5);
+    fullProjectConfig.queryExamples = queryExamples;
+
     return NextResponse.json({
       readme,
+      projectConfig: fullProjectConfig,
       queryExamples,
     });
   } catch (error) {

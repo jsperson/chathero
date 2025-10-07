@@ -73,17 +73,22 @@ export class CSVAdapter implements DataAdapter {
       let found = false;
       for (const typeFolder of typeFolders) {
         const potentialPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.csv');
+        console.log(`CSVAdapter - Checking path: ${potentialPath}`);
         try {
           await fs.access(potentialPath);
           filePath = potentialPath;
           found = true;
+          console.log(`CSVAdapter - Found CSV at: ${potentialPath}`);
           break;
         } catch (e) {
+          console.log(`CSVAdapter - Not found at: ${potentialPath}`);
           // Try next type folder
         }
       }
 
       if (!found) {
+        console.log(`CSVAdapter - Searched in: ${datasetsPath}`);
+        console.log(`CSVAdapter - Type folders: ${typeFolders.map(f => f.name).join(', ')}`);
         throw new Error(`Dataset '${datasetName}' not found in any type folder`);
       }
     }

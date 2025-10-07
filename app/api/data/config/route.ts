@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { dataset, readme, queryExamples } = await request.json();
+    const { dataset, readme, queryExamples, projectConfig } = await request.json();
 
     if (!dataset) {
       return NextResponse.json(
@@ -120,23 +120,28 @@ export async function POST(request: NextRequest) {
       await fs.writeFile(readmePath, readme, 'utf-8');
     }
 
-    // Update project.yaml with queryExamples
-    if (queryExamples !== undefined) {
+    // Update project.yaml with full config or just queryExamples
+    if (projectConfig || queryExamples !== undefined) {
       const projectPath = path.join(datasetPath, 'project.yaml');
 
-      let projectConfig: any = {};
-      try {
-        const existingContent = await fs.readFile(projectPath, 'utf-8');
-        projectConfig = yaml.load(existingContent) || {};
-      } catch (e) {
-        // project.yaml doesn't exist, will create new one
+      let configToSave: any = {};
+
+      if (projectConfig) {
+        // Full project config provided (from AI generation)
+        configToSave = projectConfig;
+      } else {
+        // Only queryExamples provided (manual edit)
+        try {
+          const existingContent = await fs.readFile(projectPath, 'utf-8');
+          configToSave = yaml.load(existingContent) || {};
+        } catch (e) {
+          // project.yaml doesn't exist, will create new one
+        }
+        configToSave.queryExamples = queryExamples;
       }
 
-      // Update queryExamples
-      projectConfig.queryExamples = queryExamples;
-
       // Write back
-      const yamlContent = yaml.dump(projectConfig, {
+      const yamlContent = yaml.dump(configToSave, {
         indent: 2,
         lineWidth: -1, // Don't wrap lines
       });
