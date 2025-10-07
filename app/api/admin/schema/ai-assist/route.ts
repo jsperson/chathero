@@ -103,6 +103,17 @@ If you're just providing advice without modifying the schema, return:
     // Parse AI response
     let cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
 
+    // Save raw response for debugging
+    console.log('AI assist - Raw response length:', cleanResponse.length);
+    if (cleanResponse.length < 5000) {
+      console.log('AI assist - Full raw response:', cleanResponse);
+    } else {
+      console.log('AI assist - Response too long, showing segments');
+      console.log('AI assist - Start (1000 chars):', cleanResponse.substring(0, 1000));
+      console.log('AI assist - Around position 4136:', cleanResponse.substring(4000, 4300));
+      console.log('AI assist - End (500 chars):', cleanResponse.substring(cleanResponse.length - 500));
+    }
+
     // Additional cleaning to fix common JSON issues
     // Remove trailing commas before closing braces/brackets
     cleanResponse = cleanResponse.replace(/,(\s*[}\]])/g, '$1');
@@ -145,6 +156,10 @@ If you're just providing advice without modifying the schema, return:
     }
 
     cleanResponse = fixedLines.join('\n');
+
+    console.log('AI assist - After string repair, response length:', cleanResponse.length);
+    console.log('AI assist - First 500 chars:', cleanResponse.substring(0, 500));
+    console.log('AI assist - Last 500 chars:', cleanResponse.substring(cleanResponse.length - 500));
 
     let aiResult;
     try {
