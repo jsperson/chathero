@@ -90,7 +90,7 @@ IMPORTANT: Generate NEW, CORRECTED code. Do not repeat the same mistake!
 ` : '';
 
     const conversationContext = conversationHistory && conversationHistory.length > 0
-      ? `\n\nCONVERSATION HISTORY (for context):\n${conversationHistory.map(msg => `${msg.role}: ${msg.content}`).join('\n')}\n\nUse this conversation history to understand context for the current question. For example, if the user asks "What about tables?" after discussing furniture, they likely mean the furniture category "Tables".`
+      ? `\n\n⚠️ CONVERSATION HISTORY - CRITICAL FOR CONTEXT:\n${conversationHistory.map(msg => `${msg.role}: ${msg.content}`).join('\n')}\n\n🔴 IMPORTANT: The current user question MUST be interpreted in the context of the conversation above.\n- The current question often modifies or builds upon the previous query\n- If previous messages discussed a specific metric or entity, the current question likely continues that topic\n- Phrases like "by X instead of Y" or "what about Z" are modifications to the previous query, not new queries\n- Always preserve the core intent (e.g., if asking about orders, keep it about orders even if changing grouping)\n\nExample patterns:\n  Previous: "How many X by Y?"\n  Current: "By Z instead of Y" → Same metric (X), different grouping (Z instead of Y)\n  \n  Previous: "Show me category A"\n  Current: "What about B?" → Switch from category A to category B, same type of query`
       : '';
 
     const systemPrompt = `You are a data request analyzer. Your job is to determine what data filters are needed to answer the user's question.
