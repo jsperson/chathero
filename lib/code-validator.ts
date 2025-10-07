@@ -28,10 +28,16 @@ ${code}
 
 CODE DESCRIPTION: ${description}
 
-SAFETY REQUIREMENTS:
-The code will be executed in a sandboxed Python environment with the following constraints:
-- Input: "df" pandas DataFrame (read-only)
-- Must create "result" variable containing a list of dictionaries
+EXECUTION ENVIRONMENT:
+The code will be executed in a sandboxed Python environment with these PREDEFINED variables:
+- **df**: pandas DataFrame (already defined, contains the input data) - DO NOT flag as undefined
+- **pd**: pandas module (already imported as "import pandas as pd") - DO NOT flag as undefined
+- **np**: numpy module (already imported as "import numpy as np") - DO NOT flag as undefined
+- **json**: json module (already imported) - DO NOT flag as undefined
+
+The code MUST create a "result" variable containing a list of dictionaries.
+
+CONSTRAINTS:
 - Timeout: 10 seconds max execution
 - No network access, no file I/O
 
