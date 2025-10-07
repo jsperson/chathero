@@ -122,10 +122,15 @@ with open('${outputFile}', 'w') as f:
 
       const result = JSON.parse(resultData);
 
-      // Log successful execution
+      // Log successful execution with sample results for verification
       if (this.logger && requestId) {
+        const sampleResults = Array.isArray(result)
+          ? result.slice(0, 3)  // First 3 records
+          : result;
+
         await this.logger.chatQuery(requestId, 'PYTHON_EXECUTION_SUCCESS', {
-          resultCount: Array.isArray(result) ? result.length : 1
+          resultCount: Array.isArray(result) ? result.length : 1,
+          sampleData: sampleResults
         });
       }
 

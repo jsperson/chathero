@@ -226,6 +226,28 @@ DATE HANDLING:
 - Use pd.notna() or pd.isna() to check for null dates
 - Date comparisons: >= for inclusive start, < for exclusive end
 
+DATE RANGE LOGIC - CRITICAL:
+When correlating records across datasets using date ranges, be EXTREMELY careful with your logic:
+
+Common pitfall: Filtering one dataset but applying it to the wrong variable
+❌ WRONG:
+presidents_filtered = df[df['_dataset_source'] == 'presidents']
+launches = df[df['_dataset_source'] == 'launches']
+df['launch_date'] = pd.to_datetime(df['launch_date'])  # Parsing on wrong DataFrame!
+# Later using launches will fail because launches still has string dates
+
+✅ CORRECT - Use .copy() and consistent naming:
+presidents = df[df['_dataset_source'] == 'presidents'].copy()
+launches = df[df['_dataset_source'] == 'launches'].copy()
+launches['launch_date'] = pd.to_datetime(launches['launch_date'], errors='coerce')  # Parse on correct DF
+presidents['presidential_start'] = pd.to_datetime(presidents['presidential_start'], errors='coerce')
+# Now you can use these DataFrames safely
+
+VERIFY YOUR LOGIC:
+- Double-check that filtered DataFrames match the variable names you use later
+- Ensure date parsing happens on the correct DataFrame (the one you'll actually use)
+- When comparing dates, verify both sides are Timestamps (use pd.to_datetime)
+
 ⚠️ CRITICAL - JSON SERIALIZATION:
 - Pandas Timestamp objects CANNOT be directly serialized to JSON
 - ALWAYS convert Timestamps to strings before adding to result
@@ -234,6 +256,24 @@ DATE HANDLING:
 - Example: {'date': timestamp.isoformat(), 'name': 'John'}
 - ❌ WRONG: {'date': timestamp} - will fail with "Object of type Timestamp is not JSON serializable"
 - ✅ CORRECT: {'date': timestamp.isoformat()}
+
+⚠️ RESULT COMPLETENESS:
+When generating code that filters or correlates data, ensure the result includes ALL fields needed to verify correctness:
+- If correlating by dates, include relevant date fields in the result (converted to strings with .isoformat())
+- If filtering by criteria, include the filter field values in the result
+- If grouping, include group identifier fields
+
+Example for "launches within X of presidential inaugurations":
+❌ WRONG: result.append({'name': p['name'], 'mission_count': count})
+✅ CORRECT: result.append({
+    'name': p['name'],
+    'inauguration_date': p['presidential_start'].isoformat(),
+    'mission_count': count,
+    'window_start': inauguration_start.isoformat(),
+    'window_end': inauguration_end.isoformat()
+})
+
+This allows Phase 3 to show complete, verifiable answers with context instead of just counts.
 
 NUMERIC FIELD HANDLING:
 ⚠️ CRITICAL: Numeric fields may contain mixed types (strings, floats, etc.) due to data quality issues!
@@ -249,6 +289,18 @@ CODE EXAMPLE for temporal correlation:
   "codeDescription": "Uses pandas to parse dates and correlate orders with presidential terms by comparing Order Date against presidential_start/end ranges (inclusive start, exclusive end), returns list of {name, order_count} for presidents with >0 orders",
   "fieldsToInclude": ["_dataset_source", "name", "Order Date", "presidential_start", "presidential_end"]
 }
+
+🔍 SELF-VERIFICATION CHECKLIST (review before submitting):
+Before returning your analysis, verify:
+1. ✅ All fields in "generatedCode" are included in "fieldsToInclude"
+2. ✅ Date parsing uses pd.to_datetime() on the correct DataFrames (the ones you'll actually use)
+3. ✅ All Timestamp objects in result are converted to strings (.isoformat())
+4. ✅ Variable names match between filtering and usage (e.g., if you filter to 'launches', use 'launches' not 'df')
+5. ✅ Numeric fields use pd.to_numeric(errors='coerce') before math operations
+6. ✅ Result includes verification fields (dates, identifiers) not just counts
+7. ✅ For aggregation/counting queries, no limit is set (need all records)
+
+If ANY of these checks fail, fix the issue before responding.
 
 IMPORTANT RULES:
 - Do NOT add a limit for counting, aggregation, or "how many" queries - these need ALL records to count accurately
