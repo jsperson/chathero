@@ -52,20 +52,23 @@ export async function GET(request: NextRequest) {
       // README is optional
     }
 
-    // Load project.yaml for queryExamples
+    // Load queries.yaml for queryExamples and exampleQuestions
     let queryExamples: any[] = [];
+    let exampleQuestions: string[] = [];
     try {
-      const projectPath = path.join(datasetPath, 'project.yaml');
-      const projectContent = await fs.readFile(projectPath, 'utf-8');
-      const projectConfig: any = yaml.load(projectContent);
-      queryExamples = projectConfig.queryExamples || [];
+      const queriesPath = path.join(datasetPath, 'queries.yaml');
+      const queriesContent = await fs.readFile(queriesPath, 'utf-8');
+      const queriesConfig: any = yaml.load(queriesContent);
+      queryExamples = queriesConfig.queryExamples || [];
+      exampleQuestions = queriesConfig.exampleQuestions || [];
     } catch (e) {
-      // project.yaml might not exist
+      // queries.yaml might not exist
     }
 
     return NextResponse.json({
       readme,
       queryExamples,
+      exampleQuestions,
     });
   } catch (error) {
     console.error('Error loading dataset config:', error);
@@ -78,7 +81,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { dataset, readme, queryExamples, projectConfig, backup } = await request.json();
+    const { dataset, readme, queryExamples, exampleQuestions, projectConfig, backup } = await request.json();
 
     if (!dataset) {
       return NextResponse.json(
@@ -120,14 +123,14 @@ export async function POST(request: NextRequest) {
       await fs.writeFile(readmePath, readme, 'utf-8');
     }
 
-    // Update project.yaml with full config or just queryExamples
-    if (projectConfig || queryExamples !== undefined) {
-      const projectPath = path.join(datasetPath, 'project.yaml');
+    // Save queries.yaml
+    if (queryExamples !== undefined || exampleQuestions !== undefined) {
+      const queriesPath = path.join(datasetPath, 'queries.yaml');
 
       // Create backup if requested and file exists
       if (backup) {
         try {
-          const existingContent = await fs.readFile(projectPath, 'utf-8');
+          const existingContent = await fs.readFile(queriesPath, 'utf-8');
 
           // Generate timestamp: YYYYMMDD_HHMMSS
           const now = new Date();
@@ -139,9 +142,9 @@ export async function POST(request: NextRequest) {
                           now.getMinutes().toString().padStart(2, '0') +
                           now.getSeconds().toString().padStart(2, '0');
 
-          const backupPath = path.join(datasetPath, `project.yaml.${timestamp}`);
+          const backupPath = path.join(datasetPath, `queries.yaml.${timestamp}`);
           await fs.writeFile(backupPath, existingContent, 'utf-8');
-          console.log(`Backed up existing project.yaml to project.yaml.${timestamp} for dataset: ${dataset}`);
+          console.log(`Backed up existing queries.yaml to queries.yaml.${timestamp} for dataset: ${dataset}`);
         } catch (e) {
           // No existing file to backup, that's OK
         }
@@ -149,17 +152,19 @@ export async function POST(request: NextRequest) {
 
       let configToSave: any = {};
 
-      if (projectConfig) {
-        // Full project config provided (from AI generation)
-        configToSave = projectConfig;
-      } else {
-        // Only queryExamples provided (manual edit)
-        try {
-          const existingContent = await fs.readFile(projectPath, 'utf-8');
-          configToSave = yaml.load(existingContent) || {};
-        } catch (e) {
-          // project.yaml doesn't exist, will create new one
-        }
+      // Load existing queries.yaml to preserve fields
+      try {
+        const existingContent = await fs.readFile(queriesPath, 'utf-8');
+        configToSave = yaml.load(existingContent) || {};
+      } catch (e) {
+        // queries.yaml doesn't exist, will create new one
+      }
+
+      // Update with new values
+      if (exampleQuestions !== undefined) {
+        configToSave.exampleQuestions = exampleQuestions;
+      }
+      if (queryExamples !== undefined) {
         configToSave.queryExamples = queryExamples;
       }
 
@@ -168,7 +173,7 @@ export async function POST(request: NextRequest) {
         indent: 2,
         lineWidth: -1, // Don't wrap lines
       });
-      await fs.writeFile(projectPath, yamlContent, 'utf-8');
+      await fs.writeFile(queriesPath, yamlContent, 'utf-8');
     }
 
     return NextResponse.json({ success: true });

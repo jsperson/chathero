@@ -12,13 +12,25 @@ export async function POST(request: NextRequest) {
 
     const schemaConfig = await request.json();
 
-    // Transform UI schema format to project.yaml format
-    const projectConfig = {
+    // Split into metadata and schema
+    const metadata = {
       project: {
         name: schemaConfig.project.name,
         description: schemaConfig.project.description,
         domain: schemaConfig.project.domain,
       },
+      aiContext: {
+        systemRole: `You are a helpful assistant that answers questions about ${schemaConfig.project.name} data.`,
+        domainContext: `This dataset contains data in the ${schemaConfig.project.domain} domain. ${schemaConfig.project.description}`,
+      },
+    };
+
+    const fieldKeywords: Record<string, string[]> = {};
+    schemaConfig.categoricalFields.forEach((field: any) => {
+      fieldKeywords[field.name] = field.keywords || [field.name];
+    });
+
+    const schema = {
       dataSchema: {
         primaryDateField: schemaConfig.primaryDateField || 'date',
         categoricalFields: schemaConfig.categoricalFields.map((field: any) => ({
@@ -33,21 +45,11 @@ export async function POST(request: NextRequest) {
         })),
       },
       domainKnowledge: {
-        fieldKeywords: {} as Record<string, string[]>,
-      },
-      exampleQuestions: schemaConfig.exampleQuestions || [],
-      aiContext: {
-        systemRole: `You are a helpful assistant that answers questions about ${schemaConfig.project.name} data.`,
-        domainContext: `This dataset contains data in the ${schemaConfig.project.domain} domain. ${schemaConfig.project.description}`,
+        fieldKeywords,
       },
     };
 
-    // Build field keywords
-    schemaConfig.categoricalFields.forEach((field: any) => {
-      projectConfig.domainKnowledge.fieldKeywords[field.name] = field.keywords || [field.name];
-    });
-
-    // Write to dataset-specific project.yaml
+    // Write to dataset-specific schema.yaml and metadata.yaml
     const config = await loadConfig();
     const datasetName = selectedDataset || config.dataSource.defaultDataset;
     const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
@@ -56,35 +58,52 @@ export async function POST(request: NextRequest) {
     const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
     const typeFolders = typeEntries.filter(entry => entry.isDirectory());
 
-    let configPath: string | null = null;
+    let datasetDir: string | null = null;
     for (const typeFolder of typeFolders) {
-      const potentialPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
+      const potentialJsonPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
+      const potentialCsvPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.csv');
+
       try {
-        await fs.access(potentialPath);
-        configPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
+        await fs.access(potentialJsonPath);
+        datasetDir = path.join(datasetsPath, typeFolder.name, datasetName);
         break;
       } catch (e) {
-        // Try next type folder
+        try {
+          await fs.access(potentialCsvPath);
+          datasetDir = path.join(datasetsPath, typeFolder.name, datasetName);
+          break;
+        } catch (csvError) {
+          // Try next type folder
+        }
       }
     }
 
-    if (!configPath) {
+    if (!datasetDir) {
       throw new Error(`Dataset '${datasetName}' not found`);
     }
 
-    const yamlContent = yaml.dump(projectConfig, {
+    // Write metadata.yaml
+    const metadataPath = path.join(datasetDir, 'metadata.yaml');
+    const metadataContent = yaml.dump(metadata, {
       indent: 2,
       lineWidth: 100,
     });
+    await fs.writeFile(metadataPath, metadataContent, 'utf-8');
 
-    await fs.writeFile(configPath, yamlContent, 'utf-8');
+    // Write schema.yaml
+    const schemaPath = path.join(datasetDir, 'schema.yaml');
+    const schemaContent = yaml.dump(schema, {
+      indent: 2,
+      lineWidth: 100,
+    });
+    await fs.writeFile(schemaPath, schemaContent, 'utf-8');
 
     // Clear the config cache so the new config is loaded on next request
     clearConfigCache();
 
     return NextResponse.json({
       success: true,
-      message: `Configuration saved to ${datasetName}/project.yaml`,
+      message: `Configuration saved to ${datasetName}/schema.yaml and metadata.yaml`,
     });
   } catch (error) {
     console.error('Save error:', error);

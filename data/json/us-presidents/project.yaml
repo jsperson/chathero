@@ -1,62 +1,125 @@
 project:
-  name: Test Presidents
-  description: Dataset containing profiles of U.S. Presidents with key attributes.
-  domain: historical figures
+  name: Us Presidents
+  description: Dataset with 47 records
+  domain: general data
 dataSchema:
   primaryDateField: birth_date
   categoricalFields:
     - name: name
       displayName: Name
-      description: Unique names of U.S. Presidents, totaling 45 distinct entries.
+      description: 45 unique values
     - name: spouse
       displayName: Spouse
-      description: Full names of spouses of U.S. Presidents, with 44 distinct entries.
+      description: 44 unique values
+    - name: birth_date
+      displayName: Birth Date
+      description: 45 unique values
     - name: birth_place
       displayName: Birth Place
-      description: The locations where U.S. Presidents were born, with 42 distinct entries.
+      description: 42 unique values
+    - name: death_date
+      displayName: Death Date
+      description: 38 unique values
     - name: cause_of_death
       displayName: Cause Of Death
-      description: >-
-        The medical conditions or events leading to the deaths of U.S. Presidents, with 27 distinct
-        entries.
+      description: 27 unique values
+    - name: presidential_start
+      displayName: Presidential Start
+      description: 47 unique values
+    - name: presidential_end
+      displayName: Presidential End
+      description: 46 unique values
     - name: party
-      displayName: Political Party
-      description: The political affiliations of U.S. Presidents, with 6 distinct entries.
+      displayName: Party
+      description: 6 unique values
   numericFields: []
 domainKnowledge:
   fieldKeywords:
     name:
       - name
-      - president's name
-      - individual
+      - names
+      - name
+      - name
     spouse:
       - spouse
-      - wife
-      - partner
-      - presidential spouse
+      - spouses
+      - spouse
+      - spouse
+    birth_date:
+      - birth_date
+      - birth_dates
+      - birth date
+      - birth_date
     birth_place:
+      - birth_place
+      - birth_places
       - birth place
-      - location of birth
-      - city
-      - state
+      - birth_place
+    death_date:
+      - death_date
+      - death_dates
+      - death date
+      - death_date
     cause_of_death:
+      - cause_of_death
+      - cause_of_deaths
       - cause of death
-      - death reason
-      - medical condition
-      - health issue
+      - cause_of_death
+    presidential_start:
+      - presidential_start
+      - presidential_starts
+      - presidential start
+      - presidential_start
+    presidential_end:
+      - presidential_end
+      - presidential_ends
+      - presidential end
+      - presidential_end
     party:
       - party
-      - political affiliation
-      - political party
-      - presidential party
+      - partys
+      - party
+      - party
 exampleQuestions:
-  - Which U.S. President was born in Virginia?
-  - What were the causes of death of Thomas Jefferson and John Adams?
-  - How many Presidents were affiliated with the Federalist Party?
-  - Who were the spouses of the first five U.S. Presidents?
-  - What years did James Monroe serve as President?
+  - How many presidents were part of the Democratic-Republican party?
+  - How many presidents served between 1800 and 1850?
+  - How many presidents lived over 80 years?
+  - Which presidents died on July 4th?
+  - How many presidents did not belong to any political party?
 aiContext:
-  systemRole: You are a helpful assistant that answers questions about Test Presidents data.
-  domainContext: >-
-    This dataset contains data in the historical figures domain. Dataset containing profiles of U.S.
-    Presidents with key attributes.
+  systemRole: You are a helpful assistant that answers questions about Us Presidents data.
+  domainContext: This dataset contains 47 records with 10 fields.
+queryExamples:
+  - question: How many presidents were part of the Democratic-Republican party?
+    filters:
+      - field: party
+        operator: equals
+        value: Democratic-Republican
+    explanation: Counts the number of presidents associated with the Democratic-Republican party.
+  - question: How many presidents served between 1800 and 1850?
+    filters:
+      - field: presidential_start
+        operator: greater_than
+        value: '1800-01-01'
+      - field: presidential_end
+        operator: less_than
+        value: '1850-12-31'
+    explanation: Finds the number of presidents whose terms began and ended between 1800 and 1850.
+  - question: How many presidents lived over 80 years?
+    filters:
+      - field: birth_date
+        operator: less_than
+        value: subtract 80 years from death_date
+    explanation: Identifies presidents who lived more than 80 years by calculating their age at death.
+  - question: Which presidents died on July 4th?
+    filters:
+      - field: death_date
+        operator: contains
+        value: '-07-04'
+    explanation: Finds presidents who died on July 4th by matching the month and day in their death dates.
+  - question: How many presidents did not belong to any political party?
+    filters:
+      - field: party
+        operator: equals
+        value: None
+    explanation: Counts the presidents who were unaffiliated with any political party.

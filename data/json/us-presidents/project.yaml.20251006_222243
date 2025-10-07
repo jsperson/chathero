@@ -1,0 +1,39 @@
+project:
+  name: Us Presidents
+  description: Dataset with 47 records
+  domain: general data
+dataSchema:
+  primaryDateField: birth_date
+  categoricalFields:
+    - name: name
+      displayName: Name
+      description: 45 unique values
+    - name: spouse
+      displayName: Spouse
+      description: 44 unique values
+    - name: birth_place
+      displayName: Birth Place
+      description: 42 unique values
+    - name: cause_of_death
+      displayName: Cause Of Death
+      description: 27 unique values
+    - name: party
+      displayName: Party
+      description: 6 unique values
+  numericFields: []
+domainKnowledge:
+  fieldKeywords:
+    name:
+      - name
+    spouse:
+      - spouse
+    birth_place:
+      - birth_place
+    cause_of_death:
+      - cause_of_death
+    party:
+      - party
+exampleQuestions: []
+aiContext:
+  systemRole: You are a helpful assistant that answers questions about Us Presidents data.
+  domainContext: This dataset contains data in the general data domain. Dataset with 47 records

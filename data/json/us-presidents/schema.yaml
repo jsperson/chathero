@@ -1,0 +1,78 @@
+dataSchema:
+  primaryDateField: birth_date
+  categoricalFields:
+    - name: name
+      displayName: Name
+      description: 45 unique values
+    - name: spouse
+      displayName: Spouse
+      description: 44 unique values
+    - name: birth_date
+      displayName: Birth Date
+      description: 45 unique values
+    - name: birth_place
+      displayName: Birth Place
+      description: 42 unique values
+    - name: death_date
+      displayName: Death Date
+      description: 38 unique values
+    - name: cause_of_death
+      displayName: Cause Of Death
+      description: 27 unique values
+    - name: presidential_start
+      displayName: Presidential Start
+      description: 47 unique values
+    - name: presidential_end
+      displayName: Presidential End
+      description: 46 unique values
+    - name: party
+      displayName: Party
+      description: 6 unique values
+  numericFields: []
+domainKnowledge:
+  fieldKeywords:
+    name:
+      - name
+      - names
+      - name
+      - name
+    spouse:
+      - spouse
+      - spouses
+      - spouse
+      - spouse
+    birth_date:
+      - birth_date
+      - birth_dates
+      - birth date
+      - birth_date
+    birth_place:
+      - birth_place
+      - birth_places
+      - birth place
+      - birth_place
+    death_date:
+      - death_date
+      - death_dates
+      - death date
+      - death_date
+    cause_of_death:
+      - cause_of_death
+      - cause_of_deaths
+      - cause of death
+      - cause_of_death
+    presidential_start:
+      - presidential_start
+      - presidential_starts
+      - presidential start
+      - presidential_start
+    presidential_end:
+      - presidential_end
+      - presidential_ends
+      - presidential end
+      - presidential_end
+    party:
+      - party
+      - partys
+      - party
+      - party

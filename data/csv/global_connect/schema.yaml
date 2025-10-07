@@ -1,0 +1,80 @@
+dataSchema:
+  primaryDateField: Order Date
+  categoricalFields:
+    - name: Ship Mode
+      displayName: Ship  Mode
+      description: 4 unique values
+    - name: Segment
+      displayName: Segment
+      description: 3 unique values
+    - name: State
+      displayName: State
+      description: 892 unique values
+    - name: Country
+      displayName: Country
+      description: 143 unique values
+    - name: Region
+      displayName: Region
+      description: 23 unique values
+  numericFields:
+    - name: "\uFEFFRow ID"
+      displayName: Row  I D
+      unit: ''
+    - name: Sales
+      displayName: Sales
+      unit: ''
+    - name: Quantity
+      displayName: Quantity
+      unit: ''
+domainKnowledge:
+  fieldKeywords:
+    Ship Mode:
+      - Ship Mode
+      - ship modes
+      - ship mode
+      - ship_mode
+    Segment:
+      - Segment
+      - segments
+      - segment
+      - segment
+    State:
+      - State
+      - states
+      - state
+      - state
+    Country:
+      - Country
+      - countrys
+      - country
+      - country
+    Region:
+      - Region
+      - regions
+      - region
+      - region
+    Market:
+      - Market
+      - markets
+      - market
+      - market
+    Category:
+      - Category
+      - categorys
+      - category
+      - category
+    Sub-Category:
+      - Sub-Category
+      - sub-categorys
+      - sub-category
+      - sub-category
+    Discount:
+      - Discount
+      - discounts
+      - discount
+      - discount
+    "Order Priority\r":
+      - "Order Priority\r"
+      - "order priority\rs"
+      - "order priority\r"
+      - "order_priority\r"

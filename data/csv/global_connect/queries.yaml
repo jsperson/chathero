@@ -1,0 +1,46 @@
+exampleQuestions:
+  - What is the total profit for the 'Technology' category?
+  - How many orders were shipped in 'Standard Class'?
+  - What is the average shipping cost in the 'Asia Pacific' market?
+  - How many orders were placed in the first quarter of 2021?
+  - What is the highest sales value recorded with a 'High' order priority?
+queryExamples:
+  - question: What is the total profit for the 'Technology' category?
+    filters:
+      - field: Category
+        operator: equals
+        value: Technology
+    explanation: Filter records where the category is 'Technology' and sum the profit values for these records.
+  - question: How many orders were shipped in 'Standard Class'?
+    filters:
+      - field: Ship Mode
+        operator: equals
+        value: Standard Class
+    explanation: Filter records based on Ship Mode being 'Standard Class' and count these records.
+  - question: What is the average shipping cost in the 'Asia Pacific' market?
+    filters:
+      - field: Market
+        operator: equals
+        value: Asia Pacific
+    explanation: Filter records where the Market is 'Asia Pacific' and find the average shipping cost for these records.
+  - question: How many orders were placed in the first quarter of 2021?
+    filters:
+      - field: Order Date
+        operator: greater_than
+        value: 01/01/2021
+      - field: Order Date
+        operator: less_than
+        value: 04/01/2021
+    explanation: Filter orders placed between January 1, 2021, and March 31, 2021, and count these records.
+  - question: What is the highest sales value recorded with a 'High' order priority?
+    filters:
+      - field: "Order Priority\r"
+        operator: equals
+        value: High
+    explanation: Filter records where the order priority is 'High' and find the maximum sales value from these records.
+  - question: How many products were shipped to Germany?
+    filters:
+      - field: Country
+        operator: equals
+        value: Germany
+    explanation: Filter records where the destination country is 'Germany' and count these records.

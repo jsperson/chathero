@@ -150,12 +150,50 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
       throw new Error(`Dataset '${datasetName}' not found in any type folder`);
     }
 
+    // Load configuration from multiple files (new structure) or fallback to single file (legacy)
+    const datasetDir = path.dirname(dataPath);
+    const metadataPath = path.join(datasetDir, 'metadata.yaml');
+    const schemaPath = path.join(datasetDir, 'schema.yaml');
+    const queriesPath = path.join(datasetDir, 'queries.yaml');
+
+    let metadata: any = null;
+    let schema: any = null;
+    let queries: any = null;
+
+    // Try new multi-file structure
     try {
-      const fileContent = await fs.readFile(configPath!, 'utf-8');
-      cachedProjectConfig = yaml.load(fileContent) as ProjectConfig;
-    } catch (readError) {
-      // If project.yaml doesn't exist, auto-discover schema from data
-      console.log('project.yaml not found, auto-discovering schema from data...');
+      const metadataContent = await fs.readFile(metadataPath, 'utf-8');
+      metadata = yaml.load(metadataContent);
+    } catch (e) {
+      // metadata.yaml doesn't exist - will try legacy or auto-discover
+    }
+
+    try {
+      const schemaContent = await fs.readFile(schemaPath, 'utf-8');
+      schema = yaml.load(schemaContent);
+    } catch (e) {
+      // schema.yaml doesn't exist
+    }
+
+    try {
+      const queriesContent = await fs.readFile(queriesPath, 'utf-8');
+      queries = yaml.load(queriesContent);
+    } catch (e) {
+      // queries.yaml doesn't exist
+    }
+
+    // If we have the new structure, merge them
+    if (metadata && schema) {
+      cachedProjectConfig = {
+        ...metadata,
+        dataSchema: schema.dataSchema,
+        domainKnowledge: schema.domainKnowledge || { fieldKeywords: {} },
+        exampleQuestions: queries?.exampleQuestions || [],
+        queryExamples: queries?.queryExamples || [],
+      };
+    } else {
+      // Auto-discover schema from data
+      console.log('Config files not found, auto-discovering schema from data...');
 
       // Use the appropriate adapter to load the data
       const { createDataAdapter } = await import('./adapters/adapter-factory');

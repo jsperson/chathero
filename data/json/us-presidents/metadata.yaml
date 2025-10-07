@@ -1,0 +1,7 @@
+project:
+  name: Us Presidents
+  description: Dataset with 47 records
+  domain: general data
+aiContext:
+  systemRole: You are a helpful assistant that answers questions about Us Presidents data.
+  domainContext: This dataset contains 47 records with 10 fields.

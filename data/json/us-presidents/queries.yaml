@@ -1,0 +1,40 @@
+exampleQuestions:
+  - How many presidents were part of the Democratic-Republican party?
+  - How many presidents served between 1800 and 1850?
+  - How many presidents lived over 80 years?
+  - Which presidents died on July 4th?
+  - How many presidents did not belong to any political party?
+queryExamples:
+  - question: How many presidents were part of the Democratic-Republican party?
+    filters:
+      - field: party
+        operator: equals
+        value: Democratic-Republican
+    explanation: Counts the number of presidents associated with the Democratic-Republican party.
+  - question: How many presidents served between 1800 and 1850?
+    filters:
+      - field: presidential_start
+        operator: greater_than
+        value: '1800-01-01'
+      - field: presidential_end
+        operator: less_than
+        value: '1850-12-31'
+    explanation: Finds the number of presidents whose terms began and ended between 1800 and 1850.
+  - question: How many presidents lived over 80 years?
+    filters:
+      - field: birth_date
+        operator: less_than
+        value: subtract 80 years from death_date
+    explanation: Identifies presidents who lived more than 80 years by calculating their age at death.
+  - question: Which presidents died on July 4th?
+    filters:
+      - field: death_date
+        operator: contains
+        value: '-07-04'
+    explanation: Finds presidents who died on July 4th by matching the month and day in their death dates.
+  - question: How many presidents did not belong to any political party?
+    filters:
+      - field: party
+        operator: equals
+        value: None
+    explanation: Counts the presidents who were unaffiliated with any political party.
