@@ -129,44 +129,15 @@ If you're just providing advice without modifying the schema, return:
       temperature: 0.3, // Slightly higher for more creative keywords but still consistent
     });
 
-    // Parse AI response
-    let cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-
-    // Save raw response for debugging
-    console.log('AI assist - Raw response length:', cleanResponse.length);
-    if (cleanResponse.length < 5000) {
-      console.log('AI assist - Full raw response:', cleanResponse);
-    } else {
-      console.log('AI assist - Response too long, showing segments');
-      console.log('AI assist - Start (1000 chars):', cleanResponse.substring(0, 1000));
-      console.log('AI assist - Around position 4136:', cleanResponse.substring(4000, 4300));
-      console.log('AI assist - End (500 chars):', cleanResponse.substring(cleanResponse.length - 500));
-    }
-
-    // Additional cleaning to fix common JSON issues
-    // Remove trailing commas before closing braces/brackets
-    cleanResponse = cleanResponse.replace(/,(\s*[}\]])/g, '$1');
-
-    // More aggressive JSON repair - replace all actual newlines within values with spaces
-    // Look for patterns like: "value": "text\nmore text" and fix them
-    cleanResponse = cleanResponse.replace(/"([^"]*)\n([^"]*?)"/g, (match, before, after) => {
-      // Only join if this looks like a broken string (no colon after closing quote)
-      return `"${before} ${after}"`;
-    });
-
-    console.log('AI assist - After string repair, response length:', cleanResponse.length);
-    console.log('AI assist - First 500 chars:', cleanResponse.substring(0, 500));
-    console.log('AI assist - Last 500 chars:', cleanResponse.substring(cleanResponse.length - 500));
+    // Parse AI response - strip markdown code fences
+    const cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
 
     let aiResult;
     try {
       aiResult = JSON.parse(cleanResponse);
-      console.log('AI assist - Parsed result keys:', Object.keys(aiResult));
 
       // If this was a keyword request and we got fieldKeywords, convert to updatedSchema format
       if (isKeywordRequest && aiResult.fieldKeywords) {
-        console.log('AI assist - Converting fieldKeywords to updatedSchema format');
-
         // Build updatedSchema by updating keywords in current schema
         const updatedCategoricalFields = currentSchema.categoricalFields.map(field => ({
           ...field,
@@ -189,31 +160,9 @@ If you're just providing advice without modifying the schema, return:
 
         aiResult.suggestion = `Generated keywords for ${Object.keys(aiResult.fieldKeywords).length} fields`;
       }
-
-      // Log what fields are in updatedSchema if present
-      if (aiResult.updatedSchema) {
-        console.log('AI assist - updatedSchema has categoricalFields:', !!aiResult.updatedSchema.categoricalFields);
-        console.log('AI assist - updatedSchema has numericFields:', !!aiResult.updatedSchema.numericFields);
-        if (aiResult.updatedSchema.categoricalFields && aiResult.updatedSchema.categoricalFields.length > 0) {
-          console.log('AI assist - First categorical field keywords:', aiResult.updatedSchema.categoricalFields[0].keywords);
-        }
-      }
     } catch (parseError) {
       console.error('Failed to parse AI response as JSON:', parseError);
-      console.error('AI response length:', cleanResponse.length);
 
-      // Show context around the error position
-      if (parseError instanceof Error) {
-        const match = parseError.message.match(/position (\d+)/);
-        if (match) {
-          const pos = parseInt(match[1]);
-          const start = Math.max(0, pos - 100);
-          const end = Math.min(cleanResponse.length, pos + 100);
-          console.error('Context around error position:', cleanResponse.substring(start, end));
-        }
-      }
-
-      // Return a helpful error message
       return NextResponse.json({
         error: 'AI generated invalid JSON response. Please try rephrasing your request.',
         details: parseError instanceof Error ? parseError.message : 'Unknown parse error'
