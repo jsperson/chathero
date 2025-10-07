@@ -191,8 +191,13 @@ export async function POST(request: NextRequest) {
     });
 
     // PHASE 2.5: Apply hard limit on records sent to Phase 3 to avoid token overflow
-    // OpenAI has a 30,000 TPM limit. With ~8 tokens per record, we can safely send ~500 records max.
-    const PHASE_3_MAX_RECORDS = 500;
+    // OpenAI has a 30,000 TPM limit. Adjust limit based on number of fields.
+    // Estimate: ~10 tokens per field per record, plus overhead
+    const fieldCount = processedData.length > 0 ? Object.keys(processedData[0]).length : 1;
+    const estimatedTokensPerRecord = fieldCount * 10 + 20; // 10 per field + 20 overhead
+    const maxTokensForData = 20000; // Leave room for system prompt, conversation history
+    const PHASE_3_MAX_RECORDS = Math.max(50, Math.floor(maxTokensForData / estimatedTokensPerRecord));
+
     let dataForPhase3 = processedData;
     let samplingApplied = false;
 
@@ -204,7 +209,10 @@ export async function POST(request: NextRequest) {
       await logger.chatQuery(requestId, 'PHASE_2.5_SAMPLING', {
         originalRecords: processedData.length,
         sampledRecords: dataForPhase3.length,
-        reason: 'Token limit protection'
+        reason: 'Token limit protection',
+        fieldCount,
+        estimatedTokensPerRecord,
+        maxRecordsAllowed: PHASE_3_MAX_RECORDS
       });
     }
 
