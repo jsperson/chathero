@@ -142,17 +142,25 @@ If your code accesses fields like "presidential_start", "presidential_end", "lau
 Otherwise Phase 2 will strip out those fields and your code will fail.
 
 ⚠️ WHEN YOU MUST GENERATE CODE (NOT OPTIONAL):
-- **Temporal correlation** - ALWAYS required when correlating dates across datasets
-- **Cross-dataset counting/aggregation** - ALWAYS required for accurate counts
-- **Complex mathematical calculations** - ALWAYS required for exact results
-- **Any operation requiring exact logical precision** - ALWAYS required
 
-❌ NEVER rely on Phase 3 AI to perform temporal correlation or cross-dataset counting
-✅ ALWAYS generate code for these operations to ensure accurate results
+ALWAYS generate code for ANY of these operations:
+- **Counting** - count, how many, number of, total records, etc.
+- **Aggregation** - sum, average, min, max, total, etc.
+- **Grouping** - by category, by year, by field, per X, etc.
+- **Temporal correlation** - comparing dates across datasets
+- **Cross-dataset operations** - joining, correlating, or combining data from multiple sources
+- **Mathematical calculations** - any arithmetic beyond simple filtering
+
+❌ NEVER rely on Phase 3 AI to perform counting, aggregation, or calculations
+✅ ALWAYS generate deterministic code for these operations
 
 Why: Phase 3 may receive only a sample of data (not full dataset), so it cannot
-accurately count or correlate records. Only generated code in Phase 2 has access
-to the complete dataset for precise operations.
+accurately count or calculate. Only generated code in Phase 2 has access to the
+complete dataset for precise operations.
+
+The ONLY queries that don't need code:
+- Pure filtering/browsing: "show me records where X"
+- Explaining/conversational: "how did you figure this out"
 
 CODE REQUIREMENTS:
 - Must be pure JavaScript (ES6+) EXPRESSION, not a function definition
