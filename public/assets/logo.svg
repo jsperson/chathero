@@ -1,21 +1,47 @@
 <svg width="200" height="50" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#005288;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0088cc;stop-opacity:1" />
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0066cc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#005288;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
     </linearGradient>
   </defs>
 
-  <!-- Chat bubble icon -->
-  <rect x="5" y="15" width="28" height="20" rx="4" fill="url(#gradient)"/>
-  <polygon points="15,35 20,40 20,35" fill="url(#gradient)"/>
+  <!-- Modern chat bubble with depth -->
+  <g transform="translate(8, 10)">
+    <!-- Shadow -->
+    <ellipse cx="16" cy="27" rx="14" ry="2" fill="#00000015"/>
 
-  <!-- Hero shield -->
-  <path d="M 50 12 L 58 12 L 62 20 L 58 38 L 50 38 L 46 20 Z" fill="#A7A9AC"/>
-  <path d="M 51 16 L 57 16 L 60 20 L 57 34 L 51 34 L 48 20 Z" fill="url(#gradient)"/>
+    <!-- Chat bubble main -->
+    <rect x="2" y="4" width="28" height="20" rx="5" fill="url(#gradient)"/>
+    <polygon points="8,24 14,30 14,24" fill="url(#gradient)"/>
 
-  <!-- ChatHero text -->
-  <text x="70" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#005288">
+    <!-- Chat lines inside bubble -->
+    <line x1="7" y1="11" x2="25" y2="11" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="7" y1="17" x2="20" y2="17" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Hero shield with cape effect -->
+  <g transform="translate(42, 8)">
+    <!-- Shield shadow -->
+    <ellipse cx="12" cy="34" rx="8" ry="2" fill="#00000015"/>
+
+    <!-- Cape -->
+    <path d="M 8 6 Q 4 12, 5 20 Q 6 26, 8 32 L 8 6" fill="#A7A9AC" opacity="0.6"/>
+    <path d="M 16 6 Q 20 12, 19 20 Q 18 26, 16 32 L 16 6" fill="#A7A9AC" opacity="0.6"/>
+
+    <!-- Shield -->
+    <path d="M 12 2 L 20 6 L 20 16 Q 20 24, 12 32 Q 4 24, 4 16 L 4 6 Z" fill="url(#shieldGradient)"/>
+
+    <!-- Shield star -->
+    <path d="M 12 10 L 13 13 L 16 13 L 13.5 15 L 14.5 18 L 12 16 L 9.5 18 L 10.5 15 L 8 13 L 11 13 Z" fill="white"/>
+  </g>
+
+  <!-- ChatHero text with modern font -->
+  <text x="72" y="32" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="600" fill="#005288" letter-spacing="0.5">
     ChatHero
   </text>
 </svg>
