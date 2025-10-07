@@ -186,29 +186,21 @@ DATE HANDLING AND COMPARISON RULES:
 
 ALWAYS normalize ALL dates to YYYY-MM-DD format before any comparisons:
 
-```javascript
-// Normalize date to YYYY-MM-DD format
-const normalizeDate = (dateStr) => {
-  if (!dateStr) return null;
-  // Already YYYY-MM-DD format
-  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
-  // MM/DD/YYYY format
-  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateStr)) {
-    const [m, d, y] = dateStr.split('/');
-    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
-  }
-  // Fallback: try to parse and reformat
-  const date = new Date(dateStr);
-  return date.toISOString().split('T')[0];
-};
-```
+Define this helper function at the start of your generated code:
+  const normalizeDate = (dateStr) => {
+    if (!dateStr) return null;
+    if (/^\\d{4}-\\d{2}-\\d{2}$/.test(dateStr)) return dateStr;
+    if (/^\\d{1,2}\\/\\d{1,2}\\/\\d{4}$/.test(dateStr)) {
+      const [m, d, y] = dateStr.split('/');
+      return \`\${y}-\${m.padStart(2,'0')}-\${d.padStart(2,'0')}\`;
+    }
+    return new Date(dateStr).toISOString().split('T')[0];
+  };
 
-USE this function on ALL date fields before comparison:
-```javascript
-const orderDate = normalizeDate(shipment['Order Date']);
-const startDate = normalizeDate(president.presidential_start);
-if (orderDate >= startDate && orderDate < endDate) { ... }
-```
+Then use it on ALL date fields before comparison:
+  const orderDate = normalizeDate(shipment['Order Date']);
+  const startDate = normalizeDate(president.presidential_start);
+  if (orderDate >= startDate && orderDate < endDate) { ... }
 
 DATE RANGE COMPARISON RULES:
 - ALWAYS use inclusive start (>=) and exclusive end (<) to avoid double-counting boundary dates
