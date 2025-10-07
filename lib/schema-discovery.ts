@@ -164,8 +164,13 @@ export class SchemaDiscovery {
       }
     }
 
-    // Build categorical fields config
-    const categoricalFields = schema.categoricalFields.map(fieldName => {
+    // Build categorical fields config - include ALL string fields (not just low-cardinality)
+    // This ensures fields like 'name', 'spouse', etc. are included
+    const allStringFields = schema.fields
+      .filter(f => f.type === 'string' || f.type === 'date')
+      .map(f => f.name);
+
+    const categoricalFields = allStringFields.map(fieldName => {
       const field = schema.fields.find(f => f.name === fieldName);
       return {
         name: fieldName,
@@ -181,9 +186,9 @@ export class SchemaDiscovery {
       unit: this.guessUnit(fieldName),
     }));
 
-    // Build field keywords from categorical fields
+    // Build field keywords from all string/date fields
     const fieldKeywords: Record<string, string[]> = {};
-    schema.categoricalFields.forEach(fieldName => {
+    allStringFields.forEach(fieldName => {
       const keywords = [fieldName, ...this.generateKeywords(fieldName)];
       fieldKeywords[fieldName] = keywords;
     });
@@ -196,8 +201,8 @@ export class SchemaDiscovery {
       },
       dataSchema: {
         primaryDateField: primaryDateField || 'date',
-        categoricalFields: categoricalFields.slice(0, 5), // Limit to top 5
-        numericFields: numericFields.slice(0, 3), // Limit to top 3
+        categoricalFields: categoricalFields, // Include all string/date fields
+        numericFields: numericFields, // Include all numeric fields
       },
       domainKnowledge: {
         fieldKeywords,
