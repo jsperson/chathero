@@ -136,7 +136,7 @@ export default function Home() {
             }
             return {
               ...p,
-              status: pd.phase1_5.approved ? 'completed' : 'completed',
+              status: pd.phase1_5.approved ? 'completed' : 'warning',
               expandedDetails: details
             };
           }
@@ -153,7 +153,7 @@ export default function Home() {
             }
             return {
               ...p,
-              status: 'completed',
+              status: pd.phase2.executionError ? 'warning' : 'completed',
               expandedDetails: details
             };
           }

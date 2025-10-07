@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export type PhaseStatus = 'pending' | 'active' | 'completed';
+export type PhaseStatus = 'pending' | 'active' | 'completed' | 'warning' | 'error';
 
 export interface PhaseDetail {
   label: string;
@@ -69,6 +69,10 @@ export default function ProgressStepper({ phases }: ProgressStepperProps) {
                   className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${
                     phase.status === 'completed'
                       ? 'bg-green-500 text-white'
+                      : phase.status === 'warning'
+                      ? 'bg-yellow-500 text-white'
+                      : phase.status === 'error'
+                      ? 'bg-red-500 text-white'
                       : phase.status === 'active'
                       ? 'bg-blue-500 text-white animate-pulse'
                       : 'bg-gray-300 text-gray-600'
@@ -86,6 +90,34 @@ export default function ProgressStepper({ phases }: ProgressStepperProps) {
                         strokeLinejoin="round"
                         strokeWidth={2}
                         d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  ) : phase.status === 'warning' ? (
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                  ) : phase.status === 'error' ? (
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
                       />
                     </svg>
                   ) : phase.status === 'active' ? (
@@ -119,6 +151,10 @@ export default function ProgressStepper({ phases }: ProgressStepperProps) {
                         ? 'text-blue-600'
                         : phase.status === 'completed'
                         ? 'text-green-600'
+                        : phase.status === 'warning'
+                        ? 'text-yellow-600'
+                        : phase.status === 'error'
+                        ? 'text-red-600'
                         : 'text-gray-500'
                     }`}
                   >
