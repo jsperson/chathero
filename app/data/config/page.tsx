@@ -24,6 +24,7 @@ export default function DatasetConfigPage() {
   const [queryExamples, setQueryExamples] = useState<QueryExample[]>([]);
   const [aiAssisting, setAiAssisting] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
+  const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
     // Check URL parameter first, then fall back to cookie
@@ -130,6 +131,32 @@ export default function DatasetConfigPage() {
     setQueryExamples(updated);
   };
 
+  const handleGenerate = async () => {
+    setGenerating(true);
+    try {
+      const response = await fetch('/api/data/config/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dataset: datasetName }),
+      });
+
+      const data = await response.json();
+
+      if (data.readme) {
+        setReadme(data.readme);
+      }
+      if (data.queryExamples) {
+        setQueryExamples(data.queryExamples);
+      }
+
+      alert('Configuration generated! Review and save when ready.');
+    } catch (error) {
+      console.error('Generate error:', error);
+      alert('Failed to generate configuration');
+    }
+    setGenerating(false);
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -154,6 +181,15 @@ export default function DatasetConfigPage() {
             Configure Dataset: {datasetName}
           </h1>
           <div className="flex gap-2">
+            {(!readme || queryExamples.length === 0) && (
+              <button
+                onClick={handleGenerate}
+                disabled={generating}
+                className="px-4 py-2 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 disabled:opacity-50"
+              >
+                {generating ? '✨ Generating...' : '✨ Generate with AI'}
+              </button>
+            )}
             <button
               onClick={() => router.push('/data')}
               className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"
