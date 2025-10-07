@@ -105,7 +105,8 @@ export default function DatasetConfigPage() {
       } else if (data.examples) {
         // Validate that examples is an array
         if (Array.isArray(data.examples)) {
-          setQueryExamples(data.examples);
+          // Append new examples to existing ones instead of replacing
+          setQueryExamples([...queryExamples, ...data.examples]);
           setAiPrompt('');
         } else {
           console.error('AI returned non-array examples:', data.examples);
@@ -285,12 +286,15 @@ export default function DatasetConfigPage() {
           {/* AI Assistance */}
           <div className="mb-4 p-4 bg-blue-50 rounded-lg">
             <h3 className="font-semibold mb-2">🤖 AI Assistance</h3>
+            <p className="text-sm text-gray-600 mb-2">
+              Ask AI to generate additional query examples (will be added to existing examples, not replace them)
+            </p>
             <div className="flex gap-2">
               <input
                 type="text"
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
-                placeholder="e.g., 'Generate examples for filtering by year and vehicle type'"
+                placeholder="e.g., 'Generate 3 examples for filtering by date and region'"
                 className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2"
                 style={{ '--tw-ring-color': 'var(--color-primary)' } as any}
               />

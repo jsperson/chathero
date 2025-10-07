@@ -23,27 +23,45 @@ Dataset: ${dataset}
 Dataset schema:
 ${JSON.stringify(projectConfig.dataSchema, null, 2)}
 
-Current examples:
+Current examples (do NOT duplicate these):
 ${JSON.stringify(currentExamples, null, 2)}
 
-Generate query examples in this format:
+IMPORTANT: Generate NEW examples based on the user's request below. Do not duplicate existing examples.
+
+Your task: ${prompt}
+
+Return examples in this exact JSON format:
 [
   {
-    "question": "User's question",
-    "filters": [{"field": "field_name", "operator": "equals|contains", "value": "value"}],
-    "limit": 100,
-    "explanation": "What data is needed"
+    "question": "Natural language question",
+    "filters": [{"field": "exact_field_name", "operator": "equals|contains|greater_than|less_than", "value": "realistic_value"}],
+    "explanation": "Brief explanation of what filters accomplish"
   }
 ]
 
-Guidelines:
-- Always include a filter for "_dataset_source" with value "${dataset}" when the dataset is part of a multi-dataset setup
-- Use "contains" operator for partial text matching
-- Use "equals" operator for exact matching
-- Keep explanations concise
-- Examples should teach the AI how to filter data for common queries
+CRITICAL RULES:
+1. Use EXACT field names from the schema above (case-sensitive!)
+2. Use realistic values that would exist in the data
+3. Filter operators:
+   - "equals" for exact matches (categories, IDs)
+   - "contains" for partial text/date matches (e.g., "2024" in date field)
+   - "greater_than" / "less_than" for numeric/date comparisons
+4. For date ranges, use TWO filters (greater_than for start, less_than for end)
+5. Keep questions practical and useful
+6. Do NOT include "limit" unless the question is about "show me" or "list"
+7. Explanations should be concise (one sentence)
 
-Return ONLY valid JSON array, no other text.`;
+Example of a GOOD query example:
+{
+  "question": "How many orders in Q1 2024?",
+  "filters": [
+    {"field": "Order Date", "operator": "greater_than", "value": "2024-01-01"},
+    {"field": "Order Date", "operator": "less_than", "value": "2024-04-01"}
+  ],
+  "explanation": "Filter orders between Jan 1 and Apr 1, 2024, then count them"
+}
+
+Return ONLY the JSON array, no other text.`;
 
     const response = await aiAdapter.chat(prompt, {
       system_instruction: systemPrompt,
