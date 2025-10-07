@@ -36,11 +36,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Delete configuration files (both new and legacy structure)
+    // Delete schema configuration files (both new and legacy structure)
+    // Note: Does NOT delete README.md or queries.yaml (managed by config screen)
     const filesToDelete = [
       path.join(datasetDir, 'metadata.yaml'),
       path.join(datasetDir, 'schema.yaml'),
-      path.join(datasetDir, 'queries.yaml'),
       path.join(datasetDir, 'project.yaml'), // Legacy file
     ];
 
