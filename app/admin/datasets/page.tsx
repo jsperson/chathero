@@ -130,10 +130,9 @@ export default function DatasetManagementPage() {
                       <div className="relative group">
                         <span className="text-yellow-500 text-xl cursor-help">⚠️</span>
                         <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block bg-gray-900 text-white text-xs rounded py-2 px-3 whitespace-nowrap z-10">
-                          Missing: {[
-                            !dataset.hasReadme && 'README.md',
-                            !dataset.hasProjectConfig && 'project.yaml'
-                          ].filter(Boolean).join(', ')}
+                          {!dataset.hasProjectConfig && !dataset.hasReadme && 'Configure schema and add README'}
+                          {!dataset.hasProjectConfig && dataset.hasReadme && 'Configure schema (metadata.yaml, schema.yaml)'}
+                          {dataset.hasProjectConfig && !dataset.hasReadme && 'Add README.md'}
                           <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                         </div>
                       </div>
