@@ -35,12 +35,8 @@ export default function Header() {
     <header className="border-b" style={{ borderColor: 'var(--color-primary)' }}>
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {logo ? (
+          {logo && (
             <img src={logo} alt={appName} className="h-8 w-auto" />
-          ) : (
-            <h1 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>
-              {appName}
-            </h1>
           )}
         </div>
 
