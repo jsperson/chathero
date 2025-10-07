@@ -1,21 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
 interface DatasetInfo {
   name: string;
   displayName: string;
   data: any[];
+  total: number;
+  hasMore: boolean;
 }
 
 export default function DataPage() {
   const [datasets, setDatasets] = useState<DatasetInfo[]>([]);
   const [activeTab, setActiveTab] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortKey, setSortKey] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const PAGE_SIZE = 100;
 
   useEffect(() => {
     // Load selected datasets from cookie
@@ -31,11 +36,11 @@ export default function DataPage() {
       return;
     }
 
-    // Fetch data for each dataset
+    // Fetch data for each dataset with pagination
     Promise.all(
       selectedDatasets.map(async (datasetName) => {
-        const res = await fetch(`/api/data?dataset=${datasetName}`);
-        const data = await res.json();
+        const res = await fetch(`/api/data?dataset=${datasetName}&offset=0&limit=${PAGE_SIZE}`);
+        const response = await res.json();
 
         // Get display name from datasets API
         const datasetsRes = await fetch('/api/datasets');
@@ -45,7 +50,9 @@ export default function DataPage() {
         return {
           name: datasetName,
           displayName: datasetInfo?.displayName || datasetName,
-          data: Array.isArray(data) ? data : []
+          data: response.data || [],
+          total: response.total || 0,
+          hasMore: response.hasMore || false
         };
       })
     )
@@ -60,7 +67,50 @@ export default function DataPage() {
         setError('Failed to load data');
         setLoading(false);
       });
-  }, []);
+  }, [PAGE_SIZE]);
+
+  const loadMoreData = useCallback(async () => {
+    const activeDataset = datasets.find(d => d.name === activeTab);
+    if (!activeDataset || !activeDataset.hasMore || loadingMore) return;
+
+    setLoadingMore(true);
+    try {
+      const offset = activeDataset.data.length;
+      const res = await fetch(`/api/data?dataset=${activeTab}&offset=${offset}&limit=${PAGE_SIZE}`);
+      const response = await res.json();
+
+      setDatasets(prev => prev.map(ds => {
+        if (ds.name === activeTab) {
+          return {
+            ...ds,
+            data: [...ds.data, ...response.data],
+            hasMore: response.hasMore
+          };
+        }
+        return ds;
+      }));
+    } catch (err) {
+      console.error('Failed to load more data:', err);
+    }
+    setLoadingMore(false);
+  }, [datasets, activeTab, loadingMore, PAGE_SIZE]);
+
+  // Infinite scroll handler
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      // Load more when scrolled to within 200px of bottom
+      if (scrollHeight - scrollTop - clientHeight < 200) {
+        loadMoreData();
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [loadMoreData]);
 
   if (loading) {
     return (
@@ -151,7 +201,7 @@ export default function DataPage() {
               >
                 {dataset.displayName}
                 <span className="ml-2 text-sm text-gray-500">
-                  ({dataset.data.length})
+                  ({dataset.data.length} of {dataset.total})
                 </span>
               </button>
             ))}
@@ -181,7 +231,7 @@ export default function DataPage() {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[600px] overflow-y-auto" ref={scrollContainerRef}>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b-2" style={{ borderColor: 'var(--color-primary)' }}>
@@ -217,6 +267,20 @@ export default function DataPage() {
                 ))}
               </tbody>
             </table>
+
+            {/* Loading more indicator */}
+            {loadingMore && (
+              <div className="text-center py-4 text-gray-500">
+                Loading more records...
+              </div>
+            )}
+
+            {/* End of data indicator */}
+            {!activeDataset.hasMore && activeDataset.data.length > 0 && (
+              <div className="text-center py-4 text-gray-400 text-sm">
+                All {activeDataset.total} records loaded
+              </div>
+            )}
           </div>
         </div>
       </div>
