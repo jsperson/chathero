@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
-import { JSONAdapter } from '@/lib/adapters/json.adapter';
+import { createDataAdapter } from '@/lib/adapters/adapter-factory';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,8 +21,8 @@ export async function POST(request: NextRequest) {
     const config = await loadConfig();
     const projectConfig = await loadProjectConfig(selectedDataset);
 
-    // Load data for context
-    const dataAdapter = new JSONAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
+    // Load data for context - use correct adapter based on dataset type
+    const dataAdapter = await createDataAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
     const data = await dataAdapter.getData();
 
     // Load README if available
