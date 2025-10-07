@@ -257,7 +257,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Add sampling notice if applied
-    if (samplingApplied) {
+    if (samplingApplied && Array.isArray(processedData)) {
       contextData.data_explanation = `${contextData.data_explanation}\n\nNote: Showing first ${PHASE_3_MAX_RECORDS} of ${processedData.length} total records to avoid token limits. Use this sample to answer the question, but report the total count accurately.`;
     }
 

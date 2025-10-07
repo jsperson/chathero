@@ -163,15 +163,19 @@ The ONLY queries that don't need code:
 - Explaining/conversational: "how did you figure this out"
 
 CODE REQUIREMENTS:
-- Must be pure JavaScript (ES6+) EXPRESSION, not a function definition
+- Must be pure JavaScript (ES6+) with explicit RETURN statement
 - Input: "data" array containing filtered records
-- Output: Must RETURN an array of result objects directly
-- Use IIFE pattern: (function() { ... return result; })() or inline expression
+- Output: Must RETURN an array of result objects
+- Code will be auto-wrapped in function, so just write the logic with return
 - Only use: filter(), map(), reduce(), basic comparisons, date operations
 - NO external libraries, NO async operations, NO side effects, NO function declarations
 - Keep code concise and readable
-- WRONG: const func = (data) => {...}  (function declaration - will not execute)
-- RIGHT: const presidents = data.filter(...); return presidents.map(...)
+
+Format examples:
+✅ CORRECT: const presidents = data.filter(...); return presidents.map(...);
+✅ CORRECT: return data.filter(...).map(...).reduce(...);
+❌ WRONG: const func = (data) => {...}  (function declaration)
+❌ WRONG: (function() { return ...; })()  (IIFE - will be double-wrapped)
 
 DATE RANGE COMPARISON RULES:
 - ALWAYS use inclusive start (>=) and exclusive end (<) to avoid double-counting boundary dates
