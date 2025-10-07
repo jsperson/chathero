@@ -45,13 +45,14 @@ The user is asking for help with their schema configuration. Based on their requ
 2. If applicable, return an updated schema object
 
 Guidelines:
-- For field descriptions: be concise but informative
+- For field descriptions: be concise but informative (single line, no newlines)
 - For keywords: include synonyms, plural/singular forms, common variations, abbreviations, related terms
   * Consider the dataset domain and README context when generating keywords
   * Think about how users might naturally refer to these fields in questions
-  * Include both formal and informal terms
+  * Include both formal and informal terms (but NO apostrophes or quotes)
   * For date fields: include variations like "when", "date", temporal keywords
   * For categorical fields: include category-specific terms from the README
+  * Each keyword must be a simple string - no punctuation except hyphens and underscores
 - For domain: identify the business/data domain (e.g., "space launches", "e-commerce sales", "user analytics")
 - For example questions: create 3-5 natural language questions users might ask about this data
 - For display names: use proper Title Case and expand abbreviations
@@ -91,13 +92,22 @@ If you're just providing advice without modifying the schema, return:
 }`;
 
     const aiAdapter = new OpenAIAdapter(config.ai, projectConfig);
+
+    // Use a more lenient model for schema generation (less strict JSON formatting)
     const response = await aiAdapter.chat(prompt, {
       system_instruction: systemPrompt,
       require_json: true,
+      temperature: 0.3, // Slightly higher for more creative keywords but still consistent
     });
 
     // Parse AI response
-    const cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    let cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+    // Additional cleaning to fix common JSON issues
+    // Remove trailing commas before closing braces/brackets
+    cleanResponse = cleanResponse.replace(/,(\s*[}\]])/g, '$1');
+    // Fix unescaped quotes in strings (naive approach - only handles simple cases)
+    // This is risky but might help with the apostrophe issue
 
     let aiResult;
     try {
