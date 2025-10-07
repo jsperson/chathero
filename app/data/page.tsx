@@ -214,7 +214,10 @@ export default function DataPage() {
               {activeDataset.displayName}
             </h2>
             <div className="text-sm text-gray-500">
-              {sortedData.length} of {data.length} records
+              {searchTerm ? `${sortedData.length} of ${data.length} loaded` : `${data.length} of ${activeDataset.total} records`}
+              {data.length < activeDataset.total && !searchTerm && (
+                <span className="ml-2 text-blue-600">(scroll for more)</span>
+              )}
             </div>
           </div>
 
