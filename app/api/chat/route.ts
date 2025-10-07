@@ -306,10 +306,43 @@ export async function POST(request: NextRequest) {
       { role: 'assistant', content: response }
     ];
 
+    // Build phase details for UI
+    const phaseDetails = {
+      phase1: {
+        filters: queryAnalysis.filters || [],
+        fieldsToInclude: queryAnalysis.fieldsToInclude || [],
+        generatedCode: queryAnalysis.generatedCode,
+        codeDescription: queryAnalysis.codeDescription,
+        explanation: queryAnalysis.explanation,
+        limit: queryAnalysis.limit
+      },
+      phase1_5: codeValidation ? {
+        approved: codeValidation.approved,
+        reason: codeValidation.reason,
+        risks: codeValidation.risks || []
+      } : null,
+      phase2: {
+        inputRecords: rawData.length,
+        outputRecords: Array.isArray(processedData) ? processedData.length : 1,
+        filtersApplied: queryAnalysis.filters?.length || 0,
+        codeExecuted: !!queryAnalysis.generatedCode && codeValidation?.approved
+      },
+      phase2_5: {
+        recordsToPhase3: Array.isArray(dataForPhase3) ? dataForPhase3.length : 1,
+        totalRecords: Array.isArray(processedData) ? processedData.length : 1,
+        samplingApplied
+      },
+      phase3: {
+        responseLength: response.length,
+        datasets: selectedDatasets || [config.dataSource.defaultDataset]
+      }
+    };
+
     return NextResponse.json({
       response,
       conversationHistory: updatedHistory,
       timestamp: new Date().toISOString(),
+      phaseDetails
     });
   } catch (error) {
     const errorDetails = error instanceof Error

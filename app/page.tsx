@@ -167,18 +167,85 @@ export default function Home() {
         throw new Error(data.error);
       }
 
-      // Mark all phases as completed with final details
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase3' ? {
-          ...p,
-          status: 'completed',
-          details: undefined,
-          expandedDetails: [
-            { label: 'Response Length', value: data.response.length, type: 'number' },
-            { label: 'Status', value: 'Complete', type: 'text' }
-          ]
-        } : { ...p, status: 'completed', details: undefined }
-      ));
+      // Update phases with real backend data
+      if (data.phaseDetails) {
+        const pd = data.phaseDetails;
+
+        setPhases(prev => prev.map(p => {
+          if (p.id === 'phase1') {
+            const details = [];
+            details.push({ label: 'Explanation', value: pd.phase1.explanation || 'N/A', type: 'text' });
+            if (pd.phase1.filters && pd.phase1.filters.length > 0) {
+              details.push({ label: 'Filters', value: pd.phase1.filters, type: 'json' });
+            } else {
+              details.push({ label: 'Filters', value: 'None', type: 'text' });
+            }
+            if (pd.phase1.fieldsToInclude && pd.phase1.fieldsToInclude.length > 0) {
+              details.push({ label: 'Fields Selected', value: pd.phase1.fieldsToInclude.join(', '), type: 'text' });
+            }
+            if (pd.phase1.limit) {
+              details.push({ label: 'Limit', value: pd.phase1.limit, type: 'number' });
+            }
+            if (pd.phase1.generatedCode) {
+              details.push({ label: 'Generated Code', value: pd.phase1.generatedCode, type: 'code' });
+              details.push({ label: 'Code Description', value: pd.phase1.codeDescription || 'N/A', type: 'text' });
+            }
+            return { ...p, status: 'completed', expandedDetails: details };
+          }
+
+          if (p.id === 'phase1.5' && pd.phase1_5) {
+            const details = [
+              { label: 'Approved', value: pd.phase1_5.approved ? 'Yes' : 'No', type: 'text' },
+              { label: 'Reason', value: pd.phase1_5.reason || 'N/A', type: 'text' }
+            ];
+            if (pd.phase1_5.risks && pd.phase1_5.risks.length > 0) {
+              details.push({ label: 'Risks', value: pd.phase1_5.risks, type: 'json' });
+            }
+            return { ...p, status: 'completed', expandedDetails: details };
+          }
+
+          if (p.id === 'phase2') {
+            return {
+              ...p,
+              status: 'completed',
+              expandedDetails: [
+                { label: 'Input Records', value: pd.phase2.inputRecords.toLocaleString(), type: 'text' },
+                { label: 'Output Records', value: pd.phase2.outputRecords.toLocaleString(), type: 'text' },
+                { label: 'Filters Applied', value: pd.phase2.filtersApplied, type: 'number' },
+                { label: 'Code Executed', value: pd.phase2.codeExecuted ? 'Yes' : 'No', type: 'text' }
+              ]
+            };
+          }
+
+          if (p.id === 'phase2.5') {
+            return {
+              ...p,
+              status: 'completed',
+              expandedDetails: [
+                { label: 'Records to Phase 3', value: pd.phase2_5.recordsToPhase3.toLocaleString(), type: 'text' },
+                { label: 'Total Records', value: pd.phase2_5.totalRecords.toLocaleString(), type: 'text' },
+                { label: 'Sampling Applied', value: pd.phase2_5.samplingApplied ? 'Yes' : 'No', type: 'text' }
+              ]
+            };
+          }
+
+          if (p.id === 'phase3') {
+            return {
+              ...p,
+              status: 'completed',
+              expandedDetails: [
+                { label: 'Response Length', value: pd.phase3.responseLength, type: 'number' },
+                { label: 'Datasets', value: pd.phase3.datasets.join(', '), type: 'text' }
+              ]
+            };
+          }
+
+          return { ...p, status: 'completed', details: undefined };
+        }));
+      } else {
+        // Fallback if no phase details returned
+        setPhases(prev => prev.map(p => ({ ...p, status: 'completed', details: undefined })));
+      }
 
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
     } catch (error) {
