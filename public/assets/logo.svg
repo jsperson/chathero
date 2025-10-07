@@ -11,7 +11,7 @@
   </defs>
 
   <!-- Unified chat bubble shield icon -->
-  <g transform="translate(16, 20) scale(2)">
+  <g transform="translate(16, 10) scale(2)">
     <!-- Shadow -->
     <ellipse cx="20" cy="34" rx="18" ry="3" fill="#00000020"/>
 
@@ -37,7 +37,7 @@
   </g>
 
   <!-- ChatHero text with modern font -->
-  <text x="144" y="64" font-family="'Segoe UI', Arial, sans-serif" font-size="44" font-weight="600" fill="#005288" letter-spacing="1">
+  <text x="105" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="44" font-weight="600" fill="#005288" letter-spacing="1">
     ChatHero
   </text>
 </svg>
