@@ -226,6 +226,15 @@ DATE HANDLING:
 - Use pd.notna() or pd.isna() to check for null dates
 - Date comparisons: >= for inclusive start, < for exclusive end
 
+⚠️ CRITICAL - JSON SERIALIZATION:
+- Pandas Timestamp objects CANNOT be directly serialized to JSON
+- ALWAYS convert Timestamps to strings before adding to result
+- Use .isoformat() or str() to convert: date.isoformat() or str(date)
+- For lists of dates: [d.isoformat() for d in date_list]
+- Example: {'date': timestamp.isoformat(), 'name': 'John'}
+- ❌ WRONG: {'date': timestamp} - will fail with "Object of type Timestamp is not JSON serializable"
+- ✅ CORRECT: {'date': timestamp.isoformat()}
+
 NUMERIC FIELD HANDLING:
 ⚠️ CRITICAL: Numeric fields may contain mixed types (strings, floats, etc.) due to data quality issues!
 - ALWAYS convert numeric fields to numeric type before math operations
