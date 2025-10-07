@@ -45,6 +45,12 @@ Guidelines:
 - For example questions: create 3-5 natural language questions users might ask about this data
 - For display names: use proper Title Case and expand abbreviations
 
+IMPORTANT: Return ONLY valid JSON. Ensure all strings are properly escaped:
+- Use double quotes for strings
+- Escape special characters: \\ for backslash, \" for quotes, \\n for newlines
+- Do not include newlines within string values
+- Test that your JSON is valid before returning
+
 If you're making changes to the schema, return JSON in this format:
 {
   "suggestion": "text explanation of what you did",
@@ -64,7 +70,20 @@ If you're just providing advice without modifying the schema, return:
 
     // Parse AI response
     const cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    const aiResult = JSON.parse(cleanResponse);
+
+    let aiResult;
+    try {
+      aiResult = JSON.parse(cleanResponse);
+    } catch (parseError) {
+      console.error('Failed to parse AI response as JSON:', parseError);
+      console.error('AI response:', cleanResponse);
+
+      // Return a helpful error message
+      return NextResponse.json({
+        error: 'AI generated invalid JSON response. Please try rephrasing your request.',
+        details: parseError instanceof Error ? parseError.message : 'Unknown parse error'
+      }, { status: 500 });
+    }
 
     return NextResponse.json(aiResult);
   } catch (error) {
