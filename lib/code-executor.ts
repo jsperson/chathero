@@ -12,11 +12,17 @@ export interface CodeExecutionResult {
 }
 
 export class CodeExecutor {
+  private logger?: any;
+
+  constructor(logger?: any) {
+    this.logger = logger;
+  }
+
   /**
    * Execute validated Python code in a subprocess
    * Combined with AI validation in Phase 1.5, provides good security
    */
-  async execute(code: string, data: any[]): Promise<CodeExecutionResult> {
+  async execute(code: string, data: any[], requestId?: string): Promise<CodeExecutionResult> {
     const tempDir = os.tmpdir();
     const timestamp = Date.now();
     const dataFile = path.join(tempDir, `data_${timestamp}.json`);
@@ -47,6 +53,14 @@ with open('${outputFile}', 'w') as f:
 `;
 
       await fs.writeFile(codeFile, wrappedCode, 'utf-8');
+
+      // Log the generated Python code
+      if (this.logger && requestId) {
+        await this.logger.chatQuery(requestId, 'PYTHON_CODE_GENERATED', {
+          codeLength: code.length,
+          code: code
+        });
+      }
 
       // Execute Python with timeout
       const pythonProcess = spawn('python3', [codeFile], {
@@ -84,9 +98,21 @@ with open('${outputFile}', 'w') as f:
       }
 
       if (exitCode !== 0) {
+        const errorMsg = stderr || stdout || 'Unknown error';
+
+        // Log the execution error
+        if (this.logger && requestId) {
+          await this.logger.chatQuery(requestId, 'PYTHON_EXECUTION_ERROR', {
+            exitCode,
+            stderr,
+            stdout,
+            error: errorMsg
+          });
+        }
+
         return {
           success: false,
-          error: `Python execution failed: ${stderr || stdout}`,
+          error: `Python execution failed: ${errorMsg}`,
         };
       }
 
@@ -96,12 +122,27 @@ with open('${outputFile}', 'w') as f:
 
       const result = JSON.parse(resultData);
 
+      // Log successful execution
+      if (this.logger && requestId) {
+        await this.logger.chatQuery(requestId, 'PYTHON_EXECUTION_SUCCESS', {
+          resultCount: Array.isArray(result) ? result.length : 1
+        });
+      }
+
       return {
         success: true,
         result,
       };
     } catch (error: any) {
       console.error('Python execution error:', error);
+
+      // Log exception
+      if (this.logger && requestId) {
+        await this.logger.chatQuery(requestId, 'PYTHON_EXECUTION_EXCEPTION', {
+          error: error.message,
+          stack: error.stack
+        });
+      }
 
       // Clean up temp files on error
       try {

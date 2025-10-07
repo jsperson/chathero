@@ -229,8 +229,8 @@ export async function POST(request: NextRequest) {
           attempt
         });
 
-        const executor = new CodeExecutor();
-        const executionResult = await executor.execute(queryAnalysis.generatedCode, filteredData);
+        const executor = new CodeExecutor(logger);
+        const executionResult = await executor.execute(queryAnalysis.generatedCode, filteredData, requestId);
 
         if (executionResult.success) {
           processedData = executionResult.result;
