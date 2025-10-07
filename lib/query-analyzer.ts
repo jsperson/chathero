@@ -99,6 +99,11 @@ Return a JSON object:
 
 CRITICAL: The "fieldsToInclude" field is REQUIRED in every response.
 
+⚠️ TOKEN LIMIT WARNING: Each field increases token usage significantly!
+- With 500 records × 21 fields = ~78K tokens (EXCEEDS 30K TPM LIMIT)
+- With 500 records × 6 fields = ~20K tokens (safe)
+- BE EXTREMELY SELECTIVE: Include ONLY the absolute minimum fields needed
+
 FIELD SELECTION RULES - Include fields needed for BOTH processing AND displaying results:
 
 1. **Fields needed to answer the question** (correlation/filtering):
@@ -118,6 +123,11 @@ FIELD SELECTION RULES - Include fields needed for BOTH processing AND displaying
 4. **Always exclude**:
    - Verbose text fields not needed (descriptions, long text, URLs)
    - Fields not mentioned and not needed for processing or output
+
+5. **For conversational/explanatory questions** (e.g., "how did you figure this out?", "explain"):
+   - Return ONLY 2-3 key identifier fields (id, name, _dataset_source)
+   - These questions don't need actual data - just context for explanation
+   - Maximum 3 fields for conversational queries
 
 Example: "List launch count by president"
 - Need for processing: presidential_start, presidential_end, launch_date, _dataset_source

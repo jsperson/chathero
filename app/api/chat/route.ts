@@ -143,7 +143,48 @@ export async function POST(request: NextRequest) {
 
     // Apply field selection if specified (reduces token usage for Phase 3)
     if (queryAnalysis.fieldsToInclude && queryAnalysis.fieldsToInclude.length > 0) {
-      const fieldsToKeep = queryAnalysis.fieldsToInclude;
+      let fieldsToKeep = queryAnalysis.fieldsToInclude;
+
+      // Safety backstop: Enforce maximum field count to prevent token overflow
+      // With 500 records, ~10 fields max = 50K tokens total (safe buffer under 30K TPM limit)
+      const MAX_FIELDS = 10;
+      let fieldLimitApplied = false;
+
+      if (fieldsToKeep.length > MAX_FIELDS) {
+        fieldLimitApplied = true;
+
+        // Prioritize fields: _dataset_source, filter fields, then first fields in list
+        const priorityFields: string[] = [];
+
+        // 1. Always include _dataset_source if present
+        if (fieldsToKeep.includes('_dataset_source')) {
+          priorityFields.push('_dataset_source');
+        }
+
+        // 2. Include fields used in filters
+        const filterFields = queryAnalysis.filters?.map(f => f.field) || [];
+        filterFields.forEach(field => {
+          if (fieldsToKeep.includes(field) && !priorityFields.includes(field)) {
+            priorityFields.push(field);
+          }
+        });
+
+        // 3. Fill remaining slots with fields from Phase 1 selection
+        fieldsToKeep.forEach(field => {
+          if (priorityFields.length < MAX_FIELDS && !priorityFields.includes(field)) {
+            priorityFields.push(field);
+          }
+        });
+
+        await logger.chatQuery(requestId, 'PHASE_2_FIELD_LIMIT_APPLIED', {
+          requestedFields: fieldsToKeep.length,
+          maxAllowed: MAX_FIELDS,
+          selectedFields: priorityFields
+        });
+
+        fieldsToKeep = priorityFields;
+      }
+
       filteredData = filteredData.map(record => {
         const reduced: any = {};
         fieldsToKeep.forEach(field => {
@@ -157,7 +198,8 @@ export async function POST(request: NextRequest) {
       await logger.chatQuery(requestId, 'PHASE_2_FIELD_SELECTION', {
         originalFields: Object.keys(rawData[0] || {}).length,
         selectedFields: fieldsToKeep.length,
-        fields: fieldsToKeep
+        fields: fieldsToKeep,
+        fieldLimitApplied
       });
     }
 
