@@ -302,12 +302,13 @@ export default function Home() {
         <div className="flex-1 overflow-y-auto mb-4 space-y-4">
           {messages.length === 0 ? (
             <div className="text-center text-gray-500 mt-8">
-              <p className="text-lg">Welcome! Ask me anything about the data.</p>
+              <p className="text-lg mb-2">Welcome! Ask me anything about the data.</p>
+              <p className="text-sm text-gray-400 mb-4">💡 You can combine multiple datasets in complex questions</p>
               {exampleQuestions.length > 0 && (
                 <div className="text-sm mt-4">
                   <p className="font-semibold mb-2">Try asking:</p>
                   <div className="space-y-1">
-                    {exampleQuestions.slice(0, 3).map((q, i) => (
+                    {exampleQuestions.slice(0, 5).map((q, i) => (
                       <p key={i} className="text-gray-600">&quot;{q}&quot;</p>
                     ))}
                   </div>
