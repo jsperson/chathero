@@ -149,7 +149,26 @@ export default function DatasetConfigPage() {
         setQueryExamples(data.queryExamples);
       }
 
-      alert('Configuration generated! Review and save when ready.');
+      // Automatically save the full project config
+      if (data.projectConfig) {
+        const saveResponse = await fetch('/api/data/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            dataset: datasetName,
+            readme: data.readme,
+            projectConfig: data.projectConfig,
+          }),
+        });
+
+        if (saveResponse.ok) {
+          alert('Configuration generated and saved! You can now use this dataset for queries.');
+        } else {
+          alert('Configuration generated but failed to save. Please try saving manually.');
+        }
+      } else {
+        alert('Configuration generated! Review and save when ready.');
+      }
     } catch (error) {
       console.error('Generate error:', error);
       alert('Failed to generate configuration');
