@@ -28,7 +28,7 @@ export class QueryAnalyzer {
   /**
    * Analyze a user question using AI to determine how to process the data
    */
-  async analyze(question: string, dataSample: any[], datasetReadmes?: Record<string, string>, modelOverride?: string): Promise<QueryAnalysisResult> {
+  async analyze(question: string, dataSample: any[], datasetReadmes?: Record<string, string>, modelOverride?: string, retryContext?: { previousCode: string; error: string; attempt: number }): Promise<QueryAnalysisResult> {
     // Check if multiple datasets are present
     const hasMultipleDatasets = dataSample.length > 0 && dataSample.some(record => record._dataset_source);
     const uniqueDatasets = [...new Set(dataSample.map(r => r._dataset_source).filter(Boolean))];
@@ -69,7 +69,28 @@ ${uniqueDatasets.length >= 2 ? `- "show ${uniqueDatasets[1]}" → {"operation": 
 IMPORTANT: When the user mentions a specific dataset name (${uniqueDatasets.map(d => `"${d}"`).join(', ')}), you MUST add a filter for _dataset_source to isolate that dataset!`
       : '';
 
+    const retryInstructions = retryContext ? `
+⚠️ RETRY ATTEMPT ${retryContext.attempt}/2
+
+Your previous code FAILED with this error:
+${retryContext.error}
+
+Previous code that failed:
+\`\`\`python
+${retryContext.previousCode}
+\`\`\`
+
+Please generate CORRECTED code that fixes this error. Common fixes:
+- Add pd.to_numeric() for numeric fields before math operations
+- Add error handling for edge cases
+- Check for null/NaN values before processing
+- Ensure correct data types
+
+IMPORTANT: Generate NEW, CORRECTED code. Do not repeat the same mistake!
+` : '';
+
     const systemPrompt = `You are a data request analyzer. Your job is to determine what data filters are needed to answer the user's question.
+${retryInstructions}
 ${datasetInfo}${readmeInfo}
 
 Dataset schema:

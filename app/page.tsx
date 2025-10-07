@@ -107,6 +107,9 @@ export default function Home() {
         setPhases(prev => prev.map(p => {
           if (p.id === 'phase1') {
             const details = [];
+            if (pd.phase1.attempts && pd.phase1.attempts > 1) {
+              details.push({ label: 'Attempts', value: `${pd.phase1.attempts} (retried ${pd.phase1.attempts - 1} time${pd.phase1.attempts > 2 ? 's' : ''})`, type: 'text' });
+            }
             details.push({ label: 'Explanation', value: pd.phase1.explanation || 'N/A', type: 'text' });
             if (pd.phase1.filters && pd.phase1.filters.length > 0) {
               details.push({ label: 'Filters', value: pd.phase1.filters, type: 'json' });
@@ -127,10 +130,12 @@ export default function Home() {
           }
 
           if (p.id === 'phase1.5' && pd.phase1_5) {
-            const details = [
-              { label: 'Approved', value: pd.phase1_5.approved ? '✅ Yes' : '❌ No', type: 'text' },
-              { label: 'Reason', value: pd.phase1_5.reason || 'N/A', type: 'text' }
-            ];
+            const details = [];
+            if (pd.phase1_5.attempts && pd.phase1_5.attempts > 1) {
+              details.push({ label: 'Attempts', value: `${pd.phase1_5.attempts} (retried ${pd.phase1_5.attempts - 1} time${pd.phase1_5.attempts > 2 ? 's' : ''})`, type: 'text' });
+            }
+            details.push({ label: 'Approved', value: pd.phase1_5.approved ? '✅ Yes' : '❌ No', type: 'text' });
+            details.push({ label: 'Reason', value: pd.phase1_5.reason || 'N/A', type: 'text' });
             if (pd.phase1_5.risks && pd.phase1_5.risks.length > 0) {
               details.push({ label: 'Security Risks', value: pd.phase1_5.risks, type: 'json' });
             }
@@ -142,12 +147,14 @@ export default function Home() {
           }
 
           if (p.id === 'phase2') {
-            const details = [
-              { label: 'Input Records', value: pd.phase2.inputRecords.toLocaleString(), type: 'text' },
-              { label: 'Output Records', value: pd.phase2.outputRecords.toLocaleString(), type: 'text' },
-              { label: 'Filters Applied', value: pd.phase2.filtersApplied, type: 'number' },
-              { label: 'Code Executed', value: pd.phase2.codeExecuted ? '✅ Yes' : 'No', type: 'text' }
-            ];
+            const details = [];
+            if (pd.phase2.attempts && pd.phase2.attempts > 1) {
+              details.push({ label: 'Attempts', value: `${pd.phase2.attempts} (retried ${pd.phase2.attempts - 1} time${pd.phase2.attempts > 2 ? 's' : ''})`, type: 'text' });
+            }
+            details.push({ label: 'Input Records', value: pd.phase2.inputRecords.toLocaleString(), type: 'text' });
+            details.push({ label: 'Output Records', value: pd.phase2.outputRecords.toLocaleString(), type: 'text' });
+            details.push({ label: 'Filters Applied', value: pd.phase2.filtersApplied, type: 'number' });
+            details.push({ label: 'Code Executed', value: pd.phase2.codeExecuted ? '✅ Yes' : 'No', type: 'text' });
             if (pd.phase2.executionError) {
               details.push({ label: '❌ Execution Error', value: pd.phase2.executionError, type: 'text' });
             }

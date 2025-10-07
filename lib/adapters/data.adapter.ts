@@ -5,5 +5,7 @@ export interface DataAdapter {
 
 export interface DataSourceConfig {
   type: string;
-  path: string;
+  path?: string;
+  datasetsPath?: string;
+  defaultDataset?: string;
 }

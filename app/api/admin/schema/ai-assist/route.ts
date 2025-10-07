@@ -39,8 +39,8 @@ export async function POST(request: NextRequest) {
       `You are a helpful assistant that generates keywords and synonyms for data fields.
 
 Current fields:
-${currentSchema.categoricalFields.map(f => `- ${f.name}: ${f.displayName}`).join('\n')}
-${currentSchema.numericFields.map(f => `- ${f.name}: ${f.displayName}`).join('\n')}
+${currentSchema.categoricalFields.map((f: any) => `- ${f.name}: ${f.displayName}`).join('\n')}
+${currentSchema.numericFields.map((f: any) => `- ${f.name}: ${f.displayName}`).join('\n')}
 
 Data sample (first 5 records):
 ${JSON.stringify(data.slice(0, 5), null, 2)}${readmeContext}
@@ -132,19 +132,19 @@ If you're just providing advice without modifying the schema, return:
     // Parse AI response - strip markdown code fences
     const cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
 
-    let aiResult;
+    let aiResult: any;
     try {
       aiResult = JSON.parse(cleanResponse);
 
       // If this was a keyword request and we got fieldKeywords, convert to updatedSchema format
       if (isKeywordRequest && aiResult.fieldKeywords) {
         // Build updatedSchema by updating keywords in current schema
-        const updatedCategoricalFields = currentSchema.categoricalFields.map(field => ({
+        const updatedCategoricalFields = currentSchema.categoricalFields.map((field: any) => ({
           ...field,
           keywords: aiResult.fieldKeywords[field.name] || field.keywords,
         }));
 
-        const updatedNumericFields = currentSchema.numericFields.map(field => ({
+        const updatedNumericFields = currentSchema.numericFields.map((field: any) => ({
           ...field,
           keywords: aiResult.fieldKeywords[field.name] || field.keywords,
         }));

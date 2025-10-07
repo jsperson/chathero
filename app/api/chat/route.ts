@@ -76,156 +76,197 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // PHASE 1: AI determines what data is needed
-    await logger.chatQuery(requestId, 'PHASE_1_START', {
-      totalRecords: rawData.length,
-      model: config.ai.queryAnalyzerModel || config.ai.model
-    });
-    const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
-    const queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes, config.ai.queryAnalyzerModel);
-    await logger.chatQuery(requestId, 'PHASE_1_RESULT', queryAnalysis);
+    // Retry loop for code generation and execution
+    const MAX_RETRIES = 2;
+    let attempt = 0;
+    let queryAnalysis: any;
+    let codeValidation: any = null;
+    let processedData: any;
+    let executionError: string | null = null;
+    let retryContext: { previousCode: string; error: string; attempt: number } | undefined;
 
-    // PHASE 1.5: Validate generated code if present
-    let codeValidation = null;
-    if (queryAnalysis.generatedCode) {
-      await logger.chatQuery(requestId, 'PHASE_1.5_START', {
-        codeLength: queryAnalysis.generatedCode.length,
-        description: queryAnalysis.codeDescription
+    while (attempt < MAX_RETRIES) {
+      attempt++;
+      const isRetry = attempt > 1;
+
+      // PHASE 1: AI determines what data is needed
+      await logger.chatQuery(requestId, isRetry ? 'PHASE_1_RETRY' : 'PHASE_1_START', {
+        totalRecords: rawData.length,
+        model: config.ai.queryAnalyzerModel || config.ai.model,
+        attempt,
+        retrying: isRetry
       });
 
-      const codeValidator = new CodeValidator(aiAdapter);
-      codeValidation = await codeValidator.validate(
-        queryAnalysis.generatedCode,
-        queryAnalysis.codeDescription || 'No description provided'
-      );
+      const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
+      queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes, config.ai.queryAnalyzerModel, retryContext);
+      await logger.chatQuery(requestId, 'PHASE_1_RESULT', { ...queryAnalysis, attempt });
 
-      await logger.chatQuery(requestId, 'PHASE_1.5_RESULT', codeValidation);
-
-      if (!codeValidation.approved) {
-        await logger.chatQuery(requestId, 'PHASE_1.5_REJECTED', {
-          reason: codeValidation.reason,
-          risks: codeValidation.risks
+      // PHASE 1.5: Validate generated code if present
+      if (queryAnalysis.generatedCode) {
+        await logger.chatQuery(requestId, 'PHASE_1.5_START', {
+          codeLength: queryAnalysis.generatedCode.length,
+          description: queryAnalysis.codeDescription,
+          attempt
         });
-        // Continue without code execution
-        queryAnalysis.generatedCode = undefined;
+
+        const codeValidator = new CodeValidator(aiAdapter);
+        codeValidation = await codeValidator.validate(
+          queryAnalysis.generatedCode,
+          queryAnalysis.codeDescription || 'No description provided'
+        );
+
+        await logger.chatQuery(requestId, 'PHASE_1.5_RESULT', { ...codeValidation, attempt });
+
+        if (!codeValidation.approved) {
+          await logger.chatQuery(requestId, 'PHASE_1.5_REJECTED', {
+            reason: codeValidation.reason,
+            risks: codeValidation.risks,
+            attempt
+          });
+          // Continue without code execution
+          queryAnalysis.generatedCode = undefined;
+        }
       }
-    }
 
-    // PHASE 2: Apply basic filters to get the requested data
-    await logger.chatQuery(requestId, 'PHASE_2_START', { filtersToApply: queryAnalysis.filters?.length || 0 });
-    let filteredData = rawData;
+      // PHASE 2: Apply basic filters to get the requested data
+      await logger.chatQuery(requestId, 'PHASE_2_START', { filtersToApply: queryAnalysis.filters?.length || 0, attempt });
+      let filteredData = rawData;
 
-    if (queryAnalysis.filters && queryAnalysis.filters.length > 0) {
-      queryAnalysis.filters.forEach(filter => {
-        filteredData = filteredData.filter(record => {
-          const value = record[filter.field];
+      if (queryAnalysis.filters && queryAnalysis.filters.length > 0) {
+        queryAnalysis.filters.forEach((filter: any) => {
+          filteredData = filteredData.filter((record: any) => {
+            const value = record[filter.field];
 
-          switch (filter.operator) {
-            case 'equals':
-              return value === filter.value;
-            case 'contains':
-              return value?.toString().toLowerCase().includes(filter.value.toLowerCase());
-            case 'greater_than':
-              return value > filter.value;
-            case 'less_than':
-              return value < filter.value;
-            default:
-              return true;
-          }
+            switch (filter.operator) {
+              case 'equals':
+                return value === filter.value;
+              case 'contains':
+                return value?.toString().toLowerCase().includes(filter.value.toLowerCase());
+              case 'greater_than':
+                return value > filter.value;
+              case 'less_than':
+                return value < filter.value;
+              default:
+                return true;
+            }
+          });
         });
-      });
-    }
+      }
 
-    // Apply limit if specified
-    if (queryAnalysis.limit) {
-      filteredData = filteredData.slice(0, queryAnalysis.limit);
-    }
+      // Apply limit if specified
+      if (queryAnalysis.limit) {
+        filteredData = filteredData.slice(0, queryAnalysis.limit);
+      }
 
-    // Apply field selection if specified (reduces token usage for Phase 3)
-    if (queryAnalysis.fieldsToInclude && queryAnalysis.fieldsToInclude.length > 0) {
-      let fieldsToKeep = queryAnalysis.fieldsToInclude;
+      // Apply field selection if specified (reduces token usage for Phase 3)
+      if (queryAnalysis.fieldsToInclude && queryAnalysis.fieldsToInclude.length > 0) {
+        let fieldsToKeep = queryAnalysis.fieldsToInclude;
 
-      // Safety backstop: Enforce maximum field count to prevent token overflow
-      // With 500 records, ~10 fields max = 50K tokens total (safe buffer under 30K TPM limit)
-      const MAX_FIELDS = 10;
-      let fieldLimitApplied = false;
+        // Safety backstop: Enforce maximum field count to prevent token overflow
+        // With 500 records, ~10 fields max = 50K tokens total (safe buffer under 30K TPM limit)
+        const MAX_FIELDS = 10;
+        let fieldLimitApplied = false;
 
-      if (fieldsToKeep.length > MAX_FIELDS) {
-        fieldLimitApplied = true;
+        if (fieldsToKeep.length > MAX_FIELDS) {
+          fieldLimitApplied = true;
 
-        // Prioritize fields: _dataset_source, filter fields, then first fields in list
-        const priorityFields: string[] = [];
+          // Prioritize fields: _dataset_source, filter fields, then first fields in list
+          const priorityFields: string[] = [];
 
-        // 1. Always include _dataset_source if present
-        if (fieldsToKeep.includes('_dataset_source')) {
-          priorityFields.push('_dataset_source');
+          // 1. Always include _dataset_source if present
+          if (fieldsToKeep.includes('_dataset_source')) {
+            priorityFields.push('_dataset_source');
+          }
+
+          // 2. Include fields used in filters
+          const filterFields = queryAnalysis.filters?.map((f: any) => f.field) || [];
+          filterFields.forEach((field: string) => {
+            if (fieldsToKeep.includes(field) && !priorityFields.includes(field)) {
+              priorityFields.push(field);
+            }
+          });
+
+          // 3. Fill remaining slots with fields from Phase 1 selection
+          fieldsToKeep.forEach(field => {
+            if (priorityFields.length < MAX_FIELDS && !priorityFields.includes(field)) {
+              priorityFields.push(field);
+            }
+          });
+
+          await logger.chatQuery(requestId, 'PHASE_2_FIELD_LIMIT_APPLIED', {
+            requestedFields: fieldsToKeep.length,
+            maxAllowed: MAX_FIELDS,
+            selectedFields: priorityFields
+          });
+
+          fieldsToKeep = priorityFields;
         }
 
-        // 2. Include fields used in filters
-        const filterFields = queryAnalysis.filters?.map(f => f.field) || [];
-        filterFields.forEach(field => {
-          if (fieldsToKeep.includes(field) && !priorityFields.includes(field)) {
-            priorityFields.push(field);
-          }
+        filteredData = filteredData.map(record => {
+          const reduced: any = {};
+          fieldsToKeep.forEach(field => {
+            if (field in record) {
+              reduced[field] = record[field];
+            }
+          });
+          return reduced;
         });
 
-        // 3. Fill remaining slots with fields from Phase 1 selection
-        fieldsToKeep.forEach(field => {
-          if (priorityFields.length < MAX_FIELDS && !priorityFields.includes(field)) {
-            priorityFields.push(field);
-          }
+        await logger.chatQuery(requestId, 'PHASE_2_FIELD_SELECTION', {
+          originalFields: Object.keys(rawData[0] || {}).length,
+          selectedFields: fieldsToKeep.length,
+          fields: fieldsToKeep,
+          fieldLimitApplied
         });
-
-        await logger.chatQuery(requestId, 'PHASE_2_FIELD_LIMIT_APPLIED', {
-          requestedFields: fieldsToKeep.length,
-          maxAllowed: MAX_FIELDS,
-          selectedFields: priorityFields
-        });
-
-        fieldsToKeep = priorityFields;
       }
 
-      filteredData = filteredData.map(record => {
-        const reduced: any = {};
-        fieldsToKeep.forEach(field => {
-          if (field in record) {
-            reduced[field] = record[field];
+      // Execute approved code if present
+      processedData = filteredData;
+      executionError = null;
+      if (queryAnalysis.generatedCode && codeValidation?.approved) {
+        await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_START', {
+          dataRecords: filteredData.length,
+          attempt
+        });
+
+        const executor = new CodeExecutor();
+        const executionResult = await executor.execute(queryAnalysis.generatedCode, filteredData);
+
+        if (executionResult.success) {
+          processedData = executionResult.result;
+          await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_SUCCESS', {
+            inputRecords: filteredData.length,
+            outputRecords: Array.isArray(processedData) ? processedData.length : 1,
+            attempt
+          });
+          // Success! Break out of retry loop
+          break;
+        } else {
+          executionError = executionResult.error || 'Unknown error';
+          await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_FAILED', {
+            error: executionError,
+            attempt
+          });
+
+          // If we have retries left, set up retry context
+          if (attempt < MAX_RETRIES) {
+            retryContext = {
+              previousCode: queryAnalysis.generatedCode,
+              error: executionError,
+              attempt: attempt + 1
+            };
+            // Continue to next iteration of retry loop
+            continue;
+          } else {
+            // No more retries, fall back to unprocessed data
+            processedData = filteredData;
+            break;
           }
-        });
-        return reduced;
-      });
-
-      await logger.chatQuery(requestId, 'PHASE_2_FIELD_SELECTION', {
-        originalFields: Object.keys(rawData[0] || {}).length,
-        selectedFields: fieldsToKeep.length,
-        fields: fieldsToKeep,
-        fieldLimitApplied
-      });
-    }
-
-    // Execute approved code if present
-    let processedData = filteredData;
-    let executionError: string | null = null;
-    if (queryAnalysis.generatedCode && codeValidation?.approved) {
-      await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_START', {
-        dataRecords: filteredData.length
-      });
-
-      const executor = new CodeExecutor();
-      const executionResult = await executor.execute(queryAnalysis.generatedCode, filteredData);
-
-      if (executionResult.success) {
-        processedData = executionResult.result;
-        await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_SUCCESS', {
-          inputRecords: filteredData.length,
-          outputRecords: Array.isArray(processedData) ? processedData.length : 1
-        });
+        }
       } else {
-        executionError = executionResult.error || 'Unknown error';
-        await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_FAILED', {
-          error: executionError
-        });
-        // Fall back to unprocessed data
+        // No code to execute, break out
+        processedData = filteredData;
+        break;
       }
     }
 
@@ -316,19 +357,22 @@ export async function POST(request: NextRequest) {
         generatedCode: queryAnalysis.generatedCode,
         codeDescription: queryAnalysis.codeDescription,
         explanation: queryAnalysis.explanation,
-        limit: queryAnalysis.limit
+        limit: queryAnalysis.limit,
+        attempts: attempt
       },
       phase1_5: codeValidation ? {
         approved: codeValidation.approved,
         reason: codeValidation.reason,
-        risks: codeValidation.risks || []
+        risks: codeValidation.risks || [],
+        attempts: attempt
       } : null,
       phase2: {
         inputRecords: rawData.length,
         outputRecords: Array.isArray(processedData) ? processedData.length : 1,
         filtersApplied: queryAnalysis.filters?.length || 0,
         codeExecuted: !!queryAnalysis.generatedCode && codeValidation?.approved,
-        executionError: executionError
+        executionError: executionError,
+        attempts: attempt
       },
       phase2_5: {
         recordsToPhase3: Array.isArray(dataForPhase3) ? dataForPhase3.length : 1,
