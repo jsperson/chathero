@@ -79,8 +79,8 @@ Format as markdown.`;
       requestId: 'readme-gen'
     });
 
-    // Generate query examples
-    const examplesPrompt = `Based on this dataset schema, suggest 5 interesting questions that can be answered with this data:
+    // Generate query examples with filters
+    const examplesPrompt = `Based on this dataset schema, suggest 5 interesting query examples with appropriate filters:
 
 Dataset: ${dataset}
 Total Records: ${data.length}
@@ -91,8 +91,25 @@ Date Fields: ${schema.dateFields.join(', ')}
 Sample data:
 ${JSON.stringify(data.slice(0, 5), null, 2)}
 
-Return ONLY a JSON array of question strings, nothing else. Example format:
-["Question 1?", "Question 2?", "Question 3?", "Question 4?", "Question 5?"]`;
+For each question, provide:
+1. A natural language question
+2. Appropriate filters (if needed) with field name, operator (equals/contains/greater_than/less_than), and value
+3. A brief explanation of what the query does
+
+Return ONLY a JSON array of objects with this structure:
+[
+  {
+    "question": "How many records in 2024?",
+    "filters": [{"field": "date_field", "operator": "contains", "value": "2024"}],
+    "explanation": "Filter to records from 2024 and count them"
+  }
+]
+
+Include a mix of:
+- Questions with filters (by category, date range, specific values)
+- Questions without filters (totals, counts, aggregations)
+- At least one question filtering by a categorical field
+- At least one question filtering by date (if date fields exist)`;
 
     const examplesResponse = await aiAdapter.chat(examplesPrompt, {
       data: [],
@@ -100,28 +117,25 @@ Return ONLY a JSON array of question strings, nothing else. Example format:
       requestId: 'examples-gen'
     });
 
-    // Parse the questions
-    let exampleQuestions: string[] = [];
+    // Parse the query examples
+    let queryExamples: any[] = [];
     try {
       // Extract JSON array from response
       const jsonMatch = examplesResponse.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
-        exampleQuestions = JSON.parse(jsonMatch[0]);
+        queryExamples = JSON.parse(jsonMatch[0]);
       }
     } catch (e) {
-      console.error('Failed to parse example questions:', e);
-      // Fallback: split by newlines and filter
-      exampleQuestions = examplesResponse
-        .split('\n')
-        .filter(line => line.trim().length > 0 && line.includes('?'))
-        .slice(0, 5);
+      console.error('Failed to parse query examples:', e);
+      // Fallback: create simple examples without filters
+      queryExamples = [
+        { question: "How many records are there?", filters: [], explanation: "Count all records" },
+        { question: "What are the main categories?", filters: [], explanation: "List unique values" }
+      ];
     }
 
-    // Create query examples with simple structure
-    const queryExamples = exampleQuestions.map(question => ({
-      question,
-      explanation: 'Auto-generated example query'
-    }));
+    // Extract just the questions for exampleQuestions field
+    const exampleQuestions = queryExamples.map(ex => ex.question);
 
     // Generate full project config using auto-discovery
     const projectName = dataset
