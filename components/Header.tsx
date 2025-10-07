@@ -91,6 +91,13 @@ export default function Header() {
                 >
                   📦 Dataset Selection
                 </Link>
+                <Link
+                  href="/admin/ai-settings"
+                  className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                  onClick={() => setAdminMenuOpen(false)}
+                >
+                  🤖 AI Settings
+                </Link>
               </div>
             )}
           </div>
