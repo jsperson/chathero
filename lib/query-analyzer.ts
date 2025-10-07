@@ -186,15 +186,16 @@ DATE HANDLING AND COMPARISON RULES:
 
 ALWAYS normalize ALL dates to YYYY-MM-DD format before any comparisons:
 
-Define this helper function at the start of your generated code:
-  const normalizeDate = (dateStr) => {
-    if (!dateStr) return null;
-    if (/^\\d{4}-\\d{2}-\\d{2}$/.test(dateStr)) return dateStr;
-    if (/^\\d{1,2}\\/\\d{1,2}\\/\\d{4}$/.test(dateStr)) {
-      const [m, d, y] = dateStr.split('/');
-      return \`\${y}-\${m.padStart(2,'0')}-\${d.padStart(2,'0')}\`;
+Define this helper function at the start of your generated code (use these exact regex patterns):
+  const normalizeDate = (d) => {
+    if (!d) return null;
+    if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(d)) return d;
+    if (/^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/.test(d)) {
+      const [m, day, y] = d.split('/');
+      const normalized = y + '-' + m.padStart(2,'0') + '-' + day.padStart(2,'0');
+      return normalized;
     }
-    return new Date(dateStr).toISOString().split('T')[0];
+    return new Date(d).toISOString().split('T')[0];
   };
 
 Then use it on ALL date fields before comparison:
@@ -211,7 +212,7 @@ DATE RANGE COMPARISON RULES:
 
 CODE EXAMPLE for temporal correlation:
 {
-  "generatedCode": "const normalizeDate = (d) => { if (!d) return null; if (/^\\\\d{4}-\\\\d{2}-\\\\d{2}$/.test(d)) return d; if (/^\\\\d{1,2}\\\\/\\\\d{1,2}\\\\/\\\\d{4}$/.test(d)) { const [m, day, y] = d.split('/'); return \\\`\\\${y}-\\\${m.padStart(2,'0')}-\\\${day.padStart(2,'0')}\\\`; } return new Date(d).toISOString().split('T')[0]; }; const presidents = data.filter(r => r._dataset_source === 'us-presidents'); const launches = data.filter(r => r._dataset_source === 'spacex-launches'); return presidents.map(p => ({ name: p.name, launch_count: launches.filter(l => normalizeDate(l.launch_date) >= normalizeDate(p.presidential_start) && normalizeDate(l.launch_date) < normalizeDate(p.presidential_end || '9999-12-31')).length })).filter(p => p.launch_count > 0);",
+  "generatedCode": "const normalizeDate = (d) => { if (!d) return null; if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(d)) return d; if (/^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$/.test(d)) { const [m, day, y] = d.split('/'); return y + '-' + m.padStart(2,'0') + '-' + day.padStart(2,'0'); } return new Date(d).toISOString().split('T')[0]; }; const presidents = data.filter(r => r._dataset_source === 'us-presidents'); const launches = data.filter(r => r._dataset_source === 'spacex-launches'); return presidents.map(p => ({ name: p.name, launch_count: launches.filter(l => normalizeDate(l.launch_date) >= normalizeDate(p.presidential_start) && normalizeDate(l.launch_date) < normalizeDate(p.presidential_end || '9999-12-31')).length })).filter(p => p.launch_count > 0);",
   "codeDescription": "Normalizes all dates to YYYY-MM-DD format, then correlates launches with presidential terms by comparing launch_date against presidential_start/end ranges (inclusive start, exclusive end), returns array of {name, launch_count} for presidents with >0 launches",
   "fieldsToInclude": ["_dataset_source", "name", "launch_date", "presidential_start", "presidential_end"]
 }
