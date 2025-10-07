@@ -30,7 +30,9 @@ export async function GET() {
         const jsonPath = path.join(datasetPath, 'data.json');
         const csvPath = path.join(datasetPath, 'data.csv');
         const readmePath = path.join(datasetPath, 'README.md');
-        const projectPath = path.join(datasetPath, 'project.yaml');
+        const metadataPath = path.join(datasetPath, 'metadata.yaml');
+        const schemaPath = path.join(datasetPath, 'schema.yaml');
+        const legacyProjectPath = path.join(datasetPath, 'project.yaml');
 
         let recordCount = 0;
         let description = '';
@@ -62,21 +64,39 @@ export async function GET() {
           // No README
         }
 
+        // Check for new structure (metadata.yaml + schema.yaml) or legacy project.yaml
         try {
-          await fs.access(projectPath);
+          await fs.access(metadataPath);
+          await fs.access(schemaPath);
           hasProject = true;
-          // Try to load project name from project.yaml
+          // Try to load project name from metadata.yaml
           try {
-            const projectContent = await fs.readFile(projectPath, 'utf-8');
-            const projectConfig = yaml.load(projectContent) as any;
-            if (projectConfig?.project?.name) {
-              displayName = projectConfig.project.name;
+            const metadataContent = await fs.readFile(metadataPath, 'utf-8');
+            const metadataConfig = yaml.load(metadataContent) as any;
+            if (metadataConfig?.project?.name) {
+              displayName = metadataConfig.project.name;
             }
           } catch (e) {
-            // Couldn't parse project.yaml, use default display name
+            // Couldn't parse metadata.yaml, use default display name
           }
         } catch (e) {
-          // No project.yaml
+          // Try legacy project.yaml
+          try {
+            await fs.access(legacyProjectPath);
+            hasProject = true;
+            // Try to load project name from project.yaml
+            try {
+              const projectContent = await fs.readFile(legacyProjectPath, 'utf-8');
+              const projectConfig = yaml.load(projectContent) as any;
+              if (projectConfig?.project?.name) {
+                displayName = projectConfig.project.name;
+              }
+            } catch (e) {
+              // Couldn't parse project.yaml, use default display name
+            }
+          } catch (legacyError) {
+            // No config files
+          }
         }
 
         allDatasets.push({
