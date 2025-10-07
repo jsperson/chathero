@@ -146,21 +146,29 @@ data/
   json/                     # JSON file-based datasets
     spacex-launches/
       data.json             # The dataset (JSON array)
-      project.yaml          # Dataset-specific configuration (optional)
+      metadata.yaml         # Project metadata (name, description, domain)
+      schema.yaml           # Field definitions and types
+      queries.yaml          # Example questions and AI context
       README.md             # Dataset description (optional)
     us-presidents/
       data.json
-      project.yaml
+      metadata.yaml
+      schema.yaml
+      queries.yaml
       README.md
   url/                      # URL-based datasets (future)
     live-api-data/
       config.yaml           # URL and cache settings
-      project.yaml
+      metadata.yaml
+      schema.yaml
+      queries.yaml
       README.md
   postgres/                 # Database datasets (future)
     customer-data/
       config.yaml           # Connection settings
-      project.yaml
+      metadata.yaml
+      schema.yaml
+      queries.yaml
       README.md
 ```
 
@@ -170,16 +178,20 @@ data/
 - Type is determined by which folder contains the dataset
 - No explicit type configuration needed
 
-### Project Configuration (`data/{dataset-name}/project.yaml`)
+### Dataset Configuration Files
 
-Optional - auto-generated if not present:
+Configuration is split into three files for better organization:
 
+#### `metadata.yaml` - Project Information
 ```yaml
 project:
-  name: "My Project"
-  description: "Dataset description"
+  name: "SpaceX Launches"
+  description: "Dataset of SpaceX launch missions"
   domain: "space launches"      # Used for AI context
+```
 
+#### `schema.yaml` - Field Definitions
+```yaml
 dataSchema:
   primaryDateField: "launch_date"
   categoricalFields:
@@ -194,7 +206,10 @@ dataSchema:
 domainKnowledge:
   fieldKeywords:
     vehicle: ["vehicle", "rocket", "falcon", "starship"]
+```
 
+#### `queries.yaml` - Example Questions & AI Context
+```yaml
 exampleQuestions:
   - "How many launches by year?"
   - "What's the average payload mass?"
@@ -203,6 +218,8 @@ aiContext:
   systemRole: "You are a helpful assistant..."
   domainContext: "This dataset contains..."
 ```
+
+**Note:** All configuration files are optional - the system auto-generates them if not present.
 
 ## Quick Start
 
@@ -272,7 +289,7 @@ aiContext:
 
 **Option C: Manual**
 - Download auto-generated YAML from `/admin/schema`
-- Customize `project.yaml` manually
+- Customize `metadata.yaml`, `schema.yaml`, and `queries.yaml` manually
 - Restart application
 
 ### Step 3: Start Chatting
@@ -314,9 +331,9 @@ aiContext:
 ### Schema Configuration (`/admin/schema`)
 
 **Actions (Top of Page)**
-- **Save Configuration**: Writes to dataset-specific `project.yaml`
-- **Rediscover Schema**: Updates fields from data while preserving metadata
-- **Download YAML**: Get configuration file
+- **Save Configuration**: Writes to dataset-specific YAML files (`metadata.yaml`, `schema.yaml`, `queries.yaml`)
+- **Rediscover Schema**: Updates fields from data while preserving custom metadata
+- **Download YAML**: Get configuration files
 - **Clear Configuration**: Reset to auto-discovery
 
 **AI Assistant**
@@ -467,11 +484,11 @@ OPENAI_API_KEY=sk-...    # Required for AI features
 
 ### Admin APIs
 - `GET /api/admin/schema` - Load schema with existing config
-- `POST /api/admin/schema/save` - Save configuration to project.yaml
-- `POST /api/admin/schema/download` - Download YAML
-- `POST /api/admin/schema/clear` - Delete configuration
-- `POST /api/admin/schema/rediscover` - Merge discovered schema with existing
-- `POST /api/admin/schema/ai-assist` - AI suggestions for schema
+- `POST /api/admin/schema/save` - Save configuration to YAML files (metadata.yaml, schema.yaml, queries.yaml)
+- `POST /api/admin/schema/download` - Download YAML files
+- `POST /api/admin/schema/clear` - Delete configuration files
+- `POST /api/admin/schema/rediscover` - Merge discovered schema with existing config
+- `POST /api/admin/schema/ai-assist` - AI suggestions for schema improvement
 
 ## Future Roadmap
 
