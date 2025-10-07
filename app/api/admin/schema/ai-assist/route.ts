@@ -93,6 +93,16 @@ If you're just providing advice without modifying the schema, return:
     let aiResult;
     try {
       aiResult = JSON.parse(cleanResponse);
+      console.log('AI assist - Parsed result:', JSON.stringify(aiResult, null, 2));
+
+      // Log what fields are in updatedSchema if present
+      if (aiResult.updatedSchema) {
+        console.log('AI assist - updatedSchema has categoricalFields:', !!aiResult.updatedSchema.categoricalFields);
+        console.log('AI assist - updatedSchema has numericFields:', !!aiResult.updatedSchema.numericFields);
+        if (aiResult.updatedSchema.categoricalFields && aiResult.updatedSchema.categoricalFields.length > 0) {
+          console.log('AI assist - First categorical field:', JSON.stringify(aiResult.updatedSchema.categoricalFields[0], null, 2));
+        }
+      }
     } catch (parseError) {
       console.error('Failed to parse AI response as JSON:', parseError);
       console.error('AI response:', cleanResponse);
