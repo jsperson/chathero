@@ -35,6 +35,7 @@ export async function GET() {
         let recordCount = 0;
         let description = '';
         let hasProject = false;
+        let hasReadme = false;
         let displayName = datasetName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
         // Try JSON first, then CSV
@@ -54,6 +55,7 @@ export async function GET() {
 
         try {
           const readme = await fs.readFile(readmePath, 'utf-8');
+          hasReadme = true;
           // Extract first line as description
           description = readme.split('\n').find(line => line.trim() && !line.startsWith('#'))?.trim() || '';
         } catch (e) {
@@ -84,6 +86,7 @@ export async function GET() {
           recordCount,
           description,
           hasProjectConfig: hasProject,
+          hasReadme: hasReadme,
         });
       }
     }

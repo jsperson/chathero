@@ -8,6 +8,8 @@ interface Dataset {
   displayName: string;
   type: string;
   recordCount: number;
+  hasProjectConfig: boolean;
+  hasReadme: boolean;
 }
 
 export default function DatasetManagementPage() {
@@ -122,7 +124,21 @@ export default function DatasetManagementPage() {
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{dataset.displayName}</h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-lg">{dataset.displayName}</h3>
+                    {(!dataset.hasReadme || !dataset.hasProjectConfig) && (
+                      <div className="relative group">
+                        <span className="text-yellow-500 text-xl cursor-help">⚠️</span>
+                        <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block bg-gray-900 text-white text-xs rounded py-2 px-3 whitespace-nowrap z-10">
+                          Missing: {[
+                            !dataset.hasReadme && 'README.md',
+                            !dataset.hasProjectConfig && 'project.yaml'
+                          ].filter(Boolean).join(', ')}
+                          <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <div className="flex gap-4 text-sm text-gray-600 mt-1">
                     <span>📁 Type: {dataset.type}</span>
                     <span>📊 Records: {dataset.recordCount.toLocaleString()}</span>
