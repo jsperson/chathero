@@ -129,7 +129,18 @@ export default function Home() {
             return { ...p, status: 'completed', expandedDetails: details };
           }
 
-          if (p.id === 'phase1.5' && pd.phase1_5) {
+          if (p.id === 'phase1.5') {
+            if (!pd.phase1_5) {
+              // No code generated, so no validation needed
+              return {
+                ...p,
+                status: 'completed',
+                expandedDetails: [
+                  { label: 'Status', value: 'No code generated - validation skipped', type: 'text' }
+                ]
+              };
+            }
+
             const details = [];
             if (pd.phase1_5.attempts && pd.phase1_5.attempts > 1) {
               details.push({ label: 'Attempts', value: `${pd.phase1_5.attempts} (retried ${pd.phase1_5.attempts - 1} time${pd.phase1_5.attempts > 2 ? 's' : ''})`, type: 'text' });
