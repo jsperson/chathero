@@ -17,45 +17,54 @@ export async function POST(request: NextRequest) {
     const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
     const typeFolders = typeEntries.filter(entry => entry.isDirectory());
 
-    let configPath: string | null = null;
+    let datasetDir: string | null = null;
     for (const typeFolder of typeFolders) {
-      const potentialPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
+      const potentialDir = path.join(datasetsPath, typeFolder.name, datasetName);
       try {
-        await fs.access(potentialPath);
-        configPath = potentialPath;
+        await fs.access(potentialDir);
+        datasetDir = potentialDir;
         break;
       } catch (e) {
         // Try next type folder
       }
     }
 
-    // Check if file exists
-    try {
-      if (configPath) {
-        await fs.access(configPath);
-        // File exists, delete it
-        await fs.unlink(configPath);
-
-        // Clear the config cache so auto-discovery takes over
-        clearConfigCache();
-
-        return NextResponse.json({
-          success: true,
-          message: 'Configuration cleared successfully',
-        });
-      } else {
-        return NextResponse.json({
-          success: true,
-          message: 'No configuration file to clear',
-        });
-      }
-    } catch (error) {
-      // File doesn't exist, nothing to clear
+    if (!datasetDir) {
       return NextResponse.json({
         success: true,
-        message: 'No configuration file to clear',
+        message: 'Dataset not found',
       });
     }
+
+    // Delete configuration files (both new and legacy structure)
+    const filesToDelete = [
+      path.join(datasetDir, 'metadata.yaml'),
+      path.join(datasetDir, 'schema.yaml'),
+      path.join(datasetDir, 'queries.yaml'),
+      path.join(datasetDir, 'project.yaml'), // Legacy file
+    ];
+
+    let deletedCount = 0;
+    for (const filePath of filesToDelete) {
+      try {
+        await fs.access(filePath);
+        await fs.unlink(filePath);
+        deletedCount++;
+        console.log(`Deleted: ${filePath}`);
+      } catch (e) {
+        // File doesn't exist, skip
+      }
+    }
+
+    // Clear the config cache so auto-discovery takes over
+    clearConfigCache();
+
+    return NextResponse.json({
+      success: true,
+      message: deletedCount > 0
+        ? `Configuration cleared successfully (${deletedCount} files deleted)`
+        : 'No configuration files to clear',
+    });
   } catch (error) {
     console.error('Clear error:', error);
     return NextResponse.json(

@@ -669,7 +669,7 @@ export default function SchemaAdmin() {
           <div className="bg-white rounded-lg p-6 max-w-md mx-4">
             <h3 className="text-xl font-bold mb-4">Clear Configuration?</h3>
             <p className="mb-6 text-gray-600">
-              This will delete <code className="bg-gray-100 px-2 py-1 rounded">config/project.yaml</code> and reset to auto-discovered schema.
+              This will delete all configuration files (<code className="bg-gray-100 px-2 py-1 rounded">metadata.yaml</code>, <code className="bg-gray-100 px-2 py-1 rounded">schema.yaml</code>, <code className="bg-gray-100 px-2 py-1 rounded">queries.yaml</code>) and reset to auto-discovered schema.
               This action cannot be undone.
             </p>
             <div className="flex gap-4 justify-end">
