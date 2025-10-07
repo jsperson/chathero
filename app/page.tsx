@@ -128,25 +128,33 @@ export default function Home() {
 
           if (p.id === 'phase1.5' && pd.phase1_5) {
             const details = [
-              { label: 'Approved', value: pd.phase1_5.approved ? 'Yes' : 'No', type: 'text' },
+              { label: 'Approved', value: pd.phase1_5.approved ? '✅ Yes' : '❌ No', type: 'text' },
               { label: 'Reason', value: pd.phase1_5.reason || 'N/A', type: 'text' }
             ];
             if (pd.phase1_5.risks && pd.phase1_5.risks.length > 0) {
-              details.push({ label: 'Risks', value: pd.phase1_5.risks, type: 'json' });
+              details.push({ label: 'Security Risks', value: pd.phase1_5.risks, type: 'json' });
             }
-            return { ...p, status: 'completed', expandedDetails: details };
+            return {
+              ...p,
+              status: pd.phase1_5.approved ? 'completed' : 'completed',
+              expandedDetails: details
+            };
           }
 
           if (p.id === 'phase2') {
+            const details = [
+              { label: 'Input Records', value: pd.phase2.inputRecords.toLocaleString(), type: 'text' },
+              { label: 'Output Records', value: pd.phase2.outputRecords.toLocaleString(), type: 'text' },
+              { label: 'Filters Applied', value: pd.phase2.filtersApplied, type: 'number' },
+              { label: 'Code Executed', value: pd.phase2.codeExecuted ? '✅ Yes' : 'No', type: 'text' }
+            ];
+            if (pd.phase2.executionError) {
+              details.push({ label: '❌ Execution Error', value: pd.phase2.executionError, type: 'text' });
+            }
             return {
               ...p,
               status: 'completed',
-              expandedDetails: [
-                { label: 'Input Records', value: pd.phase2.inputRecords.toLocaleString(), type: 'text' },
-                { label: 'Output Records', value: pd.phase2.outputRecords.toLocaleString(), type: 'text' },
-                { label: 'Filters Applied', value: pd.phase2.filtersApplied, type: 'number' },
-                { label: 'Code Executed', value: pd.phase2.codeExecuted ? 'Yes' : 'No', type: 'text' }
-              ]
+              expandedDetails: details
             };
           }
 

@@ -205,6 +205,7 @@ export async function POST(request: NextRequest) {
 
     // Execute approved code if present
     let processedData = filteredData;
+    let executionError: string | null = null;
     if (queryAnalysis.generatedCode && codeValidation?.approved) {
       await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_START', {
         dataRecords: filteredData.length
@@ -220,8 +221,9 @@ export async function POST(request: NextRequest) {
           outputRecords: Array.isArray(processedData) ? processedData.length : 1
         });
       } else {
+        executionError = executionResult.error || 'Unknown error';
         await logger.chatQuery(requestId, 'PHASE_2_CODE_EXECUTION_FAILED', {
-          error: executionResult.error
+          error: executionError
         });
         // Fall back to unprocessed data
       }
@@ -325,7 +327,8 @@ export async function POST(request: NextRequest) {
         inputRecords: rawData.length,
         outputRecords: Array.isArray(processedData) ? processedData.length : 1,
         filtersApplied: queryAnalysis.filters?.length || 0,
-        codeExecuted: !!queryAnalysis.generatedCode && codeValidation?.approved
+        codeExecuted: !!queryAnalysis.generatedCode && codeValidation?.approved,
+        executionError: executionError
       },
       phase2_5: {
         recordsToPhase3: Array.isArray(dataForPhase3) ? dataForPhase3.length : 1,
