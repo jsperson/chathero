@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import ProgressStepper, { Phase } from '@/components/ProgressStepper';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -12,6 +13,7 @@ export default function Home() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [exampleQuestions, setExampleQuestions] = useState<string[]>([]);
+  const [phases, setPhases] = useState<Phase[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -44,6 +46,44 @@ export default function Home() {
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setLoading(true);
 
+    // Initialize phases
+    setPhases([
+      { id: 'phase1', name: 'Phase 1', status: 'active', details: 'Analyzing query' },
+      { id: 'phase1.5', name: 'Phase 1.5', status: 'pending' },
+      { id: 'phase2', name: 'Phase 2', status: 'pending' },
+      { id: 'phase2.5', name: 'Phase 2.5', status: 'pending' },
+      { id: 'phase3', name: 'Phase 3', status: 'pending' },
+    ]);
+
+    // Simulate phase progression (we'll replace this with real backend events later)
+    const simulatePhases = async () => {
+      await new Promise(resolve => setTimeout(resolve, 800));
+      setPhases(prev => prev.map(p =>
+        p.id === 'phase1' ? { ...p, status: 'completed' } :
+        p.id === 'phase1.5' ? { ...p, status: 'active', details: 'Validating code' } : p
+      ));
+
+      await new Promise(resolve => setTimeout(resolve, 600));
+      setPhases(prev => prev.map(p =>
+        p.id === 'phase1.5' ? { ...p, status: 'completed' } :
+        p.id === 'phase2' ? { ...p, status: 'active', details: 'Filtering data' } : p
+      ));
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setPhases(prev => prev.map(p =>
+        p.id === 'phase2' ? { ...p, status: 'completed' } :
+        p.id === 'phase2.5' ? { ...p, status: 'active', details: 'Checking limits' } : p
+      ));
+
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setPhases(prev => prev.map(p =>
+        p.id === 'phase2.5' ? { ...p, status: 'completed' } :
+        p.id === 'phase3' ? { ...p, status: 'active', details: 'Generating response' } : p
+      ));
+    };
+
+    simulatePhases();
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -60,6 +100,9 @@ export default function Home() {
         throw new Error(data.error);
       }
 
+      // Mark all phases as completed
+      setPhases(prev => prev.map(p => ({ ...p, status: 'completed', details: undefined })));
+
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
     } catch (error) {
       console.error('Chat error:', error);
@@ -67,8 +110,11 @@ export default function Home() {
         ...prev,
         { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }
       ]);
+      setPhases([]); // Clear phases on error
     } finally {
       setLoading(false);
+      // Clear phases after a short delay
+      setTimeout(() => setPhases([]), 2000);
     }
   };
 
@@ -88,6 +134,13 @@ export default function Home() {
             >
               Clear Conversation
             </button>
+          </div>
+        )}
+
+        {/* Progress Stepper */}
+        {phases.length > 0 && (
+          <div className="mb-4 border-b pb-4">
+            <ProgressStepper phases={phases} />
           </div>
         )}
 
