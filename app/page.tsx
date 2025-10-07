@@ -235,6 +235,7 @@ export default function Home() {
 
   const clearConversation = () => {
     setMessages([]);
+    setPhases([]);
   };
 
   return (
