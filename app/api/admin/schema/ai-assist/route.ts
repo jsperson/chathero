@@ -66,9 +66,18 @@ Special instructions for "rediscover" requests:
 
 IMPORTANT: Return ONLY valid JSON. Ensure all strings are properly escaped:
 - Use double quotes for strings
-- Escape special characters: \\\\ for backslash, \\" for quotes, \\\\n for newlines
-- Do not include newlines within string values
+- Escape special characters: \\\\ for backslash, \\" for quotes
+- Do NOT include literal newlines within string values - use spaces instead
+- Do NOT use line breaks in descriptions or keywords
+- Keywords must be simple strings without quotes or special characters
+- Keep all string values on a single line
 - Test that your JSON is valid before returning
+
+Example of CORRECT keyword format:
+"keywords": ["name", "president name", "full name", "person"]
+
+Example of INCORRECT (do not do this):
+"keywords": ["name", "president's name", "full-name", "person\\nindividual"]
 
 If you're making changes to the schema, return JSON in this format:
 {
@@ -105,7 +114,18 @@ If you're just providing advice without modifying the schema, return:
       }
     } catch (parseError) {
       console.error('Failed to parse AI response as JSON:', parseError);
-      console.error('AI response:', cleanResponse);
+      console.error('AI response length:', cleanResponse.length);
+
+      // Show context around the error position
+      if (parseError instanceof Error) {
+        const match = parseError.message.match(/position (\d+)/);
+        if (match) {
+          const pos = parseInt(match[1]);
+          const start = Math.max(0, pos - 100);
+          const end = Math.min(cleanResponse.length, pos + 100);
+          console.error('Context around error position:', cleanResponse.substring(start, end));
+        }
+      }
 
       // Return a helpful error message
       return NextResponse.json({
