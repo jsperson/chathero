@@ -48,11 +48,11 @@ export default function Home() {
 
     // Initialize phases
     setPhases([
-      { id: 'phase1', name: 'Phase 1', status: 'active', details: 'Analyzing query' },
-      { id: 'phase1.5', name: 'Phase 1.5', status: 'pending' },
-      { id: 'phase2', name: 'Phase 2', status: 'pending' },
-      { id: 'phase2.5', name: 'Phase 2.5', status: 'pending' },
-      { id: 'phase3', name: 'Phase 3', status: 'pending' },
+      { id: 'phase1', name: 'Plan', status: 'active', details: 'Analyzing query' },
+      { id: 'phase1.5', name: 'Validate', status: 'pending' },
+      { id: 'phase2', name: 'Wrangle', status: 'pending' },
+      { id: 'phase2.5', name: 'Optimize', status: 'pending' },
+      { id: 'phase3', name: 'Answer', status: 'pending' },
     ]);
 
     // Simulate phase progression (we'll replace this with real backend events later)
