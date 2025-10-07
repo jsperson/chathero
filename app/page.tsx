@@ -110,11 +110,8 @@ export default function Home() {
         ...prev,
         { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }
       ]);
-      setPhases([]); // Clear phases on error
     } finally {
       setLoading(false);
-      // Clear phases after a short delay
-      setTimeout(() => setPhases([]), 2000);
     }
   };
 
