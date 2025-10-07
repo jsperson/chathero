@@ -29,35 +29,51 @@ export async function GET(request: NextRequest) {
 
     const discoveredSchema = SchemaDiscovery.discover(data);
 
-    // Check if project.yaml exists for this dataset
+    // Check if schema configuration exists for this dataset (metadata.yaml/schema.yaml or legacy project.yaml)
     let existingConfig = null;
     try {
       const datasetName = selectedDataset || config.dataSource.defaultDataset;
       const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
 
-      console.log('Schema API - Looking for project.yaml for dataset:', datasetName);
+      console.log('Schema API - Looking for config files for dataset:', datasetName);
 
       // Find dataset in type folders
       const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
       const typeFolders = typeEntries.filter(entry => entry.isDirectory());
 
       for (const typeFolder of typeFolders) {
-        const configPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
+        const datasetDir = path.join(datasetsPath, typeFolder.name, datasetName);
+        const metadataPath = path.join(datasetDir, 'metadata.yaml');
+        const schemaPath = path.join(datasetDir, 'schema.yaml');
+
         try {
-          await fs.access(configPath);
-          // File exists, load it
-          console.log('Schema API - Found project.yaml at:', configPath);
+          // Check for new structure (metadata.yaml + schema.yaml)
+          await fs.access(metadataPath);
+          await fs.access(schemaPath);
+
+          console.log('Schema API - Found new structure at:', datasetDir);
           const projectConfig = await loadProjectConfig(selectedDataset);
           console.log('Schema API - Loaded project config:', projectConfig.project.name);
           existingConfig = projectConfig;
           break;
         } catch (e) {
-          // Try next type folder
+          // Try legacy project.yaml
+          try {
+            const projectPath = path.join(datasetDir, 'project.yaml');
+            await fs.access(projectPath);
+            console.log('Schema API - Found legacy project.yaml at:', projectPath);
+            const projectConfig = await loadProjectConfig(selectedDataset);
+            console.log('Schema API - Loaded project config:', projectConfig.project.name);
+            existingConfig = projectConfig;
+            break;
+          } catch (legacyError) {
+            // Try next type folder
+          }
         }
       }
     } catch (error) {
       // File doesn't exist, that's ok
-      console.log('Schema API - No project.yaml found, will use auto-discovered schema');
+      console.log('Schema API - No config files found, will use auto-discovered schema');
     }
 
     console.log('Schema API - Returning response with existingConfig:', existingConfig?.project?.name || 'null');
