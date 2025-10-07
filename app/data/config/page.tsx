@@ -72,7 +72,6 @@ export default function DatasetConfigPage() {
 
       if (response.ok) {
         alert('Configuration saved successfully!');
-        router.push('/admin/datasets');
       } else {
         alert('Failed to save configuration');
       }
