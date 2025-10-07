@@ -55,33 +55,6 @@ export default function Home() {
       { id: 'phase3', name: 'Answer', status: 'pending' },
     ]);
 
-    // Animate phases for visual feedback (real data replaces this at the end)
-    const animatePhases = async () => {
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase1' ? { ...p, status: 'completed' } :
-        p.id === 'phase1.5' ? { ...p, status: 'active', details: 'Validating...' } : p
-      ));
-
-      await new Promise(resolve => setTimeout(resolve, 600));
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase1.5' ? { ...p, status: 'completed' } :
-        p.id === 'phase2' ? { ...p, status: 'active', details: 'Filtering...' } : p
-      ));
-
-      await new Promise(resolve => setTimeout(resolve, 700));
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase2' ? { ...p, status: 'completed' } :
-        p.id === 'phase2.5' ? { ...p, status: 'active', details: 'Optimizing...' } : p
-      ));
-
-      await new Promise(resolve => setTimeout(resolve, 400));
-      setPhases(prev => prev.map(p =>
-        p.id === 'phase2.5' ? { ...p, status: 'completed' } :
-        p.id === 'phase3' ? { ...p, status: 'active', details: 'Composing...' } : p
-      ));
-    };
-
     // Use fetch with streaming for SSE
     try {
       const response = await fetch('/api/chat-stream', {
