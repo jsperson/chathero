@@ -32,6 +32,43 @@ async function getDatasetType(config: DataSourceConfig, datasetName: string): Pr
 }
 
 /**
+ * Multi-dataset adapter that loads each dataset with the correct adapter type
+ */
+class MultiDatasetAdapter implements DataAdapter {
+  private config: DataSourceConfig;
+  private datasets: string[];
+
+  constructor(config: DataSourceConfig, datasets: string[]) {
+    this.config = config;
+    this.datasets = datasets;
+  }
+
+  async getData(): Promise<any> {
+    const allData: any[] = [];
+
+    // Load each dataset with its own adapter
+    for (const datasetName of this.datasets) {
+      const type = await getDatasetType(this.config, datasetName);
+      const adapter = createAdapterForType(type, this.config, datasetName);
+
+      console.log(`Loading dataset '${datasetName}' with ${type} adapter`);
+      const data = await adapter.getData();
+
+      // Add _dataset_source field to each record (for multi-dataset queries)
+      const taggedData = Array.isArray(data)
+        ? data.map(record => ({ ...record, _dataset_source: datasetName }))
+        : [];
+
+      console.log(`  Loaded ${taggedData.length} records from '${datasetName}'`);
+      allData.push(...taggedData);
+    }
+
+    console.log(`Total records loaded: ${allData.length}`);
+    return allData;
+  }
+}
+
+/**
  * Creates the appropriate data adapter based on dataset types
  */
 export async function createDataAdapter(
@@ -48,22 +85,14 @@ export async function createDataAdapter(
     return createAdapterForType(type, config, defaultDataset);
   }
 
-  // Check if all datasets are the same type
-  const types = await Promise.all(
-    datasetArray.map(ds => getDatasetType(config, ds))
-  );
-
-  const uniqueTypes = [...new Set(types)];
-
-  if (uniqueTypes.length === 1) {
-    // All same type - use single adapter
-    return createAdapterForType(uniqueTypes[0], config, datasetArray);
+  // Single dataset - use appropriate adapter directly
+  if (datasetArray.length === 1) {
+    const type = await getDatasetType(config, datasetArray[0]);
+    return createAdapterForType(type, config, datasetArray[0]);
   }
 
-  // Mixed types - for now, we'll use JSON adapter as default
-  // In the future, we could create a CompositeAdapter that handles multiple types
-  console.warn('Mixed dataset types detected, using JSON adapter as fallback');
-  return new JSONAdapter(config, datasetArray);
+  // Multiple datasets - use MultiDatasetAdapter which handles each dataset individually
+  return new MultiDatasetAdapter(config, datasetArray);
 }
 
 function createAdapterForType(
