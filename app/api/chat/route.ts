@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
       });
 
       const queryAnalyzer = new QueryAnalyzer(aiAdapter, projectConfig);
-      queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes, config.ai.queryAnalyzerModel, retryContext);
+      queryAnalysis = await queryAnalyzer.analyze(message, rawData, datasetReadmes, config.ai.queryAnalyzerModel, retryContext, conversationHistory);
       await logger.chatQuery(requestId, 'PHASE_1_RESULT', { ...queryAnalysis, attempt });
 
       // PHASE 1.5: Validate generated code if present

@@ -28,7 +28,7 @@ export class QueryAnalyzer {
   /**
    * Analyze a user question using AI to determine how to process the data
    */
-  async analyze(question: string, dataSample: any[], datasetReadmes?: Record<string, string>, modelOverride?: string, retryContext?: { previousCode: string; error: string; attempt: number }): Promise<QueryAnalysisResult> {
+  async analyze(question: string, dataSample: any[], datasetReadmes?: Record<string, string>, modelOverride?: string, retryContext?: { previousCode: string; error: string; attempt: number }, conversationHistory?: Array<{role: string; content: string}>): Promise<QueryAnalysisResult> {
     // Check if multiple datasets are present
     const hasMultipleDatasets = dataSample.length > 0 && dataSample.some(record => record._dataset_source);
     const uniqueDatasets = [...new Set(dataSample.map(r => r._dataset_source).filter(Boolean))];
@@ -89,8 +89,13 @@ Please generate CORRECTED code that fixes this error. Common fixes:
 IMPORTANT: Generate NEW, CORRECTED code. Do not repeat the same mistake!
 ` : '';
 
+    const conversationContext = conversationHistory && conversationHistory.length > 0
+      ? `\n\nCONVERSATION HISTORY (for context):\n${conversationHistory.map(msg => `${msg.role}: ${msg.content}`).join('\n')}\n\nUse this conversation history to understand context for the current question. For example, if the user asks "What about tables?" after discussing furniture, they likely mean the furniture category "Tables".`
+      : '';
+
     const systemPrompt = `You are a data request analyzer. Your job is to determine what data filters are needed to answer the user's question.
 ${retryInstructions}
+${conversationContext}
 ${datasetInfo}${readmeInfo}
 
 Dataset schema:
