@@ -223,6 +223,7 @@ export default function DatasetConfigPage() {
             >
               {generating ? '✨ Generating...' : '✨ Generate with AI'}
             </button>
+            <div className="flex-1"></div>
             <button
               onClick={() => router.push('/data')}
               className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"
