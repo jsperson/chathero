@@ -20,6 +20,46 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Load chat history from localStorage on mount
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatHistory');
+    const savedPhases = localStorage.getItem('chatPhases');
+
+    if (savedMessages) {
+      try {
+        setMessages(JSON.parse(savedMessages));
+      } catch (err) {
+        console.error('Failed to parse saved messages:', err);
+      }
+    }
+
+    if (savedPhases) {
+      try {
+        setPhases(JSON.parse(savedPhases));
+      } catch (err) {
+        console.error('Failed to parse saved phases:', err);
+      }
+    }
+  }, []);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem('chatHistory', JSON.stringify(messages));
+    } else {
+      localStorage.removeItem('chatHistory');
+    }
+  }, [messages]);
+
+  // Save phases to localStorage whenever they change
+  useEffect(() => {
+    if (phases.length > 0) {
+      localStorage.setItem('chatPhases', JSON.stringify(phases));
+    } else {
+      localStorage.removeItem('chatPhases');
+    }
+  }, [phases]);
+
   useEffect(() => {
     // Load example questions from config
     fetch('/api/config')
