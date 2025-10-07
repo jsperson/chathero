@@ -105,13 +105,29 @@ export default function DatasetConfigPage() {
       } else if (data.examples) {
         // Validate that examples is an array
         if (Array.isArray(data.examples)) {
-          // Append new examples to existing ones instead of replacing
-          setQueryExamples([...queryExamples, ...data.examples]);
-          setAiPrompt('');
+          // Filter out any invalid/empty examples
+          const validExamples = data.examples.filter(ex =>
+            ex &&
+            ex.question &&
+            ex.question.trim().length > 0 &&
+            ex.explanation &&
+            ex.explanation.trim().length > 0
+          );
+
+          if (validExamples.length === 0) {
+            alert('AI did not generate any valid examples. Please try a different prompt.');
+          } else {
+            // Append new examples to existing ones instead of replacing
+            setQueryExamples([...queryExamples, ...validExamples]);
+            setAiPrompt('');
+            alert(`Added ${validExamples.length} example(s)`);
+          }
         } else {
           console.error('AI returned non-array examples:', data.examples);
           alert('AI returned invalid format. Please try again.');
         }
+      } else {
+        alert('AI did not return any examples. Please try again.');
       }
     } catch (error) {
       console.error('AI assist error:', error);

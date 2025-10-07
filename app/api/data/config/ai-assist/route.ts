@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loadConfig, loadProjectConfig } from '@/lib/config';
 import { OpenAIAdapter } from '@/lib/adapters/openai.adapter';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
+  const requestId = `ai-assist-${Date.now()}`;
+
   try {
     const { dataset, prompt, currentExamples } = await request.json();
+
+    await logger.info(`[${requestId}] AI Assist request`, { dataset, prompt, existingCount: currentExamples?.length || 0 });
 
     if (!dataset || !prompt) {
       return NextResponse.json(
@@ -71,38 +76,44 @@ Return ONLY the JSON array, no other text.`;
     const cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     let examples;
 
-    console.log('AI assist raw response:', cleanResponse.substring(0, 500));
+    await logger.info(`[${requestId}] AI raw response`, { response: cleanResponse.substring(0, 500) });
 
     try {
       examples = JSON.parse(cleanResponse);
     } catch (parseError) {
-      console.error('Failed to parse AI response:', cleanResponse);
+      await logger.error(`[${requestId}] Failed to parse AI response`, { response: cleanResponse });
       return NextResponse.json(
         { error: 'AI returned invalid JSON' },
         { status: 500 }
       );
     }
 
-    console.log('AI assist parsed response type:', typeof examples, Array.isArray(examples) ? 'array' : 'not array');
+    await logger.info(`[${requestId}] Parsed response type`, {
+      type: typeof examples,
+      isArray: Array.isArray(examples),
+      keys: examples && typeof examples === 'object' ? Object.keys(examples) : []
+    });
 
     // Handle both array and object with examples property (from JSON mode)
     if (Array.isArray(examples)) {
+      await logger.info(`[${requestId}] Success - returning ${examples.length} examples`);
       return NextResponse.json({ examples });
     } else if (examples && Array.isArray(examples.examples)) {
       // JSON mode sometimes wraps the array in an object
+      await logger.info(`[${requestId}] Success - found examples in .examples property (${examples.examples.length})`);
       return NextResponse.json({ examples: examples.examples });
     } else if (examples && typeof examples === 'object') {
       // Try to extract array from any property
       const keys = Object.keys(examples);
       for (const key of keys) {
         if (Array.isArray(examples[key])) {
-          console.log(`Found array in property: ${key}`);
+          await logger.info(`[${requestId}] Success - found array in .${key} property (${examples[key].length})`);
           return NextResponse.json({ examples: examples[key] });
         }
       }
     }
 
-    console.error('AI returned non-array and no array found in object:', JSON.stringify(examples));
+    await logger.error(`[${requestId}] AI returned non-array`, { data: JSON.stringify(examples) });
     return NextResponse.json(
       { error: 'AI returned invalid format (not an array)' },
       { status: 500 }
