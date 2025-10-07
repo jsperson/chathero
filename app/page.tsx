@@ -103,25 +103,39 @@ export default function Home() {
           if (done) break;
 
           buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n\n');
-          buffer = lines.pop() || '';
+          const events = buffer.split('\n\n');
+          buffer = events.pop() || '';
 
-          for (const line of lines) {
-            if (line.startsWith('event: ')) {
-              const eventType = line.substring(7).trim();
-              const nextLine = lines[lines.indexOf(line) + 1];
-              if (nextLine && nextLine.startsWith('data: ')) {
-                const data = JSON.parse(nextLine.substring(6));
+          for (const event of events) {
+            if (!event.trim()) continue;
 
-                if (eventType === 'phase') {
-                  setPhases(prev => prev.map(p => {
-                    if (p.id === data.id) {
-                      return { ...p, status: data.status, details: data.status === 'active' ? 'Processing...' : undefined };
-                    }
-                    return p;
-                  }));
-                } else if (eventType === 'complete') {
-                  // Update phases with final backend data
+            const lines = event.split('\n');
+            let eventType = '';
+            let eventData = null;
+
+            for (const line of lines) {
+              if (line.startsWith('event: ')) {
+                eventType = line.substring(7).trim();
+              } else if (line.startsWith('data: ')) {
+                try {
+                  eventData = JSON.parse(line.substring(6));
+                } catch (e) {
+                  console.error('Failed to parse SSE data:', line);
+                }
+              }
+            }
+
+            if (eventType && eventData) {
+              if (eventType === 'phase') {
+                setPhases(prev => prev.map(p => {
+                  if (p.id === eventData.id) {
+                    return { ...p, status: eventData.status, details: eventData.status === 'active' ? 'Processing...' : undefined };
+                  }
+                  return p;
+                }));
+              } else if (eventType === 'complete') {
+                const data = eventData;
+                // Update phases with final backend data
         if (data.phaseDetails) {
         const pd = data.phaseDetails;
 
@@ -228,9 +242,9 @@ export default function Home() {
       }
 
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
-                } else if (eventType === 'error') {
-                  throw new Error(data.error || 'Unknown error');
                 }
+              } else if (eventType === 'error') {
+                throw new Error(eventData.error || 'Unknown error');
               }
             }
           }
