@@ -45,9 +45,17 @@ Guidelines:
 - For example questions: create 3-5 natural language questions users might ask about this data
 - For display names: use proper Title Case and expand abbreviations
 
+Special instructions for "rediscover" requests:
+- Analyze ALL fields in the data sample
+- Include ALL string/date fields as categorical fields (not just low-cardinality ones)
+- Include ALL numeric fields
+- Preserve existing display names and descriptions from current schema where they exist
+- For new fields, generate appropriate display names and descriptions
+- Update the project description to reflect actual record count and field count
+
 IMPORTANT: Return ONLY valid JSON. Ensure all strings are properly escaped:
 - Use double quotes for strings
-- Escape special characters: \\ for backslash, \" for quotes, \\n for newlines
+- Escape special characters: \\\\ for backslash, \\" for quotes, \\\\n for newlines
 - Do not include newlines within string values
 - Test that your JSON is valid before returning
 

@@ -44,7 +44,6 @@ export default function SchemaAdmin() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResponse, setAiResponse] = useState('');
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [rediscovering, setRediscovering] = useState(false);
   const [datasetName, setDatasetName] = useState<string>('');
   const [availableDatasets, setAvailableDatasets] = useState<Dataset[]>([]);
   const [selectedDataset, setSelectedDataset] = useState<string>('');
@@ -355,29 +354,8 @@ export default function SchemaAdmin() {
   const rediscoverSchema = async () => {
     if (!schema) return;
 
-    try {
-      setRediscovering(true);
-
-      const response = await fetch('/api/admin/schema/rediscover', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ existingSchema: schema }),
-      });
-
-      const data = await response.json();
-
-      if (data.updatedSchema) {
-        setSchema(data.updatedSchema);
-        alert(`Schema rediscovered!\n\nAdded: ${data.stats.added} fields\nRemoved: ${data.stats.removed} fields\nPreserved: ${data.stats.preserved} fields`);
-      } else {
-        alert('Failed to rediscover schema');
-      }
-    } catch (error) {
-      console.error('Rediscover error:', error);
-      alert('Failed to rediscover schema');
-    } finally {
-      setRediscovering(false);
-    }
+    setAiPrompt('Rediscover schema from data, preserving existing display names and descriptions where applicable');
+    await handleAiAssist();
   };
 
   if (loading) {
@@ -422,61 +400,62 @@ export default function SchemaAdmin() {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-4 flex-wrap mb-6">
+      <div className="flex gap-2 flex-wrap mb-6">
         <button
           onClick={saveConfiguration}
           disabled={saving}
-          className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
-        >
-          {saving ? 'Saving...' : 'Save Configuration'}
-        </button>
-
-        <button
-          onClick={rediscoverSchema}
-          disabled={rediscovering}
-          className="px-6 py-3 text-white rounded-lg disabled:opacity-50"
+          className="px-4 py-2 text-white rounded-lg font-medium disabled:opacity-50"
           style={{ backgroundColor: 'var(--color-primary)' }}
         >
-          {rediscovering ? 'Rediscovering...' : 'Rediscover Schema'}
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
 
         <button
           onClick={downloadYaml}
-          className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+          className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
         >
           Download YAML
         </button>
 
         <button
           onClick={() => setShowClearConfirm(true)}
-          className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
         >
           Clear Configuration
         </button>
       </div>
 
       {/* AI Assistant */}
-      <div className="rounded-lg shadow p-6 mb-6" style={{ backgroundColor: 'rgba(0, 82, 136, 0.05)' }}>
-        <h2 className="text-xl font-semibold mb-4">🤖 AI Assistant</h2>
-
-        <div className="mb-4">
-          <textarea
+      <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+        <h3 className="font-semibold mb-2">🤖 AI Assistance</h3>
+        <p className="text-sm text-gray-600 mb-2">
+          Ask AI to help improve your schema configuration
+        </p>
+        <div className="flex gap-2">
+          <input
+            type="text"
             value={aiPrompt}
             onChange={(e) => setAiPrompt(e.target.value)}
-            placeholder="What would you like me to help with?"
-            className="w-full border rounded px-3 py-2 h-24"
+            placeholder="e.g., 'Generate better descriptions for all fields' or 'Rediscover schema from data'"
+            className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2"
+            style={{ '--tw-ring-color': 'var(--color-primary)' } as any}
             disabled={aiLoading}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleAiAssist();
+              }
+            }}
           />
+          <button
+            onClick={handleAiAssist}
+            disabled={aiLoading || !aiPrompt.trim()}
+            className="px-4 py-2 rounded-lg text-white font-medium disabled:opacity-50"
+            style={{ backgroundColor: 'var(--color-primary)' }}
+          >
+            {aiLoading ? 'Generating...' : 'Generate'}
+          </button>
         </div>
-
-        <button
-          onClick={handleAiAssist}
-          disabled={aiLoading || !aiPrompt.trim()}
-          className="px-4 py-2 text-white rounded disabled:opacity-50"
-          style={{ backgroundColor: 'var(--color-primary)' }}
-        >
-          {aiLoading ? 'Thinking...' : 'Ask AI'}
-        </button>
 
         {aiResponse && (
           <div className="mt-4 p-4 bg-white rounded border">
@@ -484,16 +463,6 @@ export default function SchemaAdmin() {
             <div className="whitespace-pre-wrap">{aiResponse}</div>
           </div>
         )}
-
-        <div className="mt-4 text-sm text-gray-600">
-          <div className="font-medium mb-2">Try asking:</div>
-          <ul className="list-disc list-inside space-y-1">
-            <li>Generate better descriptions for all fields</li>
-            <li>Suggest keywords for the {schema.categoricalFields[0]?.name} field</li>
-            <li>Create 5 example questions for this dataset</li>
-            <li>What&apos;s a good domain name for this data?</li>
-          </ul>
-        </div>
       </div>
 
       {/* Project Information */}
