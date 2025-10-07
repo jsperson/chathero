@@ -13,11 +13,17 @@ ChatHero is a generic framework that allows users to interact with JSON data thr
 ## Key Features
 
 ### 🤖 Intelligent AI Chat
-- **Three-Phase Query System**: AI analyzes questions, processes data server-side, then generates natural language responses
+- **Five-Phase Query System**: Plan → Validate → Wrangle → Optimize → Answer
 - **Smart Query Understanding**: Handles complex queries like "launches by year", "by day of week", "average cost per vehicle"
+- **Python Code Generation**: Automatically generates and executes pandas code for deterministic operations (counting, aggregation, temporal correlation)
+- **Security Validation**: All generated code is validated before execution to prevent malicious operations
+- **Multi-Dataset Queries**: Correlate data across multiple datasets (e.g., "orders by president", "shipments during SpaceX launches")
+- **Conversation Context**: Understands follow-up questions and maintains conversation history
+- **Automatic Retry**: Self-healing code generation with retry logic on execution failures
 - **Date Transformations**: Automatically extracts year, month, day of week, quarter from date fields
 - **Aggregations & Filters**: Counts, sums, averages, filtering by any field
 - **Context-Aware**: AI knows current date and dataset domain
+- **Format Handling**: Supports output in various formats (CSV, JSON, tables) handled by Phase 3 AI
 
 ### 📊 Data Management
 - **Multi-Dataset Support**: Handle multiple datasets with dropdown selector, each with its own configuration
@@ -57,22 +63,52 @@ ChatHero is a generic framework that allows users to interact with JSON data thr
 
 ### Query Processing Architecture
 
-**Phase 1: AI Query Analysis**
-- User question + data sample sent to AI
-- AI returns structured JSON with processing instructions
-- Determines: operation type, fields to group by, transformations, filters
+ChatHero uses a sophisticated five-phase pipeline with real-time progress updates via Server-Sent Events (SSE):
 
-**Phase 2: Server-Side Data Processing**
-- Executes AI's instructions on full dataset
-- Applies transformations (extract_year, extract_month, extract_day_of_week, extract_quarter)
-- Performs aggregations (count, sum, average, min, max)
-- Applies filters (equals, contains, greater_than, less_than, between)
+**Phase 1: Plan (AI Query Analysis)**
+- User question + data sample + conversation history sent to AI
+- AI analyzes query and generates execution plan with:
+  - Filters to apply (if any)
+  - Fields to include (reduces token usage)
+  - Optional Python code for deterministic operations (counting, aggregation, correlation)
+- Conversation context ensures follow-up questions are understood correctly
+- Returns structured JSON with processing instructions
+- **Retry Logic**: Up to 2 attempts if code generation fails
 
-**Phase 3: Response Generation**
-- Processed data sent back to AI with minimal context
+**Phase 1.5: Validate (Security Check)**
+- Generated Python code (if any) is validated by AI security checker
+- Checks for forbidden operations: file I/O, network access, subprocess, dangerous imports
+- Verifies code uses only allowed pandas/numpy operations
+- Validates that predefined variables (df, pd, np) are recognized
+- Code execution blocked if security risks detected
+- **Skipped**: If no code was generated in Phase 1
+
+**Phase 2: Wrangle (Data Processing)**
+- Applies filters to reduce dataset size
+- Selects only required fields (token optimization)
+- Executes approved Python code in sandboxed environment using pandas
+- Handles multi-dataset operations (separates by `_dataset_source` field)
+- Performs deterministic operations: counting, aggregation, grouping, temporal correlation
+- **Retry Logic**: If code execution fails, returns to Phase 1 with error context for corrected code
+- **Field Limit**: Maximum 10 fields enforced to prevent token overflow
+
+**Phase 2.5: Optimize (Token Management)**
+- Applies hard limit of 500 records sent to Phase 3
+- Prevents OpenAI TPM (tokens-per-minute) limit violations
+- Samples first 500 records if dataset larger
+- Passes full record count to Phase 3 for accurate reporting
+- Adds sampling notice to data explanation
+
+**Phase 3: Answer (Response Generation)**
+- Processed data + metadata sent to AI with minimal context
 - AI generates natural language response
+- Handles output formatting (CSV, JSON, tables) if requested by user
+- Uses conversation history for context-aware responses
+- Reports accurate counts even when working with sampled data
 
-This three-phase approach handles complex queries efficiently while keeping context size minimal.
+**Real-Time Progress**: UI updates via SSE streaming as each phase completes, showing phase status, details, and any warnings/errors.
+
+This five-phase approach handles complex queries efficiently, securely, and within API token limits.
 
 ## Configuration
 
@@ -91,8 +127,9 @@ theme:
 
 ai:
   provider: "openai"
-  model: "gpt-4o-mini"         # 128K context, JSON mode support
-  apiKey: "${OPENAI_API_KEY}"  # Environment variable substitution
+  model: "gpt-4o-mini"              # 128K context, JSON mode support
+  queryAnalyzerModel: "gpt-4o"      # Optional: Use more capable model for Phase 1
+  apiKey: "${OPENAI_API_KEY}"       # Environment variable substitution
 
 dataSource:
   type: "json"
@@ -250,18 +287,23 @@ aiContext:
 /lib
   /adapters          - AI and data source adapters
   config.ts          - Config loading with env var substitution
-  data-processor.ts  - Server-side data processing engine
-  query-analyzer.ts  - AI-powered query analysis
+  query-analyzer.ts  - AI-powered query analysis (Phase 1)
+  code-validator.ts  - AI-powered security validation (Phase 1.5)
+  code-executor.ts   - Python code execution sandbox (Phase 2)
   schema-discovery.ts - Automatic schema detection
+  logger.ts          - Structured logging system
 /app
-  /                  - Chat interface
+  /                  - Chat interface with SSE streaming
   /data              - Data browser table view
   /admin/schema      - Schema configuration admin
   /api
-    /chat            - Three-phase query processing
+    /chat            - Five-phase query processing (full response)
+    /chat-stream     - Five-phase query processing (SSE streaming)
     /data            - Data endpoint
+    /datasets        - Dataset listing endpoint
     /config          - Public config endpoint
     /admin/schema    - Schema admin APIs
+/logs                - Application logs (chat-queries, errors)
 /data                - JSON data files
 /public/assets       - Custom logos and static files
 /scripts             - Data processing utilities
@@ -288,6 +330,40 @@ aiContext:
 - View sample values and unique counts
 - Configure categorical and numeric fields
 - Set primary date field
+
+## Technical Capabilities
+
+### Code Generation & Execution
+- **Language**: Python 3 with pandas and numpy
+- **Execution Environment**: Sandboxed subprocess with timeout protection
+- **Security**: AI-powered validation prevents malicious code execution
+- **Deterministic Operations**: Code generation required for counting, aggregation, grouping, temporal correlation
+- **Error Handling**: Automatic retry with error context sent back to Phase 1 for code correction
+- **Field Access**: Automatic detection and inclusion of fields used in generated code
+
+### Multi-Dataset Support
+- **Dataset Selection**: Cookie-based persistence across sessions
+- **Cross-Dataset Queries**: Automatic handling via `_dataset_source` field
+- **Dataset Documentation**: README.md files passed to AI for context
+- **Dynamic Examples**: Query examples generated based on available datasets
+
+### Token Optimization
+- **Field Selection**: Phase 1 selects only required fields to reduce context size
+- **Field Limit**: Maximum 10 fields enforced (prevents 78K token overflow)
+- **Record Sampling**: Phase 2.5 limits to 500 records for Phase 3 (prevents TPM violations)
+- **Smart Prioritization**: `_dataset_source` and filter fields always included
+
+### Conversation Management
+- **History Tracking**: All messages passed to Phase 1 for context
+- **Follow-Up Understanding**: Generic patterns for "by X instead of Y" or "what about Z"
+- **Intent Preservation**: Maintains query type (counting, filtering) across follow-ups
+- **Context Instructions**: Explicit AI prompts with pattern examples
+
+### Progress & Logging
+- **Real-Time Updates**: SSE streaming provides phase-by-phase status
+- **Structured Logging**: All operations logged to `/logs/app-YYYY-MM-DD.log`
+- **Phase Details**: Expandable UI showing filters, code, attempts, errors
+- **Retry Visibility**: UI indicates when retries occur and shows attempt counts
 
 ## Sample Datasets
 
@@ -333,10 +409,16 @@ ChatHero includes two sample datasets to demonstrate capabilities:
 ## Advanced Features
 
 ### Query Capabilities
+- **Python Code Execution**: Generates and runs pandas code for complex operations
+- **Temporal Correlation**: Compare dates across datasets (e.g., orders during presidential terms)
+- **Cross-Dataset Operations**: Join/correlate data from multiple sources automatically
 - **Date Operations**: by year, month, day of week, quarter
-- **Aggregations**: count, sum, average, min, max
+- **Aggregations**: count, sum, average, min, max, groupby operations
 - **Filters**: equals, contains, greater/less than, between
 - **Multi-field**: Group by multiple fields simultaneously
+- **Numeric Type Handling**: Automatic conversion with pd.to_numeric() for mixed-type fields
+- **Conversation Memory**: Follow-up questions use context from previous messages
+- **Self-Healing**: Automatic retry with corrected code on execution failures
 
 ### Schema Discovery Intelligence
 - **Type Detection**: Identifies dates via pattern matching (YYYY-MM-DD, MM/DD/YYYY, etc.)
@@ -378,8 +460,10 @@ OPENAI_API_KEY=sk-...    # Required for AI features
 ### Public APIs
 - `GET /api/config` - Public configuration (theme, project metadata)
 - `GET /api/data` - Full dataset
-- `POST /api/chat` - Three-phase AI query processing
+- `POST /api/chat` - Five-phase AI query processing (returns full response)
+- `POST /api/chat-stream` - Five-phase AI query processing with SSE streaming (real-time progress)
 - `GET /api/schema` - Schema discovery results
+- `GET /api/datasets` - List all available datasets
 
 ### Admin APIs
 - `GET /api/admin/schema` - Load schema with existing config
