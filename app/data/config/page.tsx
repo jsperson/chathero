@@ -132,6 +132,21 @@ export default function DatasetConfigPage() {
   };
 
   const handleGenerate = async () => {
+    // Check if config already exists and warn user
+    if (readme || queryExamples.length > 0) {
+      const confirmed = confirm(
+        '⚠️ WARNING: This dataset already has configuration.\n\n' +
+        'Generating new configuration will:\n' +
+        '• Backup existing project.yaml to project.yaml.bak\n' +
+        '• Overwrite the current configuration\n\n' +
+        'Are you sure you want to continue?'
+      );
+
+      if (!confirmed) {
+        return;
+      }
+    }
+
     setGenerating(true);
     try {
       const response = await fetch('/api/data/config/generate', {
@@ -158,6 +173,7 @@ export default function DatasetConfigPage() {
             dataset: datasetName,
             readme: data.readme,
             projectConfig: data.projectConfig,
+            backup: true, // Signal to create backup
           }),
         });
 
@@ -201,15 +217,13 @@ export default function DatasetConfigPage() {
             Configure Dataset: {datasetName}
           </h1>
           <div className="flex gap-2">
-            {(!readme || queryExamples.length === 0) && (
-              <button
-                onClick={handleGenerate}
-                disabled={generating}
-                className="px-4 py-2 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 disabled:opacity-50"
-              >
-                {generating ? '✨ Generating...' : '✨ Generate with AI'}
-              </button>
-            )}
+            <button
+              onClick={handleGenerate}
+              disabled={generating}
+              className="px-4 py-2 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 disabled:opacity-50"
+            >
+              {generating ? '✨ Generating...' : '✨ Generate with AI'}
+            </button>
             <button
               onClick={() => router.push('/data')}
               className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"

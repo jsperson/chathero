@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { dataset, readme, queryExamples, projectConfig } = await request.json();
+    const { dataset, readme, queryExamples, projectConfig, backup } = await request.json();
 
     if (!dataset) {
       return NextResponse.json(
@@ -123,6 +123,18 @@ export async function POST(request: NextRequest) {
     // Update project.yaml with full config or just queryExamples
     if (projectConfig || queryExamples !== undefined) {
       const projectPath = path.join(datasetPath, 'project.yaml');
+      const backupPath = path.join(datasetPath, 'project.yaml.bak');
+
+      // Create backup if requested and file exists
+      if (backup) {
+        try {
+          const existingContent = await fs.readFile(projectPath, 'utf-8');
+          await fs.writeFile(backupPath, existingContent, 'utf-8');
+          console.log(`Backed up existing project.yaml to project.yaml.bak for dataset: ${dataset}`);
+        } catch (e) {
+          // No existing file to backup, that's OK
+        }
+      }
 
       let configToSave: any = {};
 
