@@ -72,7 +72,7 @@ export default function DatasetConfigPage() {
 
       if (response.ok) {
         alert('Configuration saved successfully!');
-        router.push('/data');
+        router.push('/admin/datasets');
       } else {
         alert('Failed to save configuration');
       }
@@ -163,6 +163,7 @@ export default function DatasetConfigPage() {
 
         if (saveResponse.ok) {
           alert('Configuration generated and saved! You can now use this dataset for queries.');
+          router.push('/admin/datasets');
         } else {
           alert('Configuration generated but failed to save. Please try saving manually.');
         }
