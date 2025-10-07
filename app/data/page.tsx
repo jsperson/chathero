@@ -201,7 +201,7 @@ export default function DataPage() {
               >
                 {dataset.displayName}
                 <span className="ml-2 text-sm text-gray-500">
-                  ({dataset.data.length} of {dataset.total})
+                  ({dataset.data.length.toLocaleString()} of {dataset.total.toLocaleString()})
                 </span>
               </button>
             ))}
@@ -214,7 +214,9 @@ export default function DataPage() {
               {activeDataset.displayName}
             </h2>
             <div className="text-sm text-gray-500">
-              {searchTerm ? `${sortedData.length} of ${data.length} loaded` : `${data.length} of ${activeDataset.total} records`}
+              {searchTerm
+                ? `${sortedData.length.toLocaleString()} of ${data.length.toLocaleString()} loaded`
+                : `${data.length.toLocaleString()} of ${activeDataset.total.toLocaleString()} records`}
               {data.length < activeDataset.total && !searchTerm && (
                 <span className="ml-2 text-blue-600">(scroll for more)</span>
               )}
