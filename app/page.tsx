@@ -82,26 +82,47 @@ export default function Home() {
       ));
     };
 
-    animatePhases();
-
+    // Use fetch with streaming for SSE
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch('/api/chat-stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: userMessage,
-          conversationHistory: messages  // Send conversation history
+          conversationHistory: messages
         }),
       });
 
-      const data = await response.json();
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
 
-      if (data.error) {
-        throw new Error(data.error);
-      }
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
 
-      // Update phases with real backend data
-      if (data.phaseDetails) {
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('event: ')) {
+              const eventType = line.substring(7).trim();
+              const nextLine = lines[lines.indexOf(line) + 1];
+              if (nextLine && nextLine.startsWith('data: ')) {
+                const data = JSON.parse(nextLine.substring(6));
+
+                if (eventType === 'phase') {
+                  setPhases(prev => prev.map(p => {
+                    if (p.id === data.id) {
+                      return { ...p, status: data.status, details: data.status === 'active' ? 'Processing...' : undefined };
+                    }
+                    return p;
+                  }));
+                } else if (eventType === 'complete') {
+                  // Update phases with final backend data
+        if (data.phaseDetails) {
         const pd = data.phaseDetails;
 
         setPhases(prev => prev.map(p => {
@@ -207,6 +228,14 @@ export default function Home() {
       }
 
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
+                } else if (eventType === 'error') {
+                  throw new Error(data.error || 'Unknown error');
+                }
+              }
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error('Chat error:', error);
       setMessages(prev => [
