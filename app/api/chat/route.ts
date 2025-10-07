@@ -190,11 +190,34 @@ export async function POST(request: NextRequest) {
       originalRecords: rawData.length
     });
 
+    // PHASE 2.5: Apply hard limit on records sent to Phase 3 to avoid token overflow
+    // OpenAI has a 30,000 TPM limit. With ~8 tokens per record, we can safely send ~500 records max.
+    const PHASE_3_MAX_RECORDS = 500;
+    let dataForPhase3 = processedData;
+    let samplingApplied = false;
+
+    if (Array.isArray(processedData) && processedData.length > PHASE_3_MAX_RECORDS) {
+      // For aggregate/count operations, take a representative sample
+      dataForPhase3 = processedData.slice(0, PHASE_3_MAX_RECORDS);
+      samplingApplied = true;
+
+      await logger.chatQuery(requestId, 'PHASE_2.5_SAMPLING', {
+        originalRecords: processedData.length,
+        sampledRecords: dataForPhase3.length,
+        reason: 'Token limit protection'
+      });
+    }
+
     const contextData = {
-      data: processedData,
+      data: dataForPhase3,
       total_records: Array.isArray(processedData) ? processedData.length : 1,
       data_explanation: queryAnalysis.codeDescription || queryAnalysis.explanation,
     };
+
+    // Add sampling notice if applied
+    if (samplingApplied) {
+      contextData.data_explanation = `${contextData.data_explanation}\n\nNote: Showing first ${PHASE_3_MAX_RECORDS} of ${processedData.length} total records to avoid token limits. Use this sample to answer the question, but report the total count accurately.`;
+    }
 
     // Add metadata
     const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
@@ -211,7 +234,9 @@ export async function POST(request: NextRequest) {
 
     // PHASE 3: AI generates final response with processed data
     await logger.chatQuery(requestId, 'PHASE_3_START', {
-      dataRecords: filteredData.length,
+      dataRecords: dataForPhase3.length,
+      totalRecords: processedData.length,
+      samplingApplied,
       datasets: metadata.datasets_queried
     });
     const response = await aiAdapter.chat(message, { ...contextData, ...metadata, requestId, conversationHistory });
