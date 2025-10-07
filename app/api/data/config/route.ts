@@ -123,14 +123,25 @@ export async function POST(request: NextRequest) {
     // Update project.yaml with full config or just queryExamples
     if (projectConfig || queryExamples !== undefined) {
       const projectPath = path.join(datasetPath, 'project.yaml');
-      const backupPath = path.join(datasetPath, 'project.yaml.bak');
 
       // Create backup if requested and file exists
       if (backup) {
         try {
           const existingContent = await fs.readFile(projectPath, 'utf-8');
+
+          // Generate timestamp: YYYYMMDD_HHMMSS
+          const now = new Date();
+          const timestamp = now.getFullYear().toString() +
+                          (now.getMonth() + 1).toString().padStart(2, '0') +
+                          now.getDate().toString().padStart(2, '0') +
+                          '_' +
+                          now.getHours().toString().padStart(2, '0') +
+                          now.getMinutes().toString().padStart(2, '0') +
+                          now.getSeconds().toString().padStart(2, '0');
+
+          const backupPath = path.join(datasetPath, `project.yaml.${timestamp}`);
           await fs.writeFile(backupPath, existingContent, 'utf-8');
-          console.log(`Backed up existing project.yaml to project.yaml.bak for dataset: ${dataset}`);
+          console.log(`Backed up existing project.yaml to project.yaml.${timestamp} for dataset: ${dataset}`);
         } catch (e) {
           // No existing file to backup, that's OK
         }

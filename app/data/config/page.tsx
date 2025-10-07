@@ -137,7 +137,7 @@ export default function DatasetConfigPage() {
       const confirmed = confirm(
         '⚠️ WARNING: This dataset already has configuration.\n\n' +
         'Generating new configuration will:\n' +
-        '• Backup existing project.yaml to project.yaml.bak\n' +
+        '• Backup existing project.yaml with timestamp\n' +
         '• Overwrite the current configuration\n\n' +
         'Are you sure you want to continue?'
       );
