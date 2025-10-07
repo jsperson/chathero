@@ -275,12 +275,55 @@ export default function SchemaAdmin() {
 
       const data = await response.json();
 
+      console.log('AI assist response:', data);
+
+      if (data.error) {
+        setAiResponse(`Error: ${data.error}`);
+        return;
+      }
+
       if (data.suggestion) {
         setAiResponse(data.suggestion);
 
         // If AI returned updated schema, apply it
         if (data.updatedSchema) {
-          setSchema(data.updatedSchema);
+          console.log('Applying updated schema:', data.updatedSchema);
+
+          // Merge with current schema to preserve sampleValues, uniqueCount, type
+          const mergedCategoricalFields = data.updatedSchema.categoricalFields?.map((updatedField: any) => {
+            const currentField = schema.categoricalFields.find((f: any) => f.name === updatedField.name);
+            return {
+              name: updatedField.name,
+              displayName: updatedField.displayName || currentField?.displayName || updatedField.name,
+              description: updatedField.description || currentField?.description || '',
+              keywords: updatedField.keywords || currentField?.keywords || [updatedField.name],
+              sampleValues: currentField?.sampleValues || [],
+              uniqueCount: currentField?.uniqueCount || 0,
+              type: currentField?.type || 'string',
+            };
+          }) || schema.categoricalFields;
+
+          const mergedNumericFields = data.updatedSchema.numericFields?.map((updatedField: any) => {
+            const currentField = schema.numericFields.find((f: any) => f.name === updatedField.name);
+            return {
+              name: updatedField.name,
+              displayName: updatedField.displayName || currentField?.displayName || updatedField.name,
+              description: updatedField.description || updatedField.unit || currentField?.description || '',
+              keywords: updatedField.keywords || currentField?.keywords || [updatedField.name],
+              sampleValues: currentField?.sampleValues || [],
+              uniqueCount: currentField?.uniqueCount || 0,
+              type: 'number',
+            };
+          }) || schema.numericFields;
+
+          setSchema({
+            project: data.updatedSchema.project || schema.project,
+            categoricalFields: mergedCategoricalFields,
+            numericFields: mergedNumericFields,
+            dateFields: data.updatedSchema.dateFields || schema.dateFields,
+            primaryDateField: data.updatedSchema.primaryDateField || schema.primaryDateField,
+            exampleQuestions: data.updatedSchema.exampleQuestions || schema.exampleQuestions,
+          });
         }
       }
     } catch (error) {
