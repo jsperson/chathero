@@ -118,44 +118,12 @@ If you're just providing advice without modifying the schema, return:
     // Remove trailing commas before closing braces/brackets
     cleanResponse = cleanResponse.replace(/,(\s*[}\]])/g, '$1');
 
-    // Fix unterminated strings by removing literal newlines within JSON strings
-    // This handles the case where AI puts newlines in description/keyword values
-    const lines = cleanResponse.split('\n');
-    const fixedLines: string[] = [];
-    let inString = false;
-    let currentLine = '';
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      currentLine += line;
-
-      // Count quotes to determine if we're inside a string
-      let quoteCount = 0;
-      for (let j = 0; j < line.length; j++) {
-        if (line[j] === '"' && (j === 0 || line[j-1] !== '\\')) {
-          quoteCount++;
-        }
-      }
-
-      // If odd number of quotes, we're starting/ending a string
-      if (quoteCount % 2 === 1) {
-        inString = !inString;
-      }
-
-      if (!inString) {
-        fixedLines.push(currentLine);
-        currentLine = '';
-      } else {
-        // We're in a string that spans lines - add a space instead of newline
-        currentLine += ' ';
-      }
-    }
-
-    if (currentLine) {
-      fixedLines.push(currentLine);
-    }
-
-    cleanResponse = fixedLines.join('\n');
+    // More aggressive JSON repair - replace all actual newlines within values with spaces
+    // Look for patterns like: "value": "text\nmore text" and fix them
+    cleanResponse = cleanResponse.replace(/"([^"]*)\n([^"]*?)"/g, (match, before, after) => {
+      // Only join if this looks like a broken string (no colon after closing quote)
+      return `"${before} ${after}"`;
+    });
 
     console.log('AI assist - After string repair, response length:', cleanResponse.length);
     console.log('AI assist - First 500 chars:', cleanResponse.substring(0, 500));
