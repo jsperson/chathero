@@ -233,6 +233,15 @@ export async function POST(request: NextRequest) {
     }
 
     // PHASE 3: AI generates final response with processed data
+    // Add a small delay to help avoid rate limit issues when Phase 1 used many tokens
+    if (rawData.length > 1000) {
+      await logger.chatQuery(requestId, 'PHASE_3_RATE_LIMIT_DELAY', {
+        delayMs: 1000,
+        reason: 'Large dataset - avoiding TPM burst'
+      });
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
     await logger.chatQuery(requestId, 'PHASE_3_START', {
       dataRecords: dataForPhase3.length,
       totalRecords: processedData.length,

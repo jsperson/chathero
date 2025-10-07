@@ -17,6 +17,46 @@ export class OpenAIAdapter implements AIAdapter {
     this.logger = logger;
   }
 
+  private async chatWithRetry(params: any, maxRetries = 3): Promise<any> {
+    let lastError: any;
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        return await this.client.chat.completions.create(params);
+      } catch (error: any) {
+        lastError = error;
+
+        // Check if it's a rate limit error
+        const isRateLimitError = error?.status === 429 ||
+                                 error?.message?.toLowerCase().includes('rate limit') ||
+                                 error?.message?.toLowerCase().includes('tokens per min');
+
+        if (!isRateLimitError || attempt === maxRetries - 1) {
+          // Not a rate limit error, or we're out of retries
+          throw error;
+        }
+
+        // Exponential backoff: 2^attempt seconds (2s, 4s, 8s)
+        const delaySeconds = Math.pow(2, attempt + 1);
+        console.log(`Rate limit hit. Retrying in ${delaySeconds}s (attempt ${attempt + 1}/${maxRetries})...`);
+
+        if (this.logger) {
+          await this.logger.info('OpenAI rate limit - retrying', {
+            attempt: attempt + 1,
+            maxRetries,
+            delaySeconds,
+            error: error?.message
+          });
+        }
+
+        // Wait before retrying
+        await new Promise(resolve => setTimeout(resolve, delaySeconds * 1000));
+      }
+    }
+
+    throw lastError;
+  }
+
   async chat(message: string, context: any): Promise<string> {
     try {
       const currentDate = context.current_date || new Date().toISOString().split('T')[0];
@@ -29,7 +69,7 @@ export class OpenAIAdapter implements AIAdapter {
         // Use the model specified in context, or fall back to default
         const modelToUse = context.model || this.model;
 
-        const completion = await this.client.chat.completions.create({
+        const completion = await this.chatWithRetry({
           model: modelToUse,
           messages: [
             { role: 'system', content: context.system_instruction },
@@ -103,7 +143,7 @@ Answer the user's question based on this data. Perform any necessary counting, g
       // Add current message
       messages.push({ role: 'user', content: message });
 
-      const completion = await this.client.chat.completions.create({
+      const completion = await this.chatWithRetry({
         model: this.model,
         messages,
         max_tokens: 16384, // Maximum for gpt-4o-mini
