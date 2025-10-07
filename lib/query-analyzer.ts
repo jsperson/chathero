@@ -141,11 +141,18 @@ When a query requires DETERMINISTIC operations that AIs struggle with, generate 
 If your code accesses fields like "presidential_start", "presidential_end", "launch_date", etc., ALL of those fields must be in fieldsToInclude.
 Otherwise Phase 2 will strip out those fields and your code will fail.
 
-WHEN TO GENERATE CODE:
-- Temporal correlation (date range overlaps, date comparisons)
-- Complex mathematical calculations
-- Precise counting/aggregation across datasets
-- Any operation requiring exact logical precision
+⚠️ WHEN YOU MUST GENERATE CODE (NOT OPTIONAL):
+- **Temporal correlation** - ALWAYS required when correlating dates across datasets
+- **Cross-dataset counting/aggregation** - ALWAYS required for accurate counts
+- **Complex mathematical calculations** - ALWAYS required for exact results
+- **Any operation requiring exact logical precision** - ALWAYS required
+
+❌ NEVER rely on Phase 3 AI to perform temporal correlation or cross-dataset counting
+✅ ALWAYS generate code for these operations to ensure accurate results
+
+Why: Phase 3 may receive only a sample of data (not full dataset), so it cannot
+accurately count or correlate records. Only generated code in Phase 2 has access
+to the complete dataset for precise operations.
 
 CODE REQUIREMENTS:
 - Must be pure JavaScript (ES6+) EXPRESSION, not a function definition
