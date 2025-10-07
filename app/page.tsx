@@ -215,7 +215,6 @@ export default function Home() {
       }
 
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
-                }
               } else if (eventType === 'error') {
                 throw new Error(eventData.error || 'Unknown error');
               }
