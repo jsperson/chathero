@@ -198,6 +198,14 @@ DATE HANDLING:
 - Use pd.notna() or pd.isna() to check for null dates
 - Date comparisons: >= for inclusive start, < for exclusive end
 
+NUMERIC FIELD HANDLING:
+⚠️ CRITICAL: Numeric fields may contain mixed types (strings, floats, etc.) due to data quality issues!
+- ALWAYS convert numeric fields to numeric type before math operations
+- Use pd.to_numeric(df['field'], errors='coerce') to convert safely
+- errors='coerce' converts invalid values to NaN instead of failing
+- Example: df['Profit'] = pd.to_numeric(df['Profit'], errors='coerce')
+- Do this BEFORE any sum(), mean(), groupby() operations on numeric fields
+
 CODE EXAMPLE for temporal correlation:
 {
   "generatedCode": "import pandas as pd\\ndf_copy = df.copy()\\npresidents = df_copy[df_copy['_dataset_source'] == 'us-presidents']\\norders = df_copy[df_copy['_dataset_source'] == 'global_connect']\\npresidents['presidential_start'] = pd.to_datetime(presidents['presidential_start'])\\npresidents['presidential_end'] = pd.to_datetime(presidents['presidential_end'])\\norders['Order Date'] = pd.to_datetime(orders['Order Date'])\\nresult = []\\nfor _, p in presidents.iterrows():\\n    start = p['presidential_start']\\n    end = p['presidential_end'] if pd.notna(p['presidential_end']) else pd.Timestamp('2099-12-31')\\n    count = len(orders[(orders['Order Date'] >= start) & (orders['Order Date'] < end)])\\n    if count > 0:\\n        result.append({'name': p['name'], 'order_count': count})",
