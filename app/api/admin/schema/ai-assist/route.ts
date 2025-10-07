@@ -31,8 +31,37 @@ export async function POST(request: NextRequest) {
       readmeContext = `\n\nDataset README (for additional context):\n${projectConfig.readme}`;
     }
 
-    // Build AI prompt
-    const systemPrompt = `You are a helpful assistant that helps users configure their data schema.
+    // Check if this is a keyword generation request
+    const isKeywordRequest = prompt.toLowerCase().includes('keyword') || prompt.toLowerCase().includes('synonym');
+
+    // Build AI prompt - use simpler format for keyword requests
+    const systemPrompt = isKeywordRequest ?
+      `You are a helpful assistant that generates keywords and synonyms for data fields.
+
+Current fields:
+${currentSchema.categoricalFields.map(f => `- ${f.name}: ${f.displayName}`).join('\n')}
+${currentSchema.numericFields.map(f => `- ${f.name}: ${f.displayName}`).join('\n')}
+
+Data sample (first 5 records):
+${JSON.stringify(data.slice(0, 5), null, 2)}${readmeContext}
+
+Generate comprehensive keywords for each field. Return ONLY a simple JSON object mapping field names to arrays of keywords.
+
+Rules:
+- Each keyword must be a simple string with NO apostrophes, quotes, or special punctuation
+- Use only letters, numbers, spaces, hyphens, and underscores
+- Include synonyms, variations, plural/singular forms
+- Consider the dataset context and domain
+
+Return format (EXACTLY like this, nothing else):
+{
+  "fieldKeywords": {
+    "field_name": ["keyword1", "keyword2", "keyword3"],
+    "other_field": ["keyword1", "keyword2"]
+  }
+}`
+    :
+      `You are a helpful assistant that helps users configure their data schema.
 
 Current schema configuration:
 ${JSON.stringify(currentSchema, null, 2)}
@@ -132,14 +161,41 @@ If you're just providing advice without modifying the schema, return:
     let aiResult;
     try {
       aiResult = JSON.parse(cleanResponse);
-      console.log('AI assist - Parsed result:', JSON.stringify(aiResult, null, 2));
+      console.log('AI assist - Parsed result keys:', Object.keys(aiResult));
+
+      // If this was a keyword request and we got fieldKeywords, convert to updatedSchema format
+      if (isKeywordRequest && aiResult.fieldKeywords) {
+        console.log('AI assist - Converting fieldKeywords to updatedSchema format');
+
+        // Build updatedSchema by updating keywords in current schema
+        const updatedCategoricalFields = currentSchema.categoricalFields.map(field => ({
+          ...field,
+          keywords: aiResult.fieldKeywords[field.name] || field.keywords,
+        }));
+
+        const updatedNumericFields = currentSchema.numericFields.map(field => ({
+          ...field,
+          keywords: aiResult.fieldKeywords[field.name] || field.keywords,
+        }));
+
+        aiResult.updatedSchema = {
+          project: currentSchema.project,
+          categoricalFields: updatedCategoricalFields,
+          numericFields: updatedNumericFields,
+          dateFields: currentSchema.dateFields,
+          primaryDateField: currentSchema.primaryDateField,
+          exampleQuestions: currentSchema.exampleQuestions,
+        };
+
+        aiResult.suggestion = `Generated keywords for ${Object.keys(aiResult.fieldKeywords).length} fields`;
+      }
 
       // Log what fields are in updatedSchema if present
       if (aiResult.updatedSchema) {
         console.log('AI assist - updatedSchema has categoricalFields:', !!aiResult.updatedSchema.categoricalFields);
         console.log('AI assist - updatedSchema has numericFields:', !!aiResult.updatedSchema.numericFields);
         if (aiResult.updatedSchema.categoricalFields && aiResult.updatedSchema.categoricalFields.length > 0) {
-          console.log('AI assist - First categorical field:', JSON.stringify(aiResult.updatedSchema.categoricalFields[0], null, 2));
+          console.log('AI assist - First categorical field keywords:', aiResult.updatedSchema.categoricalFields[0].keywords);
         }
       }
     } catch (parseError) {
