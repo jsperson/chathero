@@ -192,6 +192,8 @@ CODE REQUIREMENTS:
 - Must be Python 3 code using pandas
 - Input: "df" is a pandas DataFrame containing the filtered records
 - Output: Must create "result" variable containing a list of dictionaries
+- NEVER convert result to CSV, JSON strings, or other formats - always return list of dicts
+- If user asks for CSV/JSON/etc format, ignore the format request in code - Phase 3 will handle formatting
 - Available imports: pandas (as pd), numpy (as np)
 - NO file I/O, NO network access, NO subprocess, NO imports beyond pandas/numpy
 - Keep code concise and readable

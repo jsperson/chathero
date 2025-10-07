@@ -78,7 +78,7 @@ export default function SchemaAdmin() {
 
       // Check if dataset is specified in URL using the passed parameter
       console.log('loadDatasets - URL param:', urlParam);
-      console.log('loadDatasets - available datasets:', sorted.map(d => d.name));
+      console.log('loadDatasets - available datasets:', sorted.map((d: Dataset) => d.name));
 
       if (urlParam) {
         // URL parameter takes priority - use it even if not found in list
