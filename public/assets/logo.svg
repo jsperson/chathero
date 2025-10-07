@@ -37,7 +37,7 @@
   </g>
 
   <!-- ChatHero text with modern font -->
-  <text x="105" y="66" font-family="'Segoe UI', Arial, sans-serif" font-size="44" font-weight="600" fill="#005288" letter-spacing="1">
+  <text x="90" y="66" font-family="'Segoe UI', Arial, sans-serif" font-size="44" font-weight="600" fill="#005288" letter-spacing="1">
     ChatHero
   </text>
 </svg>
