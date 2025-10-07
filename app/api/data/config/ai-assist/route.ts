@@ -51,7 +51,26 @@ Return ONLY valid JSON array, no other text.`;
     });
 
     const cleanResponse = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    const examples = JSON.parse(cleanResponse);
+    let examples;
+
+    try {
+      examples = JSON.parse(cleanResponse);
+    } catch (parseError) {
+      console.error('Failed to parse AI response:', cleanResponse);
+      return NextResponse.json(
+        { error: 'AI returned invalid JSON' },
+        { status: 500 }
+      );
+    }
+
+    // Ensure examples is an array
+    if (!Array.isArray(examples)) {
+      console.error('AI returned non-array:', examples);
+      return NextResponse.json(
+        { error: 'AI returned invalid format (not an array)' },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ examples });
   } catch (error) {

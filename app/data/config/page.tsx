@@ -99,9 +99,18 @@ export default function DatasetConfigPage() {
       });
 
       const data = await response.json();
-      if (data.examples) {
-        setQueryExamples(data.examples);
-        setAiPrompt('');
+
+      if (data.error) {
+        alert(`Failed to get AI assistance: ${data.error}`);
+      } else if (data.examples) {
+        // Validate that examples is an array
+        if (Array.isArray(data.examples)) {
+          setQueryExamples(data.examples);
+          setAiPrompt('');
+        } else {
+          console.error('AI returned non-array examples:', data.examples);
+          alert('AI returned invalid format. Please try again.');
+        }
       }
     } catch (error) {
       console.error('AI assist error:', error);
