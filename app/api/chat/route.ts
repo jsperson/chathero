@@ -41,7 +41,18 @@ export async function POST(request: NextRequest) {
     const primaryDataset = selectedDatasets && selectedDatasets.length > 0
       ? selectedDatasets[0]
       : undefined;
-    const projectConfig = await loadProjectConfig(primaryDataset);
+
+    let projectConfig;
+    try {
+      projectConfig = await loadProjectConfig(primaryDataset);
+    } catch (error) {
+      console.error('Failed to load project config:', error);
+      await logger.error(`Failed to load project config for ${primaryDataset}`, { error: String(error) });
+      return NextResponse.json(
+        { error: 'Dataset configuration not found. Please configure this dataset first.' },
+        { status: 500 }
+      );
+    }
 
     // Initialize data adapter with all selected datasets
     const dataAdapter = await createDataAdapter(config.dataSource, selectedDatasets);

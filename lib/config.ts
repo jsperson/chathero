@@ -111,6 +111,10 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
     const datasetName = dataset || appConfig.dataSource.defaultDataset;
     const datasetsPath = path.join(process.cwd(), appConfig.dataSource.datasetsPath);
 
+    console.log('loadProjectConfig - dataset:', datasetName);
+    console.log('loadProjectConfig - cwd:', process.cwd());
+    console.log('loadProjectConfig - datasetsPath:', datasetsPath);
+
     // Find dataset in type folders
     const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
     const typeFolders = typeEntries.filter(entry => entry.isDirectory());

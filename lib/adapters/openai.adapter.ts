@@ -92,12 +92,20 @@ ${context.data_explanation ? `Data context: ${context.data_explanation}` : ''}
 
 Answer the user's question based on this data. Perform any necessary counting, grouping, filtering, or correlation yourself. Be concise and accurate. When discussing dates, remember that today is ${currentDate}.`;
 
+      // Build messages array with conversation history
+      const messages: any[] = [{ role: 'system', content: systemPrompt }];
+
+      // Add conversation history (limit to last 10 messages to avoid token overflow)
+      const conversationHistory = context.conversationHistory || [];
+      const recentHistory = conversationHistory.slice(-10);
+      messages.push(...recentHistory);
+
+      // Add current message
+      messages.push({ role: 'user', content: message });
+
       const completion = await this.client.chat.completions.create({
         model: this.model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: message }
-        ],
+        messages,
         max_tokens: 16384, // Maximum for gpt-4o-mini
       });
 
