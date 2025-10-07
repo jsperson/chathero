@@ -228,7 +228,7 @@ export async function POST(request: NextRequest) {
     }
 
     await logger.chatQuery(requestId, 'PHASE_2_RESULT', {
-      filteredRecords: processedData.length,
+      filteredRecords: Array.isArray(processedData) ? processedData.length : 1,
       originalRecords: rawData.length
     });
 

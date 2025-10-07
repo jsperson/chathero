@@ -148,12 +148,15 @@ WHEN TO GENERATE CODE:
 - Any operation requiring exact logical precision
 
 CODE REQUIREMENTS:
-- Must be pure JavaScript (ES6+)
+- Must be pure JavaScript (ES6+) EXPRESSION, not a function definition
 - Input: "data" array containing filtered records
-- Output: Must return array of result objects
+- Output: Must RETURN an array of result objects directly
+- Use IIFE pattern: (function() { ... return result; })() or inline expression
 - Only use: filter(), map(), reduce(), basic comparisons, date operations
-- NO external libraries, NO async operations, NO side effects
+- NO external libraries, NO async operations, NO side effects, NO function declarations
 - Keep code concise and readable
+- WRONG: const func = (data) => {...}  (function declaration - will not execute)
+- RIGHT: const presidents = data.filter(...); return presidents.map(...)
 
 DATE RANGE COMPARISON RULES:
 - ALWAYS use inclusive start (>=) and exclusive end (<) to avoid double-counting boundary dates
