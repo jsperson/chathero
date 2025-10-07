@@ -135,7 +135,7 @@ Example: "List launch count by president"
 - Final: ["_dataset_source", "launch_date", "presidential_start", "presidential_end", "name"]
 
 CODE GENERATION (Optional but recommended for complex operations):
-When a query requires DETERMINISTIC operations that AIs struggle with, generate JavaScript code to perform the operation.
+When a query requires DETERMINISTIC operations that AIs struggle with, generate Python code to perform the operation.
 
 ⚠️ CRITICAL: When generating code, you MUST include ALL fields referenced in the code in the "fieldsToInclude" array.
 If your code accesses fields like "presidential_start", "presidential_end", "launch_date", etc., ALL of those fields must be in fieldsToInclude.
@@ -163,58 +163,46 @@ The ONLY queries that don't need code:
 - Explaining/conversational: "how did you figure this out"
 
 CODE REQUIREMENTS:
-- Must be pure JavaScript (ES6+) with explicit RETURN statement
-- Input: "data" array containing filtered records
-- Output: Must RETURN an array of result objects
-- Code will be auto-wrapped in function, so just write the logic with return
-- Only use: filter(), map(), reduce(), basic comparisons, date operations
-- NO external libraries, NO async operations, NO side effects, NO function declarations
+- Must be Python 3 code using pandas
+- Input: "df" is a pandas DataFrame containing the filtered records
+- Output: Must create "result" variable containing a list of dictionaries
+- Available imports: pandas (as pd), numpy (as np)
+- NO file I/O, NO network access, NO subprocess, NO imports beyond pandas/numpy
 - Keep code concise and readable
+- pandas automatically handles date parsing with pd.to_datetime()
 
-Format examples:
-✅ CORRECT: const presidents = data.filter(...); return presidents.map(...);
-✅ CORRECT: return data.filter(...).map(...).reduce(...);
-❌ WRONG: const func = (data) => {...}  (function declaration)
-❌ WRONG: (function() { return ...; })()  (IIFE - will be double-wrapped)
+Format example:
+✅ CORRECT:
+import pandas as pd
+# Separate datasets
+presidents = df[df['_dataset_source'] == 'us-presidents'].copy()
+orders = df[df['_dataset_source'] == 'global_connect'].copy()
 
-DATE HANDLING AND COMPARISON RULES:
+# Parse dates automatically
+presidents['presidential_start'] = pd.to_datetime(presidents['presidential_start'])
+presidents['presidential_end'] = pd.to_datetime(presidents['presidential_end'])
+orders['Order Date'] = pd.to_datetime(orders['Order Date'])
 
-⚠️ CRITICAL: Different datasets may use different date formats!
-- Some use YYYY-MM-DD (e.g., "2021-01-20")
-- Some use MM/DD/YYYY (e.g., "01/20/2021")
-- Some use DD/MM/YYYY or other formats
+# Count orders per president
+result = []
+for _, p in presidents.iterrows():
+    start = p['presidential_start']
+    end = p['presidential_end'] if pd.notna(p['presidential_end']) else pd.Timestamp('2099-12-31')
+    count = len(orders[(orders['Order Date'] >= start) & (orders['Order Date'] < end)])
+    if count > 0:
+        result.append({'name': p['name'], 'order_count': count})
 
-ALWAYS normalize ALL dates to YYYY-MM-DD format before any comparisons:
-
-Define this helper function at the start of your generated code (use these exact regex patterns):
-  const normalizeDate = (d) => {
-    if (!d) return null;
-    if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(d)) return d;
-    if (/^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/.test(d)) {
-      const [m, day, y] = d.split('/');
-      const normalized = y + '-' + m.padStart(2,'0') + '-' + day.padStart(2,'0');
-      return normalized;
-    }
-    return new Date(d).toISOString().split('T')[0];
-  };
-
-Then use it on ALL date fields before comparison:
-  const orderDate = normalizeDate(shipment['Order Date']);
-  const startDate = normalizeDate(president.presidential_start);
-  if (orderDate >= startDate && orderDate < endDate) { ... }
-
-DATE RANGE COMPARISON RULES:
-- ALWAYS use inclusive start (>=) and exclusive end (<) to avoid double-counting boundary dates
-- Format: date >= start_date && date < end_date
-- For current/open-ended ranges: date >= start_date && date < (end_date || '9999-12-31')
-- NEVER use <= for end date comparisons - this causes overlaps at boundaries
-- Example: If a term ends "2021-01-20", the next term starts "2021-01-20" - use < to prevent counting the same date twice
+DATE HANDLING:
+- Use pd.to_datetime() to parse dates - handles multiple formats automatically
+- Dates become pandas Timestamp objects - easy to compare
+- Use pd.notna() or pd.isna() to check for null dates
+- Date comparisons: >= for inclusive start, < for exclusive end
 
 CODE EXAMPLE for temporal correlation:
 {
-  "generatedCode": "const normalizeDate = (d) => { if (!d) return null; if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(d)) return d; if (/^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$/.test(d)) { const [m, day, y] = d.split('/'); return y + '-' + m.padStart(2,'0') + '-' + day.padStart(2,'0'); } return new Date(d).toISOString().split('T')[0]; }; const presidents = data.filter(r => r._dataset_source === 'us-presidents'); const launches = data.filter(r => r._dataset_source === 'spacex-launches'); return presidents.map(p => ({ name: p.name, launch_count: launches.filter(l => normalizeDate(l.launch_date) >= normalizeDate(p.presidential_start) && normalizeDate(l.launch_date) < normalizeDate(p.presidential_end || '9999-12-31')).length })).filter(p => p.launch_count > 0);",
-  "codeDescription": "Normalizes all dates to YYYY-MM-DD format, then correlates launches with presidential terms by comparing launch_date against presidential_start/end ranges (inclusive start, exclusive end), returns array of {name, launch_count} for presidents with >0 launches",
-  "fieldsToInclude": ["_dataset_source", "name", "launch_date", "presidential_start", "presidential_end"]
+  "generatedCode": "import pandas as pd\\ndf_copy = df.copy()\\npresidents = df_copy[df_copy['_dataset_source'] == 'us-presidents']\\norders = df_copy[df_copy['_dataset_source'] == 'global_connect']\\npresidents['presidential_start'] = pd.to_datetime(presidents['presidential_start'])\\npresidents['presidential_end'] = pd.to_datetime(presidents['presidential_end'])\\norders['Order Date'] = pd.to_datetime(orders['Order Date'])\\nresult = []\\nfor _, p in presidents.iterrows():\\n    start = p['presidential_start']\\n    end = p['presidential_end'] if pd.notna(p['presidential_end']) else pd.Timestamp('2099-12-31')\\n    count = len(orders[(orders['Order Date'] >= start) & (orders['Order Date'] < end)])\\n    if count > 0:\\n        result.append({'name': p['name'], 'order_count': count})",
+  "codeDescription": "Uses pandas to parse dates and correlate orders with presidential terms by comparing Order Date against presidential_start/end ranges (inclusive start, exclusive end), returns list of {name, order_count} for presidents with >0 orders",
+  "fieldsToInclude": ["_dataset_source", "name", "Order Date", "presidential_start", "presidential_end"]
 }
 
 IMPORTANT RULES:

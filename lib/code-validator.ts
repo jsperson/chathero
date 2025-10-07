@@ -19,39 +19,38 @@ export class CodeValidator {
    * Validate generated code for safety before execution
    */
   async validate(code: string, description: string): Promise<CodeValidationResult> {
-    const systemPrompt = `You are a code security validator. Your job is to review JavaScript code for safety issues before execution.
+    const systemPrompt = `You are a code security validator. Your job is to review Python code for safety issues before execution.
 
 CODE TO VALIDATE:
-\`\`\`javascript
+\`\`\`python
 ${code}
 \`\`\`
 
 CODE DESCRIPTION: ${description}
 
 SAFETY REQUIREMENTS:
-The code will be executed in a sandboxed environment with the following constraints:
-- Input: "data" array (read-only)
-- Must return an array or primitive value
-- Timeout: 5 seconds max execution
+The code will be executed in a sandboxed Python environment with the following constraints:
+- Input: "df" pandas DataFrame (read-only)
+- Must create "result" variable containing a list of dictionaries
+- Timeout: 10 seconds max execution
+- No network access, no file I/O
 
 ALLOWED OPERATIONS:
-✅ Array methods: filter(), map(), reduce(), forEach(), find(), some(), every(), sort()
-✅ Basic comparisons: ===, !==, <, >, <=, >=, &&, ||
-✅ Date operations: new Date(), string comparisons with ISO dates
-✅ Math operations: +, -, *, /, Math.*
-✅ Ternary operators: condition ? a : b
-✅ Object property access: obj.property, obj['property']
-✅ Variable declarations: const, let
+✅ pandas operations: df.filter(), df[condition], df.groupby(), df.merge(), etc.
+✅ numpy operations: np.sum(), np.mean(), np.max(), etc.
+✅ Date operations: pd.to_datetime(), pd.Timestamp()
+✅ Basic Python: for loops, if/else, list comprehensions, dict operations
+✅ Math operations: +, -, *, /, //, %, **
+✅ Pandas methods: .iterrows(), .loc[], .iloc[], .copy(), .notna(), .isna()
+✅ Imports: pandas (as pd), numpy (as np) ONLY
 
 FORBIDDEN OPERATIONS (auto-reject if found):
-❌ File system access: fs, require('fs'), readFile, writeFile, etc.
-❌ Network access: fetch, XMLHttpRequest, http, https, net, etc.
-❌ Process operations: process.exit, child_process, exec, spawn, etc.
-❌ Dynamic code execution: eval(), Function(), setTimeout, setInterval
-❌ Prototype manipulation: __proto__, Object.setPrototypeOf
-❌ Global scope access: global, window, document, globalThis
-❌ Module loading: require(), import(), module.exports
-❌ Async operations: async, await, Promise (unless returning synchronously)
+❌ File I/O: open(), read(), write(), os.path, Path, etc.
+❌ Network: requests, urllib, socket, http, etc.
+❌ Process operations: os.system(), subprocess, exec(), eval()
+❌ Dynamic code execution: eval(), exec(), compile(), __import__()
+❌ Module loading beyond pandas/numpy: any other imports
+❌ System access: os, sys (beyond basic operations), ctypes, etc.
 
 Return JSON:
 {
