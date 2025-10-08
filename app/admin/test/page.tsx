@@ -173,7 +173,8 @@ export default function TestDashboard() {
                   {suite.tests.map((test, testIdx) => (
                     <div
                       key={testIdx}
-                      className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                      className="border rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer"
+                      onClick={() => toggleTestExpanded(idx, testIdx)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3 flex-1">
@@ -189,14 +190,11 @@ export default function TestDashboard() {
                           <div className="text-sm text-gray-500">
                             {test.duration}ms
                           </div>
-                          <button
-                            onClick={() => toggleTestExpanded(idx, testIdx)}
-                            className="text-gray-500 hover:text-gray-700 transition-colors"
-                          >
+                          <div className="text-gray-500">
                             <span className="text-lg">
                               {isTestExpanded(idx, testIdx) ? '▴' : '▾'}
                             </span>
-                          </button>
+                          </div>
                         </div>
                       </div>
 
