@@ -9,6 +9,7 @@ interface TestResult {
   message: string;
   duration: number;
   error?: string;
+  result?: any;
 }
 
 interface TestSuite {
@@ -32,6 +33,7 @@ export default function TestDashboard() {
   const [testResults, setTestResults] = useState<TestResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [expandedTests, setExpandedTests] = useState<Set<string>>(new Set());
 
   const runTests = async () => {
     setLoading(true);
@@ -76,6 +78,23 @@ export default function TestDashboard() {
       default:
         return 'text-gray-600';
     }
+  };
+
+  const toggleTestExpanded = (suiteIdx: number, testIdx: number) => {
+    const key = `${suiteIdx}-${testIdx}`;
+    setExpandedTests(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(key)) {
+        newSet.delete(key);
+      } else {
+        newSet.add(key);
+      }
+      return newSet;
+    });
+  };
+
+  const isTestExpanded = (suiteIdx: number, testIdx: number) => {
+    return expandedTests.has(`${suiteIdx}-${testIdx}`);
   };
 
   return (
@@ -169,17 +188,54 @@ export default function TestDashboard() {
                             </div>
                           </div>
                         </div>
-                        <div className="text-sm text-gray-500">
-                          {test.duration}ms
+                        <div className="flex items-center gap-3">
+                          <div className="text-sm text-gray-500">
+                            {test.duration}ms
+                          </div>
+                          <button
+                            onClick={() => toggleTestExpanded(idx, testIdx)}
+                            className="text-gray-500 hover:text-gray-700 transition-colors"
+                          >
+                            <span className="text-lg">
+                              {isTestExpanded(idx, testIdx) ? '▴' : '▾'}
+                            </span>
+                          </button>
                         </div>
                       </div>
 
-                      {test.error && (
-                        <div className="mt-3 p-3 bg-red-50 rounded border border-red-200">
-                          <div className="text-sm font-semibold text-red-800 mb-1">Error Details:</div>
-                          <pre className="text-xs text-red-600 overflow-x-auto whitespace-pre-wrap">
-                            {test.error}
-                          </pre>
+                      {isTestExpanded(idx, testIdx) && (
+                        <div className="mt-3 p-4 bg-gray-50 rounded border border-gray-200">
+                          <h4 className="font-semibold text-sm text-gray-700 mb-2">Test Details</h4>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-gray-600">Status:</span>
+                              <span className={getStatusColor(test.status)}>{test.status.toUpperCase()}</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="font-medium text-gray-600">Duration:</span>
+                              <span className="text-gray-800">{test.duration}ms</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="font-medium text-gray-600">Message:</span>
+                              <span className="text-gray-800">{test.message}</span>
+                            </div>
+                            {test.result && (
+                              <div className="mt-2">
+                                <div className="font-medium text-gray-700 mb-1">Test Results:</div>
+                                <pre className="text-xs text-gray-800 bg-white p-3 rounded overflow-x-auto whitespace-pre-wrap border border-gray-300 max-h-64 overflow-y-auto">
+                                  {JSON.stringify(test.result, null, 2)}
+                                </pre>
+                              </div>
+                            )}
+                            {test.error && (
+                              <div className="mt-2">
+                                <div className="font-medium text-red-700 mb-1">Error Details:</div>
+                                <pre className="text-xs text-red-600 bg-red-50 p-2 rounded overflow-x-auto whitespace-pre-wrap border border-red-200">
+                                  {test.error}
+                                </pre>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
