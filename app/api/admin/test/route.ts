@@ -45,6 +45,15 @@ export async function GET(request: NextRequest) {
   try {
     const results: TestSuite[] = [];
 
+    // Discover available datasets first
+    const datasetsResponse = await fetch(`${request.nextUrl.origin}/api/datasets`);
+    const datasetsData = await datasetsResponse.json();
+    const availableDatasets = datasetsData.datasets || [];
+
+    // Find first dataset of each type
+    const csvDataset = availableDatasets.find((d: any) => d.type === 'csv');
+    const jsonDataset = availableDatasets.find((d: any) => d.type === 'json');
+
     // Configuration Tests
     const configTests: TestResult[] = [];
 
@@ -74,65 +83,105 @@ export async function GET(request: NextRequest) {
     // Data Adapter Tests
     const adapterTests: TestResult[] = [];
 
-    adapterTests.push(await runTest('CSV Adapter - Load data', async () => {
-      const config = await loadConfig();
-      const adapter = await createDataAdapter(config.dataSource, 'global_connect');
-      const data = await adapter.getData();
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('CSV adapter returned no data');
-      }
-      return {
-        recordCount: data.length,
-        fields: Object.keys(data[0] || {}),
-        sampleRecord: data[0]
-      };
-    }));
+    if (csvDataset) {
+      adapterTests.push(await runTest(`CSV Adapter - Load data (${csvDataset.name})`, async () => {
+        const config = await loadConfig();
+        const adapter = await createDataAdapter(config.dataSource, csvDataset.name);
+        const data = await adapter.getData();
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error('CSV adapter returned no data');
+        }
+        return {
+          datasetName: csvDataset.name,
+          recordCount: data.length,
+          fields: Object.keys(data[0] || {}),
+          sampleRecord: data[0]
+        };
+      }));
+    } else {
+      adapterTests.push({
+        name: 'CSV Adapter - Load data',
+        status: 'skipped',
+        message: 'No CSV datasets available',
+        duration: 0
+      });
+    }
 
-    adapterTests.push(await runTest('JSON Adapter - Load data', async () => {
-      const config = await loadConfig();
-      const adapter = await createDataAdapter(config.dataSource, 'spacex-launches');
-      const data = await adapter.getData();
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('JSON adapter returned no data');
-      }
-      return {
-        recordCount: data.length,
-        fields: Object.keys(data[0] || {}),
-        sampleRecord: data[0]
-      };
-    }));
+    if (jsonDataset) {
+      adapterTests.push(await runTest(`JSON Adapter - Load data (${jsonDataset.name})`, async () => {
+        const config = await loadConfig();
+        const adapter = await createDataAdapter(config.dataSource, jsonDataset.name);
+        const data = await adapter.getData();
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error('JSON adapter returned no data');
+        }
+        return {
+          datasetName: jsonDataset.name,
+          recordCount: data.length,
+          fields: Object.keys(data[0] || {}),
+          sampleRecord: data[0]
+        };
+      }));
+    } else {
+      adapterTests.push({
+        name: 'JSON Adapter - Load data',
+        status: 'skipped',
+        message: 'No JSON datasets available',
+        duration: 0
+      });
+    }
 
     results.push({ category: 'Data Adapters', tests: adapterTests });
 
     // Schema Discovery Tests
     const schemaTests: TestResult[] = [];
 
-    schemaTests.push(await runTest('Auto-discover schema from CSV', async () => {
-      const config = await loadProjectConfig('global_connect');
-      if (!config.dataSchema.categoricalFields || config.dataSchema.categoricalFields.length === 0) {
-        throw new Error('Schema discovery failed to find categorical fields');
-      }
-      if (!config.dataSchema.numericFields || config.dataSchema.numericFields.length === 0) {
-        throw new Error('Schema discovery failed to find numeric fields');
-      }
-      return {
-        categoricalFields: config.dataSchema.categoricalFields,
-        numericFields: config.dataSchema.numericFields,
-        dateFields: config.dataSchema.dateFields || []
-      };
-    }));
+    if (csvDataset) {
+      schemaTests.push(await runTest(`Auto-discover schema from CSV (${csvDataset.name})`, async () => {
+        const config = await loadProjectConfig(csvDataset.name);
+        if (!config.dataSchema.categoricalFields || config.dataSchema.categoricalFields.length === 0) {
+          throw new Error('Schema discovery failed to find categorical fields');
+        }
+        if (!config.dataSchema.numericFields || config.dataSchema.numericFields.length === 0) {
+          throw new Error('Schema discovery failed to find numeric fields');
+        }
+        return {
+          datasetName: csvDataset.name,
+          categoricalFields: config.dataSchema.categoricalFields,
+          numericFields: config.dataSchema.numericFields,
+          dateFields: config.dataSchema.dateFields || []
+        };
+      }));
+    } else {
+      schemaTests.push({
+        name: 'Auto-discover schema from CSV',
+        status: 'skipped',
+        message: 'No CSV datasets available',
+        duration: 0
+      });
+    }
 
-    schemaTests.push(await runTest('Auto-discover schema from JSON', async () => {
-      const config = await loadProjectConfig('spacex-launches');
-      if (!config.dataSchema.categoricalFields) {
-        throw new Error('Schema discovery failed for JSON');
-      }
-      return {
-        categoricalFields: config.dataSchema.categoricalFields,
-        numericFields: config.dataSchema.numericFields || [],
-        dateFields: config.dataSchema.dateFields || []
-      };
-    }));
+    if (jsonDataset) {
+      schemaTests.push(await runTest(`Auto-discover schema from JSON (${jsonDataset.name})`, async () => {
+        const config = await loadProjectConfig(jsonDataset.name);
+        if (!config.dataSchema.categoricalFields) {
+          throw new Error('Schema discovery failed for JSON');
+        }
+        return {
+          datasetName: jsonDataset.name,
+          categoricalFields: config.dataSchema.categoricalFields,
+          numericFields: config.dataSchema.numericFields || [],
+          dateFields: config.dataSchema.dateFields || []
+        };
+      }));
+    } else {
+      schemaTests.push({
+        name: 'Auto-discover schema from JSON',
+        status: 'skipped',
+        message: 'No JSON datasets available',
+        duration: 0
+      });
+    }
 
     results.push({ category: 'Schema Discovery', tests: schemaTests });
 
@@ -207,83 +256,110 @@ result = df[df['age'] > 25].to_dict('records')
       };
     }));
 
-    apiTests.push(await runTest('API - /api/config endpoint', async () => {
-      const response = await fetch(`${request.nextUrl.origin}/api/config`, {
-        headers: { 'Cookie': 'selectedDataset=spacex-launches' }
-      });
-      if (!response.ok) throw new Error('Config API failed');
-      const data = await response.json();
-      if (!data.project || !data.project.name) {
-        throw new Error('Config API returned invalid data');
-      }
-      return {
-        projectName: data.project.name,
-        appName: data.app.name,
-        themeColor: data.theme.primaryColor
-      };
-    }));
+    // Use any available dataset for config/data API tests
+    const testDataset = jsonDataset || csvDataset;
 
-    apiTests.push(await runTest('API - /api/data endpoint', async () => {
-      const response = await fetch(`${request.nextUrl.origin}/api/data?dataset=spacex-launches&limit=5`);
-      if (!response.ok) throw new Error('Data API failed');
-      const result = await response.json();
-      if (!result.data || !Array.isArray(result.data) || result.data.length === 0) {
-        throw new Error('Data API returned no data');
-      }
-      return {
-        recordCount: result.data.length,
-        totalRecords: result.total,
-        fields: Object.keys(result.data[0] || {}),
-        sampleRecord: result.data[0]
-      };
-    }));
-
-    apiTests.push(await runTest('API - /api/chat endpoint (simple query)', async () => {
-      const response = await fetch(`${request.nextUrl.origin}/api/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': 'selectedDatasets=spacex-launches'
-        },
-        body: JSON.stringify({
-          message: 'How many launches are in the dataset?',
-          conversationHistory: []
-        })
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Chat API failed: ${response.status} - ${errorText}`);
-      }
-      const result = await response.json();
-      if (!result.response) {
-        throw new Error('Chat API returned no response');
-      }
-      if (!result.conversationHistory || !Array.isArray(result.conversationHistory)) {
-        throw new Error('Chat API returned invalid conversation history');
-      }
-      if (!result.phaseDetails) {
-        throw new Error('Chat API returned no phase details');
-      }
-      // Check that we got a meaningful response (at least 10 characters)
-      if (result.response.length < 10) {
-        throw new Error('Chat API response too short');
-      }
-      return {
-        response: result.response,
-        responseLength: result.response.length,
-        conversationLength: result.conversationHistory.length,
-        phase1: {
-          filtersApplied: result.phaseDetails.phase1.filters?.length || 0,
-          fieldsSelected: result.phaseDetails.phase1.fieldsToInclude?.length || 0,
-          codeGenerated: !!result.phaseDetails.phase1.generatedCode
-        },
-        phase2: {
-          inputRecords: result.phaseDetails.phase2.inputRecords,
-          outputRecords: result.phaseDetails.phase2.outputRecords,
-          codeExecuted: result.phaseDetails.phase2.codeExecuted
+    if (testDataset) {
+      apiTests.push(await runTest(`API - /api/config endpoint (${testDataset.name})`, async () => {
+        const response = await fetch(`${request.nextUrl.origin}/api/config`, {
+          headers: { 'Cookie': `selectedDataset=${testDataset.name}` }
+        });
+        if (!response.ok) throw new Error('Config API failed');
+        const data = await response.json();
+        if (!data.project || !data.project.name) {
+          throw new Error('Config API returned invalid data');
         }
-      };
-    }));
+        return {
+          datasetName: testDataset.name,
+          projectName: data.project.name,
+          appName: data.app.name,
+          themeColor: data.theme.primaryColor
+        };
+      }));
+
+      apiTests.push(await runTest(`API - /api/data endpoint (${testDataset.name})`, async () => {
+        const response = await fetch(`${request.nextUrl.origin}/api/data?dataset=${testDataset.name}&limit=5`);
+        if (!response.ok) throw new Error('Data API failed');
+        const result = await response.json();
+        if (!result.data || !Array.isArray(result.data) || result.data.length === 0) {
+          throw new Error('Data API returned no data');
+        }
+        return {
+          datasetName: testDataset.name,
+          recordCount: result.data.length,
+          totalRecords: result.total,
+          fields: Object.keys(result.data[0] || {}),
+          sampleRecord: result.data[0]
+        };
+      }));
+
+      apiTests.push(await runTest(`API - /api/chat endpoint (${testDataset.name})`, async () => {
+        const response = await fetch(`${request.nextUrl.origin}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': `selectedDatasets=${testDataset.name}`
+          },
+          body: JSON.stringify({
+            message: 'How many records are in the dataset?',
+            conversationHistory: []
+          })
+        });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Chat API failed: ${response.status} - ${errorText}`);
+        }
+        const result = await response.json();
+        if (!result.response) {
+          throw new Error('Chat API returned no response');
+        }
+        if (!result.conversationHistory || !Array.isArray(result.conversationHistory)) {
+          throw new Error('Chat API returned invalid conversation history');
+        }
+        if (!result.phaseDetails) {
+          throw new Error('Chat API returned no phase details');
+        }
+        // Check that we got a meaningful response (at least 10 characters)
+        if (result.response.length < 10) {
+          throw new Error('Chat API response too short');
+        }
+        return {
+          datasetName: testDataset.name,
+          response: result.response,
+          responseLength: result.response.length,
+          conversationLength: result.conversationHistory.length,
+          phase1: {
+            filtersApplied: result.phaseDetails.phase1.filters?.length || 0,
+            fieldsSelected: result.phaseDetails.phase1.fieldsToInclude?.length || 0,
+            codeGenerated: !!result.phaseDetails.phase1.generatedCode
+          },
+          phase2: {
+            inputRecords: result.phaseDetails.phase2.inputRecords,
+            outputRecords: result.phaseDetails.phase2.outputRecords,
+            codeExecuted: result.phaseDetails.phase2.codeExecuted
+          }
+        };
+      }));
+    } else {
+      apiTests.push({
+        name: 'API - /api/config endpoint',
+        status: 'skipped',
+        message: 'No datasets available',
+        duration: 0
+      });
+      apiTests.push({
+        name: 'API - /api/data endpoint',
+        status: 'skipped',
+        message: 'No datasets available',
+        duration: 0
+      });
+      apiTests.push({
+        name: 'API - /api/chat endpoint',
+        status: 'skipped',
+        message: 'No datasets available',
+        duration: 0
+      });
+    }
 
     results.push({ category: 'API Integration', tests: apiTests });
 
