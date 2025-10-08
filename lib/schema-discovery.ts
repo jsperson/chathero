@@ -100,7 +100,7 @@ export class SchemaDiscovery {
     const type = this.inferType(values);
 
     // Get sample values (up to 5)
-    const sampleValues = [...new Set(values)].slice(0, 5);
+    const sampleValues = Array.from(new Set(values)).slice(0, 5);
 
     return {
       name: fieldName,

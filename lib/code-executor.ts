@@ -65,7 +65,6 @@ with open('${outputFile}', 'w') as f:
       // Execute Python with timeout
       const pythonProcess = spawn('python3', [codeFile], {
         timeout: 10000, // 10 second timeout
-        env: {}, // No environment variables for security
       });
 
       let stdout = '';

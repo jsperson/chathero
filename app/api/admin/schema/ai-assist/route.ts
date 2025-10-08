@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     // Get selected dataset from cookie or use default
     const cookies = request.cookies;
-    const selectedDataset = cookies.get('selectedDataset')?.value;
+    const selectedDataset = cookies.get('selectedDatasets')?.value?.split(',')[0];
 
     const config = await loadConfig();
     const projectConfig = await loadProjectConfig(selectedDataset);

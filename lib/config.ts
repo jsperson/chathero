@@ -61,6 +61,7 @@ export interface ProjectConfig {
       value: any;
     }>;
     limit?: number;
+    fieldsToInclude?: string[];
     explanation: string;
   }>;
   aiContext: {
@@ -209,7 +210,7 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
 
       cachedProjectConfig = SchemaDiscovery.generateProjectConfig(data, projectName);
 
-      console.log(`Auto-discovered schema with ${cachedProjectConfig.dataSchema.categoricalFields.length} categorical fields and ${cachedProjectConfig.dataSchema.numericFields?.length || 0} numeric fields`);
+      console.log(`Auto-discovered schema with ${cachedProjectConfig!.dataSchema.categoricalFields.length} categorical fields and ${cachedProjectConfig!.dataSchema.numericFields?.length || 0} numeric fields`);
     }
 
     // Try to load README if it exists

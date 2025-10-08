@@ -80,7 +80,7 @@ export async function createDataAdapter(
 
   if (!datasetArray || datasetArray.length === 0) {
     // Use default dataset
-    const defaultDataset = config.defaultDataset;
+    const defaultDataset = config.defaultDataset || '';
     const type = await getDatasetType(config, defaultDataset);
     return createAdapterForType(type, config, defaultDataset);
   }

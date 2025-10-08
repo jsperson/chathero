@@ -51,15 +51,12 @@ export default function SchemaAdmin() {
   // Track the dataset URL parameter
   const datasetParam = searchParams.get('dataset');
 
-  console.log('RENDER - datasetParam:', datasetParam);
 
   useEffect(() => {
-    console.log('EFFECT - dataset from URL:', datasetParam);
     loadDatasets(datasetParam);
   }, [datasetParam]);
 
   useEffect(() => {
-    console.log('EFFECT - selectedDataset changed to:', selectedDataset);
     if (selectedDataset) {
       loadSchema();
     }
@@ -77,20 +74,15 @@ export default function SchemaAdmin() {
       setAvailableDatasets(sorted);
 
       // Check if dataset is specified in URL using the passed parameter
-      console.log('loadDatasets - URL param:', urlParam);
-      console.log('loadDatasets - available datasets:', sorted.map((d: Dataset) => d.name));
 
       if (urlParam) {
         // URL parameter takes priority - use it even if not found in list
-        console.log('loadDatasets - setting dataset from URL:', urlParam);
         const exists = sorted.some((d: Dataset) => d.name === urlParam);
-        console.log('loadDatasets - dataset exists in list:', exists);
         setSelectedDataset(urlParam);
         // Also set cookie so API calls use the right dataset
         document.cookie = `selectedDataset=${urlParam}; path=/; max-age=31536000`;
       } else if (sorted.length > 0) {
         // Load first dataset alphabetically only if no URL parameter
-        console.log('loadDatasets - no URL param, setting first dataset:', sorted[0].name);
         setSelectedDataset(sorted[0].name);
         document.cookie = `selectedDataset=${sorted[0].name}; path=/; max-age=31536000`;
       }
@@ -110,17 +102,13 @@ export default function SchemaAdmin() {
   const loadSchema = async () => {
     try {
       setLoading(true);
-      console.log('loadSchema - selected dataset:', selectedDataset);
 
       // Check the cookie to see what the API will receive
       const cookies = document.cookie.split(';');
       const datasetCookie = cookies.find(c => c.trim().startsWith('selectedDataset='));
-      console.log('loadSchema - current cookie:', datasetCookie);
 
-      console.log('loadSchema - fetching /api/admin/schema?dataset=' + selectedDataset);
       const response = await fetch(`/api/admin/schema?dataset=${selectedDataset}`);
       const data = await response.json();
-      console.log('loadSchema - response:', data);
 
       // If existing config exists, use it
       if (data.existingConfig) {
@@ -201,8 +189,6 @@ export default function SchemaAdmin() {
           ? selectedDataset.split(/[-_]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
           : 'My Project';
 
-        console.log('loadSchema - Using auto-discovered schema for:', selectedDataset);
-        console.log('loadSchema - Display name:', defaultName);
 
         setSchema({
           project: {
@@ -275,7 +261,6 @@ export default function SchemaAdmin() {
 
       const data = await response.json();
 
-      console.log('AI assist response:', data);
 
       if (data.error) {
         setAiResponse(`Error: ${data.error}`);
@@ -287,7 +272,6 @@ export default function SchemaAdmin() {
 
         // If AI returned updated schema, apply it
         if (data.updatedSchema) {
-          console.log('Applying updated schema:', data.updatedSchema);
 
           // Merge with current schema to preserve sampleValues, uniqueCount, type
           const mergedCategoricalFields = data.updatedSchema.categoricalFields?.map((updatedField: any) => {

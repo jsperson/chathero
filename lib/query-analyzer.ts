@@ -1,7 +1,6 @@
 // AI-powered query analyzer that determines how to process data
 import { AIAdapter } from './adapters/ai.adapter';
 import { ProjectConfig } from './config';
-import { JoinStrategy } from './join-analyzer';
 
 export interface QueryAnalysisResult {
   filters?: Array<{
@@ -31,13 +30,8 @@ export class QueryAnalyzer {
   async analyze(question: string, dataSample: any[], datasetReadmes?: Record<string, string>, modelOverride?: string, retryContext?: { previousCode: string; error: string; attempt: number }, conversationHistory?: Array<{role: string; content: string}>): Promise<QueryAnalysisResult> {
     // Check if multiple datasets are present
     const hasMultipleDatasets = dataSample.length > 0 && dataSample.some(record => record._dataset_source);
-    const uniqueDatasets = [...new Set(dataSample.map(r => r._dataset_source).filter(Boolean))];
+    const uniqueDatasets = Array.from(new Set(dataSample.map(r => r._dataset_source).filter(Boolean)));
 
-    console.log('Query Analyzer - Multi-dataset detection:');
-    console.log('  Has multiple datasets:', hasMultipleDatasets);
-    console.log('  Sample data count:', dataSample.length);
-    console.log('  Unique datasets:', uniqueDatasets);
-    console.log('  First record has _dataset_source:', dataSample[0]?._dataset_source);
 
     const datasetInfo = hasMultipleDatasets
       ? `\nIMPORTANT: This data contains records from MULTIPLE datasets combined together.
@@ -345,11 +339,11 @@ Important:
       // Otherwise Phase 2 will filter data but then strip out the filter field, causing Phase 3 to fail
       if (analysis.filters && analysis.filters.length > 0) {
         const filterFields = analysis.filters.map(f => f.field);
-        const missingFields = filterFields.filter(f => !analysis.fieldsToInclude.includes(f));
+        const missingFields = filterFields.filter(f => !analysis.fieldsToInclude!.includes(f));
 
         if (missingFields.length > 0) {
           console.warn(`Phase 1 used filters on fields not in fieldsToInclude: ${missingFields.join(', ')}. Auto-adding them.`);
-          analysis.fieldsToInclude.push(...missingFields);
+          analysis.fieldsToInclude!.push(...missingFields);
         }
       }
 
@@ -358,12 +352,12 @@ Important:
         // Extract field names from code (basic heuristic: look for r.fieldname or record.fieldname patterns)
         const codeFieldMatches = analysis.generatedCode.match(/[rp]\.\w+/g) || [];
         const codeFields = codeFieldMatches.map(m => m.split('.')[1]).filter(f => f && f !== 'length' && f !== 'filter' && f !== 'map');
-        const uniqueCodeFields = [...new Set(codeFields)];
-        const missingCodeFields = uniqueCodeFields.filter(f => !analysis.fieldsToInclude.includes(f));
+        const uniqueCodeFields = Array.from(new Set(codeFields));
+        const missingCodeFields = uniqueCodeFields.filter(f => !analysis.fieldsToInclude!.includes(f));
 
         if (missingCodeFields.length > 0) {
           console.warn(`Phase 1 generated code uses fields not in fieldsToInclude: ${missingCodeFields.join(', ')}. Auto-adding them.`);
-          analysis.fieldsToInclude.push(...missingCodeFields);
+          analysis.fieldsToInclude!.push(...missingCodeFields);
         }
       }
 
