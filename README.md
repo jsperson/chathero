@@ -14,6 +14,7 @@ ChatHero is a generic framework that allows users to interact with JSON data thr
 
 ### 🤖 Intelligent AI Chat
 - **Five-Phase Query System**: Plan → Validate → Wrangle → Optimize → Answer
+- **Real-Time Progress Stepper**: Visual status bar showing live progress through each phase with color-coded indicators (active, completed, warning/error)
 - **Smart Query Understanding**: Handles complex queries like "launches by year", "by day of week", "average cost per vehicle"
 - **Python Code Generation**: Automatically generates and executes pandas code for deterministic operations (counting, aggregation, temporal correlation)
 - **Security Validation**: All generated code is validated before execution to prevent malicious operations
@@ -309,17 +310,27 @@ aiContext:
   code-executor.ts   - Python code execution sandbox (Phase 2)
   schema-discovery.ts - Automatic schema detection
   logger.ts          - Structured logging system
+/components
+  Header.tsx         - Navigation with admin dropdown
+  ProgressStepper.tsx - Real-time phase progress indicator (status bar)
+  DatasetSelector.tsx - Dataset dropdown selection
+  ThemeProvider.tsx  - Dynamic theme configuration
 /app
   /                  - Chat interface with SSE streaming
   /data              - Data browser table view
-  /admin/schema      - Schema configuration admin
+  /admin
+    /schema          - Schema configuration admin
+    /datasets        - Dataset selection admin
+    /ai-settings     - AI model and API key configuration
   /api
     /chat            - Five-phase query processing (full response)
     /chat-stream     - Five-phase query processing (SSE streaming)
     /data            - Data endpoint
     /datasets        - Dataset listing endpoint
     /config          - Public config endpoint
-    /admin/schema    - Schema admin APIs
+    /admin
+      /schema        - Schema admin APIs
+      /ai-settings   - AI configuration APIs
 /logs                - Application logs (chat-queries, errors)
 /data                - JSON data files
 /public/assets       - Custom logos and static files
@@ -377,10 +388,24 @@ aiContext:
 - **Context Instructions**: Explicit AI prompts with pattern examples
 
 ### Progress & Logging
-- **Real-Time Updates**: SSE streaming provides phase-by-phase status
+
+**ProgressStepper Component** - Real-time visual feedback during query processing:
+- **Visual Status Bar**: Displays at the top of the chat interface showing all five phases
+- **Color-Coded Indicators**:
+  - Blue (active): Currently processing phase
+  - Green (completed): Successfully finished phase
+  - Yellow (warning): Phase completed with warnings (e.g., code rejected, retry needed)
+  - Red (error): Phase failed
+- **Phase Labels**: Phase 1 → Phase 1.5 → Phase 2 → Phase 2.5 → Phase 3
+- **Live Updates**: Updates in real-time via Server-Sent Events (SSE) as each phase progresses
+- **Expandable Details**: Click on any phase to see detailed information (filters applied, code generated, errors, etc.)
+- **Retry Indicators**: Shows attempt counts when retries occur
+- **Persistent Display**: Remains visible throughout conversation, cleared on "Clear Conversation"
+
+**Logging Infrastructure**:
 - **Structured Logging**: All operations logged to `/logs/app-YYYY-MM-DD.log`
-- **Phase Details**: Expandable UI showing filters, code, attempts, errors
-- **Retry Visibility**: UI indicates when retries occur and shows attempt counts
+- **Phase Details**: Complete audit trail of filters, code, execution results, and errors
+- **Sample Data Logging**: First 3 result records logged for verification and debugging
 
 ## Sample Datasets
 
