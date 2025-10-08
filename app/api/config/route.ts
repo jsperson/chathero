@@ -3,21 +3,30 @@ import { loadConfig, loadProjectConfig } from '@/lib/config';
 
 export async function GET(request: NextRequest) {
   try {
-    // Get selected datasets from cookie (comma-separated) or use default
+    // Get selected datasets from cookie (comma-separated for multi-select or single)
     const cookies = request.cookies;
     const selectedDatasetsStr = cookies.get('selectedDatasets')?.value;
+    const selectedDatasetStr = cookies.get('selectedDataset')?.value; // Backward compatibility
 
     let selectedDatasets: string[] | undefined;
     if (selectedDatasetsStr) {
       selectedDatasets = selectedDatasetsStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    } else if (selectedDatasetStr) {
+      // Backward compatibility for single dataset cookie
+      selectedDatasets = [selectedDatasetStr];
     }
 
     console.log('Config API - selected datasets:', selectedDatasets);
 
+    if (!selectedDatasets || selectedDatasets.length === 0) {
+      return NextResponse.json(
+        { error: 'No dataset selected. Please select at least one dataset.' },
+        { status: 400 }
+      );
+    }
+
     const config = await loadConfig();
-    const primaryDataset = selectedDatasets && selectedDatasets.length > 0
-      ? selectedDatasets[0]
-      : undefined;
+    const primaryDataset = selectedDatasets[0];
 
     console.log('Config API - loading primary dataset:', primaryDataset);
     const projectConfig = await loadProjectConfig(primaryDataset);
