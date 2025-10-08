@@ -155,16 +155,16 @@ FIELD SELECTION RULES - Include fields needed for BOTH processing AND displaying
    - These questions don't need actual data - just context for explanation
    - Maximum 3 fields for conversational queries
 
-Example: "List launch count by president"
-- Need for processing: presidential_start, presidential_end, launch_date, _dataset_source
-- Need for output: name (to label each president in the result)
-- Final: ["_dataset_source", "launch_date", "presidential_start", "presidential_end", "name"]
+Example: "List event count by person"
+- Need for processing: person_start_date, person_end_date, event_date, _dataset_source
+- Need for output: name (to label each person in the result)
+- Final: ["_dataset_source", "event_date", "person_start_date", "person_end_date", "name"]
 
 CODE GENERATION (Optional but recommended for complex operations):
 When a query requires DETERMINISTIC operations that AIs struggle with, generate Python code to perform the operation.
 
 ⚠️ CRITICAL: When generating code, you MUST include ALL fields referenced in the code in the "fieldsToInclude" array.
-If your code accesses fields like "presidential_start", "presidential_end", "launch_date", etc., ALL of those fields must be in fieldsToInclude.
+If your code accesses fields like "start_date", "end_date", "event_date", etc., ALL of those fields must be in fieldsToInclude.
 Otherwise Phase 2 will strip out those fields and your code will fail.
 
 ⚠️ WHEN YOU MUST GENERATE CODE (NOT OPTIONAL):
@@ -203,22 +203,22 @@ Format example:
 ✅ CORRECT:
 import pandas as pd
 # Separate datasets
-presidents = df[df['_dataset_source'] == 'us-presidents'].copy()
-orders = df[df['_dataset_source'] == 'global_connect'].copy()
+people = df[df['_dataset_source'] == 'dataset_a'].copy()
+transactions = df[df['_dataset_source'] == 'dataset_b'].copy()
 
 # Parse dates automatically
-presidents['presidential_start'] = pd.to_datetime(presidents['presidential_start'])
-presidents['presidential_end'] = pd.to_datetime(presidents['presidential_end'])
-orders['Order Date'] = pd.to_datetime(orders['Order Date'])
+people['start_date'] = pd.to_datetime(people['start_date'])
+people['end_date'] = pd.to_datetime(people['end_date'])
+transactions['transaction_date'] = pd.to_datetime(transactions['transaction_date'])
 
-# Count orders per president
+# Count transactions per person
 result = []
-for _, p in presidents.iterrows():
-    start = p['presidential_start']
-    end = p['presidential_end'] if pd.notna(p['presidential_end']) else pd.Timestamp('2099-12-31')
-    count = len(orders[(orders['Order Date'] >= start) & (orders['Order Date'] < end)])
+for _, p in people.iterrows():
+    start = p['start_date']
+    end = p['end_date'] if pd.notna(p['end_date']) else pd.Timestamp('2099-12-31')
+    count = len(transactions[(transactions['transaction_date'] >= start) & (transactions['transaction_date'] < end)])
     if count > 0:
-        result.append({'name': p['name'], 'order_count': count})
+        result.append({'name': p['name'], 'transaction_count': count})
 
 DATE HANDLING:
 - Use pd.to_datetime() to parse dates - handles multiple formats automatically
@@ -231,16 +231,16 @@ When correlating records across datasets using date ranges, be EXTREMELY careful
 
 Common pitfall: Filtering one dataset but applying it to the wrong variable
 ❌ WRONG:
-presidents_filtered = df[df['_dataset_source'] == 'presidents']
-launches = df[df['_dataset_source'] == 'launches']
-df['launch_date'] = pd.to_datetime(df['launch_date'])  # Parsing on wrong DataFrame!
-# Later using launches will fail because launches still has string dates
+people_filtered = df[df['_dataset_source'] == 'people']
+events = df[df['_dataset_source'] == 'events']
+df['event_date'] = pd.to_datetime(df['event_date'])  # Parsing on wrong DataFrame!
+# Later using events will fail because events still has string dates
 
 ✅ CORRECT - Use .copy() and consistent naming:
-presidents = df[df['_dataset_source'] == 'presidents'].copy()
-launches = df[df['_dataset_source'] == 'launches'].copy()
-launches['launch_date'] = pd.to_datetime(launches['launch_date'], errors='coerce')  # Parse on correct DF
-presidents['presidential_start'] = pd.to_datetime(presidents['presidential_start'], errors='coerce')
+people = df[df['_dataset_source'] == 'people'].copy()
+events = df[df['_dataset_source'] == 'events'].copy()
+events['event_date'] = pd.to_datetime(events['event_date'], errors='coerce')  # Parse on correct DF
+people['start_date'] = pd.to_datetime(people['start_date'], errors='coerce')
 # Now you can use these DataFrames safely
 
 VERIFY YOUR LOGIC:
@@ -263,14 +263,14 @@ When generating code that filters or correlates data, ensure the result includes
 - If filtering by criteria, include the filter field values in the result
 - If grouping, include group identifier fields
 
-Example for "launches within X of presidential inaugurations":
-❌ WRONG: result.append({'name': p['name'], 'mission_count': count})
+Example for "events within X of person's tenure":
+❌ WRONG: result.append({'name': p['name'], 'event_count': count})
 ✅ CORRECT: result.append({
     'name': p['name'],
-    'inauguration_date': p['presidential_start'].isoformat(),
-    'mission_count': count,
-    'window_start': inauguration_start.isoformat(),
-    'window_end': inauguration_end.isoformat()
+    'tenure_start': p['start_date'].isoformat(),
+    'event_count': count,
+    'window_start': window_start.isoformat(),
+    'window_end': window_end.isoformat()
 })
 
 This allows Phase 3 to show complete, verifiable answers with context instead of just counts.
@@ -285,9 +285,9 @@ NUMERIC FIELD HANDLING:
 
 CODE EXAMPLE for temporal correlation:
 {
-  "generatedCode": "import pandas as pd\\ndf_copy = df.copy()\\npresidents = df_copy[df_copy['_dataset_source'] == 'us-presidents']\\norders = df_copy[df_copy['_dataset_source'] == 'global_connect']\\npresidents['presidential_start'] = pd.to_datetime(presidents['presidential_start'])\\npresidents['presidential_end'] = pd.to_datetime(presidents['presidential_end'])\\norders['Order Date'] = pd.to_datetime(orders['Order Date'])\\nresult = []\\nfor _, p in presidents.iterrows():\\n    start = p['presidential_start']\\n    end = p['presidential_end'] if pd.notna(p['presidential_end']) else pd.Timestamp('2099-12-31')\\n    count = len(orders[(orders['Order Date'] >= start) & (orders['Order Date'] < end)])\\n    if count > 0:\\n        result.append({'name': p['name'], 'order_count': count})",
-  "codeDescription": "Uses pandas to parse dates and correlate orders with presidential terms by comparing Order Date against presidential_start/end ranges (inclusive start, exclusive end), returns list of {name, order_count} for presidents with >0 orders",
-  "fieldsToInclude": ["_dataset_source", "name", "Order Date", "presidential_start", "presidential_end"]
+  "generatedCode": "import pandas as pd\\ndf_copy = df.copy()\\npeople = df_copy[df_copy['_dataset_source'] == 'dataset_a']\\ntransactions = df_copy[df_copy['_dataset_source'] == 'dataset_b']\\npeople['start_date'] = pd.to_datetime(people['start_date'])\\npeople['end_date'] = pd.to_datetime(people['end_date'])\\ntransactions['transaction_date'] = pd.to_datetime(transactions['transaction_date'])\\nresult = []\\nfor _, p in people.iterrows():\\n    start = p['start_date']\\n    end = p['end_date'] if pd.notna(p['end_date']) else pd.Timestamp('2099-12-31')\\n    count = len(transactions[(transactions['transaction_date'] >= start) & (transactions['transaction_date'] < end)])\\n    if count > 0:\\n        result.append({'name': p['name'], 'transaction_count': count})",
+  "codeDescription": "Uses pandas to parse dates and correlate transactions with person tenures by comparing transaction_date against start_date/end_date ranges (inclusive start, exclusive end), returns list of {name, transaction_count} for people with >0 transactions",
+  "fieldsToInclude": ["_dataset_source", "name", "transaction_date", "start_date", "end_date"]
 }
 
 🔍 SELF-VERIFICATION CHECKLIST (review before submitting):
