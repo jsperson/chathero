@@ -11,8 +11,12 @@ export const metadata: Metadata = {
   description: "Chat with your data using AI",
   icons: {
     icon: [
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
 };
