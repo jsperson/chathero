@@ -69,16 +69,28 @@ export async function GET(request: NextRequest) {
       };
     }));
 
-    configTests.push(await runTest('Load default project config', async () => {
-      const config = await loadProjectConfig();
-      if (!config.dataSchema) throw new Error('Project config missing dataSchema');
-      return {
-        projectName: config.project.name,
-        categoricalFields: config.dataSchema.categoricalFields?.length || 0,
-        numericFields: config.dataSchema.numericFields?.length || 0,
-        dateFields: config.dataSchema.dateFields?.length || 0
-      };
-    }));
+    // Test project config loading with first available dataset
+    const testConfigDataset = jsonDataset || csvDataset;
+    if (testConfigDataset) {
+      configTests.push(await runTest(`Load project config (${testConfigDataset.name})`, async () => {
+        const config = await loadProjectConfig(testConfigDataset.name);
+        if (!config.dataSchema) throw new Error('Project config missing dataSchema');
+        return {
+          datasetName: testConfigDataset.name,
+          projectName: config.project.name,
+          categoricalFields: config.dataSchema.categoricalFields?.length || 0,
+          numericFields: config.dataSchema.numericFields?.length || 0,
+          dateFields: config.dataSchema.dateFields?.length || 0
+        };
+      }));
+    } else {
+      configTests.push({
+        name: 'Load project config',
+        status: 'skipped',
+        message: 'No datasets available',
+        duration: 0
+      });
+    }
 
     results.push({ category: 'Configuration', tests: configTests });
 
