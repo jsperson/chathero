@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Retry loop for code generation and execution
-    const MAX_RETRIES = 2;
+    const MAX_RETRIES = 4;
     let attempt = 0;
     let queryAnalysis: any;
     let codeValidation: any = null;
