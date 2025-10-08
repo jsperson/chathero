@@ -23,22 +23,16 @@ export class CSVAdapter implements DataAdapter {
         ? this.datasets
         : [this.config.defaultDataset];
 
-      console.log('CSVAdapter.getData():');
-      console.log('  Datasets to load:', datasetsToLoad);
-      console.log('  Count:', datasetsToLoad.length);
-
       // If only one dataset, return data without source field (backward compatibility)
       if (datasetsToLoad.length === 1) {
-        const data = await this.loadSingleDataset(datasetsToLoad[0]);
-        console.log('  Single dataset mode - no _dataset_source field added');
-        console.log('  Records loaded:', Array.isArray(data) ? data.length : 0);
+        const data = await this.loadSingleDataset(datasetsToLoad[0] || '');
         return data;
       }
 
       // Multiple datasets: load all and combine with _dataset_source field
       const allData: any[] = [];
 
-      for (const datasetName of datasetsToLoad) {
+      for (const datasetName of datasetsToLoad as string[]) {
         const data = await this.loadSingleDataset(datasetName);
 
         // Add _dataset_source field to each record
@@ -46,12 +40,8 @@ export class CSVAdapter implements DataAdapter {
           ? data.map(record => ({ ...record, _dataset_source: datasetName }))
           : [];
 
-        console.log(`  Loaded dataset '${datasetName}': ${taggedData.length} records`);
         allData.push(...taggedData);
       }
-
-      console.log('  Total combined records:', allData.length);
-      console.log('  Sample record has _dataset_source:', allData[0]?._dataset_source);
 
       return allData;
     } catch (error) {
@@ -61,7 +51,7 @@ export class CSVAdapter implements DataAdapter {
   }
 
   private async loadSingleDataset(datasetName: string): Promise<any> {
-    let filePath: string;
+    let filePath: string = '';
 
     // New multi-dataset structure with type folders
     if ('datasetsPath' in this.config && this.config.datasetsPath) {
@@ -73,22 +63,17 @@ export class CSVAdapter implements DataAdapter {
       let found = false;
       for (const typeFolder of typeFolders) {
         const potentialPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.csv');
-        console.log(`CSVAdapter - Checking path: ${potentialPath}`);
         try {
           await fs.access(potentialPath);
           filePath = potentialPath;
           found = true;
-          console.log(`CSVAdapter - Found CSV at: ${potentialPath}`);
           break;
         } catch (e) {
-          console.log(`CSVAdapter - Not found at: ${potentialPath}`);
           // Try next type folder
         }
       }
 
       if (!found) {
-        console.log(`CSVAdapter - Searched in: ${datasetsPath}`);
-        console.log(`CSVAdapter - Type folders: ${typeFolders.map(f => f.name).join(', ')}`);
         throw new Error(`Dataset '${datasetName}' not found in any type folder`);
       }
     }

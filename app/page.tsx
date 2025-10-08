@@ -136,7 +136,7 @@ export default function Home() {
 
             if (eventType && eventData) {
               if (eventType === 'phase') {
-                setPhases(prev => prev.map(p => {
+                setPhases((prev: any) => prev.map((p: any) => {
                   if (p.id === eventData.id) {
                     return { ...p, status: eventData.status, details: eventData.status === 'active' ? 'Processing...' : undefined };
                   }
@@ -148,7 +148,7 @@ export default function Home() {
         if (data.phaseDetails) {
         const pd = data.phaseDetails;
 
-        setPhases(prev => prev.map(p => {
+        setPhases((prev: any) => prev.map((p: any) => {
           if (p.id === 'phase1') {
             const details = [];
             if (pd.phase1.attempts && pd.phase1.attempts > 1) {
@@ -247,7 +247,7 @@ export default function Home() {
         }));
       } else {
         // Fallback if no phase details returned
-        setPhases(prev => prev.map(p => ({ ...p, status: 'completed', details: undefined })));
+        setPhases((prev: any) => prev.map((p: any) => ({ ...p, status: 'completed', details: undefined })));
       }
 
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);

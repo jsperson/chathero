@@ -140,7 +140,7 @@ Include a mix of:
     // Generate full project config using auto-discovery
     const projectName = dataset
       .split(/[-_]/)
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 
     const fullProjectConfig = SchemaDiscovery.generateProjectConfig(data, projectName);

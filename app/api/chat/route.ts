@@ -187,7 +187,7 @@ export async function POST(request: NextRequest) {
           });
 
           // 3. Fill remaining slots with fields from Phase 1 selection
-          fieldsToKeep.forEach(field => {
+          fieldsToKeep.forEach((field: string) => {
             if (priorityFields.length < MAX_FIELDS && !priorityFields.includes(field)) {
               priorityFields.push(field);
             }
@@ -202,9 +202,9 @@ export async function POST(request: NextRequest) {
           fieldsToKeep = priorityFields;
         }
 
-        filteredData = filteredData.map(record => {
+        filteredData = filteredData.map((record: any) => {
           const reduced: any = {};
-          fieldsToKeep.forEach(field => {
+          fieldsToKeep.forEach((field: string) => {
             if (field in record) {
               reduced[field] = record[field];
             }

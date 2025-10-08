@@ -105,7 +105,7 @@ export default function DatasetConfigPage() {
         // Validate that examples is an array
         if (Array.isArray(data.examples)) {
           // Filter out any invalid/empty examples
-          const validExamples = data.examples.filter(ex =>
+          const validExamples = data.examples.filter((ex: any) =>
             ex &&
             ex.question &&
             ex.question.trim().length > 0 &&
