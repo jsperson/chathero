@@ -46,7 +46,9 @@ export async function GET(request: NextRequest) {
     const results: TestSuite[] = [];
 
     // Discover available datasets first
-    const datasetsResponse = await fetch(`${request.nextUrl.origin}/api/datasets`);
+    const datasetsResponse = await fetch(`${request.nextUrl.origin}/api/datasets`, {
+      cache: 'no-store'
+    });
     const datasetsData = await datasetsResponse.json();
     const availableDatasets = datasetsData.datasets || [];
 
@@ -240,7 +242,9 @@ result = df[df['age'] > 25].to_dict('records')
     const apiTests: TestResult[] = [];
 
     apiTests.push(await runTest('API - /api/datasets endpoint', async () => {
-      const response = await fetch(`${request.nextUrl.origin}/api/datasets`);
+      const response = await fetch(`${request.nextUrl.origin}/api/datasets`, {
+        cache: 'no-store'
+      });
       if (!response.ok) throw new Error('Datasets API failed');
       const data = await response.json();
       if (!data.datasets || !Array.isArray(data.datasets)) {
@@ -262,7 +266,8 @@ result = df[df['age'] > 25].to_dict('records')
     if (testDataset) {
       apiTests.push(await runTest(`API - /api/config endpoint (${testDataset.name})`, async () => {
         const response = await fetch(`${request.nextUrl.origin}/api/config`, {
-          headers: { 'Cookie': `selectedDataset=${testDataset.name}` }
+          headers: { 'Cookie': `selectedDataset=${testDataset.name}` },
+          cache: 'no-store'
         });
         if (!response.ok) throw new Error('Config API failed');
         const data = await response.json();
@@ -278,7 +283,9 @@ result = df[df['age'] > 25].to_dict('records')
       }));
 
       apiTests.push(await runTest(`API - /api/data endpoint (${testDataset.name})`, async () => {
-        const response = await fetch(`${request.nextUrl.origin}/api/data?dataset=${testDataset.name}&limit=5`);
+        const response = await fetch(`${request.nextUrl.origin}/api/data?dataset=${testDataset.name}&limit=5`, {
+          cache: 'no-store'
+        });
         if (!response.ok) throw new Error('Data API failed');
         const result = await response.json();
         if (!result.data || !Array.isArray(result.data) || result.data.length === 0) {
@@ -303,7 +310,8 @@ result = df[df['age'] > 25].to_dict('records')
           body: JSON.stringify({
             message: 'How many records are in the dataset?',
             conversationHistory: []
-          })
+          }),
+          cache: 'no-store'
         });
         if (!response.ok) {
           const errorText = await response.text();
