@@ -84,13 +84,29 @@ export default function Header() {
 
             {adminMenuOpen && (
               <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                {/* Data Section */}
+                <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">
+                  Data
+                </div>
                 <Link
                   href="/admin/datasets"
-                  className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                  className="block px-6 py-2 hover:bg-gray-100 transition-colors"
                   onClick={() => setAdminMenuOpen(false)}
                 >
                   📦 Dataset Selection
                 </Link>
+                <Link
+                  href="/admin/dataset-maintenance"
+                  className="block px-6 py-2 hover:bg-gray-100 transition-colors text-gray-400"
+                  onClick={() => setAdminMenuOpen(false)}
+                >
+                  🔧 Dataset Maintenance
+                  <span className="text-xs ml-2">(Coming Soon)</span>
+                </Link>
+
+                {/* Divider */}
+                <div className="my-2 border-t border-gray-200"></div>
+
                 <Link
                   href="/admin/ai-settings"
                   className="block px-4 py-2 hover:bg-gray-100 transition-colors"
