@@ -1,0 +1,122 @@
+dataSchema:
+  primaryDateField: Order Date
+  categoricalFields:
+    - name: Order ID
+      displayName: Order  I D
+      description: 8565 unique values
+    - name: Ship Mode
+      displayName: Ship  Mode
+      description: 4 unique values
+    - name: Customer ID
+      displayName: Customer  I D
+      description: 7369 unique values
+    - name: Segment
+      displayName: Segment
+      description: 3 unique values
+    - name: State
+      displayName: State
+      description: 892 unique values
+    - name: Country
+      displayName: Country
+      description: 143 unique values
+    - name: Region
+      displayName: Region
+      description: 23 unique values
+    - name: Market
+      displayName: Market
+      description: 5 unique values
+    - name: Product ID
+      displayName: Product  I D
+      description: 3065 unique values
+    - name: Category
+      displayName: Category
+      description: 3 unique values
+    - name: Sub-Category
+      displayName: Sub- Category
+      description: 17 unique values
+    - name: Discount
+      displayName: Discount
+      description: 25 unique values
+    - name: "Order Priority\r"
+      displayName: Order  Priority
+      description: 4 unique values
+  numericFields:
+    - name: "\uFEFFRow ID"
+      displayName: Row  I D
+      unit: ''
+    - name: Sales
+      displayName: Sales
+      unit: ''
+    - name: Quantity
+      displayName: Quantity
+      unit: ''
+    - name: Profit
+      displayName: Profit
+      unit: ''
+    - name: Shipping Cost
+      displayName: Shipping  Cost
+      unit: ''
+domainKnowledge:
+  fieldKeywords:
+    Order ID:
+      - order_id
+      - order_identifier
+      - order_number
+      - transaction_id
+    Ship Mode:
+      - ship_mode
+      - shipping_method
+      - delivery_type
+      - transport_mode
+    Customer ID:
+      - customer_id
+      - client_id
+      - buyer_id
+      - customer_identifier
+    Segment:
+      - segment
+      - customer_segment
+      - market_segment
+      - classification
+    State:
+      - state
+      - province
+      - region_state
+      - territory
+    Country:
+      - country
+      - nation
+      - sovereign_state
+      - country_name
+    Region:
+      - region
+      - area
+      - zone
+      - geographical_region
+    Market:
+      - market
+      - market_area
+      - sales_region
+      - trade_zone
+    Product ID:
+      - product_id
+      - item_id
+      - product_identifier
+      - sku
+    Category:
+      - category
+      - product_category
+      - classification
+      - type
+    Sub-Category:
+      - sub_category
+      - subcategory
+      - product_subcategory
+      - subdivision
+    Discount:
+      - discount
+      - price_reduction
+      - rebate
+      - markdown
+    "Order Priority\r":
+      - "Order Priority\r"

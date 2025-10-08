@@ -32,47 +32,56 @@ dataSchema:
 domainKnowledge:
   fieldKeywords:
     name:
-      - name
-      - names
-      - name
-      - name
+      - full_name
+      - president_name
+      - leader_name
+      - chief_executive_name
+      - head_of_state_name
     spouse:
-      - spouse
-      - spouses
-      - spouse
-      - spouse
+      - partner
+      - wife
+      - husband
+      - marital_partner
+      - significant_other
     birth_date:
-      - birth_date
-      - birth_dates
-      - birth date
-      - birth_date
+      - date_of_birth
+      - dob
+      - birth_day
+      - birth_year
+      - born_on
     birth_place:
-      - birth_place
-      - birth_places
-      - birth place
-      - birth_place
+      - place_of_birth
+      - birth_location
+      - hometown
+      - birth_city
+      - birth_state
     death_date:
-      - death_date
-      - death_dates
-      - death date
-      - death_date
+      - date_of_death
+      - dod
+      - death_day
+      - death_year
+      - died_on
     cause_of_death:
-      - cause_of_death
-      - cause_of_deaths
-      - cause of death
-      - cause_of_death
+      - death_cause
+      - reason_of_death
+      - mortality_cause
+      - cause_of_passing
+      - death_reason
     presidential_start:
-      - presidential_start
-      - presidential_starts
-      - presidential start
-      - presidential_start
+      - term_start
+      - presidency_start
+      - inauguration_date
+      - start_of_term
+      - beginning_of_presidency
     presidential_end:
-      - presidential_end
-      - presidential_ends
-      - presidential end
-      - presidential_end
+      - term_end
+      - presidency_end
+      - end_of_term
+      - conclusion_of_presidency
+      - end_date
     party:
-      - party
-      - partys
-      - party
-      - party
+      - political_party
+      - party_affiliation
+      - political_affiliation
+      - party_membership
+      - political_group

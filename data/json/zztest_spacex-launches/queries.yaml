@@ -1,0 +1,35 @@
+exampleQuestions:
+  - How many launches were there in 2024?
+  - Show me all Falcon Heavy missions
+  - What was the success rate?
+  - Launches by year
+  - How many Starship test flights?
+  - Show me recent launches
+queryExamples:
+  - question: How many launches were successful?
+    filters:
+      - field: outcome
+        operator: equals
+        value: Success
+    explanation: Filter to records with a successful launch outcome and count them
+  - question: What is the total launch cost in USD for missions with payloads over 10,000 kg?
+    filters:
+      - field: payload_mass_kg
+        operator: greater_than
+        value: 10000
+    explanation: Filter to launches with payload mass over 10,000 kg and sum their launch costs
+  - question: How many launches were conducted by NASA?
+    filters:
+      - field: customer
+        operator: equals
+        value: NASA
+    explanation: Filter to launches with NASA as the customer and count them
+  - question: How much did launches cost on average during 2025?
+    filters:
+      - field: launch_date
+        operator: contains
+        value: '2025'
+    explanation: Filter to records with launch date in 2025 and calculate the average launch cost
+  - question: Which launch site has hosted the most launches?
+    filters: []
+    explanation: Group records by launch site and find the site with the highest number of launches

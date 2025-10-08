@@ -1,0 +1,37 @@
+exampleQuestions:
+  - How many presidents were part of the Democratic-Republican party?
+  - How many presidents served between 1800 and 1850?
+  - How many presidents lived over 80 years?
+  - Which presidents died on July 4th?
+  - How many presidents did not belong to any political party?
+queryExamples:
+  - question: How many presidents served exactly one term?
+    filters:
+      - field: presidential_start
+        operator: greater_than
+        value: DATE_SUBTRACT(presidential_end, 4 years)
+    explanation: Filter presidents who served less than or equal to one full 4-year term and count them.
+  - question: Who were the presidents affiliated with the Democratic-Republican party?
+    filters:
+      - field: party
+        operator: equals
+        value: Democratic-Republican
+    explanation: Filter presidents by the party 'Democratic-Republican' and list their names.
+  - question: How many presidents were born in Virginia?
+    filters:
+      - field: birth_place
+        operator: contains
+        value: Virginia
+    explanation: Filter records to find presidents born in the state of Virginia and count them.
+  - question: Which presidents died on July 4th, but not in the same year?
+    filters:
+      - field: death_date
+        operator: contains
+        value: '-07-04'
+    explanation: Find presidents who died on July 4th by filtering their death_dates, ignoring the year, and list their names.
+  - question: Which presidents started their presidency after 1900?
+    filters:
+      - field: presidential_start
+        operator: greater_than
+        value: '1900-12-31'
+    explanation: Filter presidents who began their terms after the year 1900 and list their names.

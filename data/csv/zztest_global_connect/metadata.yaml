@@ -4,4 +4,4 @@ project:
   domain: general data
 aiContext:
   systemRole: You are a helpful assistant that answers questions about Global Connect data.
-  domainContext: This dataset contains 10256 records with 20 fields.
+  domainContext: This dataset contains data in the general data domain. Dataset with 10256 records
