@@ -107,13 +107,17 @@ ${JSON.stringify(dataSample.slice(0, 3), null, 2)}
 Your task: Determine what filters (if any) should be applied to get the relevant data for answering the question.
 You MUST also specify which fields are needed - this significantly reduces data size sent to Phase 3.
 
+🔴 CRITICAL: For ANY counting, aggregation, or calculation query, you MUST generate Python code!
+Questions like "how many", "count", "total", "sum", "average" REQUIRE generatedCode.
+Do NOT rely on Phase 3 to count - it may receive sampled data and will give wrong counts.
+
 Return a JSON object:
 {
   "filters": [{"field": "field_name", "operator": "equals|contains|greater_than|less_than", "value": "value"}],
   "limit": 100,
   "fieldsToInclude": ["field1", "field2"],
-  "generatedCode": "optional JavaScript code for deterministic operations",
-  "codeDescription": "optional description of what the code does",
+  "generatedCode": "REQUIRED Python code for counting/aggregation/calculations",
+  "codeDescription": "description of what the code does",
   "explanation": "What data is needed and why"
 }
 
@@ -193,7 +197,21 @@ CODE REQUIREMENTS:
 - Keep code concise and readable
 - pandas automatically handles date parsing with pd.to_datetime()
 
-Format example:
+SIMPLE COUNTING EXAMPLE (MOST COMMON):
+For "how many X?" queries:
+✅ CORRECT:
+import pandas as pd
+filtered = df[df['_dataset_source'] == 'target_dataset'].copy()
+result = [{'count': len(filtered)}]
+
+For "how many X by Y?" (grouping):
+✅ CORRECT:
+import pandas as pd
+filtered = df[df['_dataset_source'] == 'target_dataset'].copy()
+counts = filtered.groupby('category_field').size().reset_index(name='count')
+result = counts.to_dict('records')
+
+COMPLEX EXAMPLE (temporal correlation):
 ✅ CORRECT:
 import pandas as pd
 # Separate datasets
