@@ -374,18 +374,32 @@ result = df[df['age'] > 25].to_dict('records')
         acc + suite.tests.reduce((sum, t) => sum + t.duration, 0), 0),
     };
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: summary.failed === 0,
       summary,
       results,
       timestamp: new Date().toISOString(),
     });
 
+    // Prevent caching at all levels
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+
+    return response;
+
   } catch (error: any) {
     console.error('Test suite error:', error);
-    return NextResponse.json(
+    const errorResponse = NextResponse.json(
       { error: 'Failed to run test suite', message: error.message },
       { status: 500 }
     );
+
+    // Prevent caching of errors too
+    errorResponse.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    errorResponse.headers.set('Pragma', 'no-cache');
+    errorResponse.headers.set('Expires', '0');
+
+    return errorResponse;
   }
 }
