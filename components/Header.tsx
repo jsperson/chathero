@@ -98,6 +98,13 @@ export default function Header() {
                 >
                   🤖 AI Settings
                 </Link>
+                <Link
+                  href="/admin/test"
+                  className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                  onClick={() => setAdminMenuOpen(false)}
+                >
+                  🧪 Test
+                </Link>
               </div>
             )}
           </div>
