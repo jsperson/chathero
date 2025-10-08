@@ -7,5 +7,4 @@ export interface DataSourceConfig {
   type: string;
   path?: string;
   datasetsPath?: string;
-  defaultDataset?: string;
 }

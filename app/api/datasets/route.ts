@@ -113,7 +113,6 @@ export async function GET() {
 
     return NextResponse.json({
       datasets: allDatasets,
-      default: config.dataSource.defaultDataset,
     });
   } catch (error) {
     console.error('Datasets API error:', error);

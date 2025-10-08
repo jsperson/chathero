@@ -135,7 +135,6 @@ ai:
 dataSource:
   type: "json"
   datasetsPath: "./data"           # Root folder containing dataset subfolders
-  defaultDataset: "spacex-launches" # Default dataset to load
 ```
 
 ### Dataset Structure
@@ -253,7 +252,6 @@ aiContext:
    dataSource:
      type: "json"
      datasetsPath: "./data"
-     defaultDataset: "spacex-launches"  # or "us-presidents"
    ```
 
 5. **Start the application**

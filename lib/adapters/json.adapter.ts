@@ -21,7 +21,11 @@ export class JSONAdapter implements DataAdapter {
       // Determine which datasets to load
       const datasetsToLoad = this.datasets && this.datasets.length > 0
         ? this.datasets
-        : [this.config.defaultDataset];
+        : [];
+
+      if (datasetsToLoad.length === 0) {
+        throw new Error('No datasets specified. Please select at least one dataset.');
+      }
 
       // If only one dataset, return data without source field (backward compatibility)
       if (datasetsToLoad.length === 1) {

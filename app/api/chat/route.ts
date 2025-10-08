@@ -401,7 +401,7 @@ export async function POST(request: NextRequest) {
       },
       phase3: {
         responseLength: response.length,
-        datasets: selectedDatasets || [config.dataSource.defaultDataset]
+        datasets: selectedDatasets || []
       }
     };
 

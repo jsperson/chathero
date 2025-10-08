@@ -6,9 +6,16 @@ import { clearConfigCache, loadConfig } from '@/lib/config';
 
 export async function POST(request: NextRequest) {
   try {
-    // Get selected dataset from cookie or use default
+    // Get selected dataset from cookie
     const cookies = request.cookies;
     const selectedDataset = cookies.get('selectedDataset')?.value;
+
+    if (!selectedDataset) {
+      return NextResponse.json(
+        { error: 'No dataset selected. Please select a dataset first.' },
+        { status: 400 }
+      );
+    }
 
     const schemaConfig = await request.json();
 
@@ -51,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     // Write to dataset-specific schema.yaml and metadata.yaml
     const config = await loadConfig();
-    const datasetName = selectedDataset || config.dataSource.defaultDataset;
+    const datasetName = selectedDataset;
     const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
 
     // Find dataset in type folders

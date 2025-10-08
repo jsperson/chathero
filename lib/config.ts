@@ -23,7 +23,6 @@ export interface AppConfig {
   dataSource: {
     type: string;
     datasetsPath: string;
-    defaultDataset: string;
     path?: string; // Deprecated - for backward compatibility
   };
 }
@@ -97,7 +96,11 @@ export async function loadConfig(): Promise<AppConfig> {
   }
 }
 
-export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig> {
+export async function loadProjectConfig(dataset: string): Promise<ProjectConfig> {
+  if (!dataset) {
+    throw new Error('Dataset parameter is required');
+  }
+
   // Clear cache if switching datasets
   if (dataset && cachedProjectConfig) {
     cachedProjectConfig = null;
@@ -109,7 +112,7 @@ export async function loadProjectConfig(dataset?: string): Promise<ProjectConfig
 
   try {
     const appConfig = await loadConfig();
-    const datasetName = dataset || appConfig.dataSource.defaultDataset;
+    const datasetName = dataset;
     const datasetsPath = path.join(process.cwd(), appConfig.dataSource.datasetsPath);
 
     console.log('loadProjectConfig - dataset:', datasetName);

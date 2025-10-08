@@ -7,7 +7,7 @@ import path from 'path';
 
 export async function GET(request: NextRequest) {
   try {
-    // Get selected dataset from URL parameter first, then cookie, then default
+    // Get selected dataset from URL parameter first, then cookie
     const { searchParams } = new URL(request.url);
     const datasetFromUrl = searchParams.get('dataset');
 
@@ -20,8 +20,15 @@ export async function GET(request: NextRequest) {
     console.log('Schema API - Cookie:', datasetFromCookie);
     console.log('Schema API - Selected dataset:', selectedDataset);
 
+    if (!selectedDataset) {
+      return NextResponse.json(
+        { error: 'No dataset selected. Please select a dataset first.' },
+        { status: 400 }
+      );
+    }
+
     const config = await loadConfig();
-    const dataAdapter = await createDataAdapter(config.dataSource as any, selectedDataset ? [selectedDataset] : undefined);
+    const dataAdapter = await createDataAdapter(config.dataSource as any, [selectedDataset]);
     const data = await dataAdapter.getData();
 
     console.log('Schema API - Data loaded, records:', data.length);
@@ -32,7 +39,7 @@ export async function GET(request: NextRequest) {
     // Check if schema configuration exists for this dataset (metadata.yaml/schema.yaml or legacy project.yaml)
     let existingConfig = null;
     try {
-      const datasetName = selectedDataset || config.dataSource.defaultDataset;
+      const datasetName = selectedDataset;
       const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
 
       console.log('Schema API - Looking for config files for dataset:', datasetName);

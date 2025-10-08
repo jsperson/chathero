@@ -79,10 +79,7 @@ export async function createDataAdapter(
   const datasetArray = typeof datasets === 'string' ? [datasets] : datasets;
 
   if (!datasetArray || datasetArray.length === 0) {
-    // Use default dataset
-    const defaultDataset = config.defaultDataset || '';
-    const type = await getDatasetType(config, defaultDataset);
-    return createAdapterForType(type, config, defaultDataset);
+    throw new Error('No datasets specified. Please select at least one dataset.');
   }
 
   // Single dataset - use appropriate adapter directly
