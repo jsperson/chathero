@@ -123,8 +123,28 @@ export async function POST(request: NextRequest) {
             risks: codeValidation.risks,
             attempt
           });
-          // Continue without code execution
-          queryAnalysis.generatedCode = undefined;
+
+          // If we have retries left, retry with validation error feedback
+          if (attempt < MAX_RETRIES) {
+            const validationError = `Code validation failed: ${codeValidation.reason}\nRisks identified: ${codeValidation.risks?.join(', ') || 'None'}`;
+            retryContext = {
+              previousCode: queryAnalysis.generatedCode,
+              error: validationError,
+              attempt: attempt + 1
+            };
+            await logger.chatQuery(requestId, 'PHASE_1.5_RETRY_TRIGGERED', {
+              attempt: attempt + 1,
+              maxRetries: MAX_RETRIES
+            });
+            // Continue to next iteration of retry loop
+            continue;
+          } else {
+            // No more retries, continue without code execution
+            await logger.chatQuery(requestId, 'PHASE_1.5_NO_MORE_RETRIES', {
+              attempt
+            });
+            queryAnalysis.generatedCode = undefined;
+          }
         }
       }
 
