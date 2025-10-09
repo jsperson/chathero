@@ -120,14 +120,14 @@ export default function DatabaseSettings() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto p-4 sm:p-8">
-        <div className="bg-white rounded-lg shadow-md p-4 sm:p-8">
-          <h1 className="text-3xl font-bold mb-6">Database Settings</h1>
+      <div className="max-w-4xl mx-auto px-2 py-4 sm:p-8">
+        <div className="bg-white rounded-lg shadow-md px-3 py-4 sm:p-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6">Database Settings</h1>
 
           {/* Data Source Type Selection */}
           <div className="mb-8">
             <label className="block text-sm font-semibold mb-2">Data Source Type</label>
-            <div className="flex flex-wrap gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row gap-3">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
@@ -137,7 +137,7 @@ export default function DatabaseSettings() {
                   onChange={(e) => setDataSourceType(e.target.value as 'file')}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <span className="text-sm sm:text-base">File-based (JSON/CSV)</span>
+                <span>File-based (JSON/CSV)</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -148,7 +148,7 @@ export default function DatabaseSettings() {
                   onChange={(e) => setDataSourceType(e.target.value as 'database')}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <span className="text-sm sm:text-base">Database</span>
+                <span>Database</span>
               </label>
             </div>
           </div>
