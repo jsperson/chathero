@@ -76,41 +76,35 @@ export async function createDataAdapter(
   config: DataSourceConfig,
   datasets?: string | string[]
 ): Promise<DataAdapter> {
-  // Handle database connections
-  if (config.type === 'database') {
-    if (!config.database) {
-      throw new Error('Database configuration is required for database type');
-    }
-
-    // For databases, if the requested dataset is the database name itself,
-    // use the configured tables instead
+  // Check if we're requesting the database specifically
+  if (config.type === 'database' && config.database) {
     const databaseName = config.database.connection.database;
     const datasetsArray = typeof datasets === 'string' ? [datasets] : datasets;
 
-    let tables: string[] | string | undefined;
-    if (datasetsArray && datasetsArray.length === 1 && datasetsArray[0] === databaseName) {
+    // Only use database adapter if requesting the database itself
+    const isRequestingDatabase = datasetsArray &&
+      datasetsArray.length === 1 &&
+      datasetsArray[0] === databaseName;
+
+    if (isRequestingDatabase) {
       // User selected the database itself, use configured tables
-      tables = config.database.tables;
-    } else if (datasetsArray) {
-      // User selected specific tables
-      tables = datasetsArray;
-    } else {
-      // No selection, use configured tables
-      tables = config.database.tables;
+      const tables = config.database.tables;
+
+      switch (config.database.type) {
+        case 'sqlserver':
+          return new SQLServerAdapter(config.database, tables);
+        case 'postgresql':
+          throw new Error('PostgreSQL adapter not yet implemented');
+        case 'mysql':
+          throw new Error('MySQL adapter not yet implemented');
+        case 'sqlite':
+          throw new Error('SQLite adapter not yet implemented');
+        default:
+          throw new Error(`Unknown database type: ${config.database.type}`);
+      }
     }
 
-    switch (config.database.type) {
-      case 'sqlserver':
-        return new SQLServerAdapter(config.database, tables);
-      case 'postgresql':
-        throw new Error('PostgreSQL adapter not yet implemented');
-      case 'mysql':
-        throw new Error('MySQL adapter not yet implemented');
-      case 'sqlite':
-        throw new Error('SQLite adapter not yet implemented');
-      default:
-        throw new Error(`Unknown database type: ${config.database.type}`);
-    }
+    // Otherwise, fall through to file-based handling
   }
 
   // Handle file-based datasets (JSON, CSV)
