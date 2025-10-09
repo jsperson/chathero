@@ -55,42 +55,120 @@ export class CSVAdapter implements DataAdapter {
   }
 
   private async loadSingleDataset(datasetName: string): Promise<any> {
-    let filePath: string = '';
+    if (!('datasetsPath' in this.config) || !this.config.datasetsPath) {
+      // Legacy single file structure
+      if ('path' in this.config && this.config.path) {
+        const filePath = path.join(process.cwd(), this.config.path);
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        return this.parseCSV(fileContent);
+      }
+      throw new Error('No data path configured');
+    }
 
-    // New multi-dataset structure with type folders
-    if ('datasetsPath' in this.config && this.config.datasetsPath) {
-      // Try to find dataset in type folders (csv, json, url, etc.)
-      const datasetsPath = path.join(process.cwd(), this.config.datasetsPath);
+    const datasetsPath = path.join(process.cwd(), this.config.datasetsPath);
+    const datasetPath = path.join(datasetsPath, datasetName);
+
+    // Read metadata to check for selected tables
+    let selectedTables: string[] | undefined;
+    try {
+      const yaml = await import('js-yaml');
+      const metadataPath = path.join(datasetPath, 'metadata.yaml');
+      const metadataContent = await fs.readFile(metadataPath, 'utf-8');
+      const metadataConfig = yaml.load(metadataContent) as any;
+      if (metadataConfig?.selectedTables) {
+        selectedTables = metadataConfig.selectedTables;
+      }
+    } catch (e) {
+      // No metadata or selectedTables, load all tables
+    }
+
+    // Check if dataset exists
+    try {
+      await fs.access(datasetPath);
+    } catch (e) {
+      // Try old structure (type folders)
       const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
       const typeFolders = typeEntries.filter(entry => entry.isDirectory());
 
-      let found = false;
       for (const typeFolder of typeFolders) {
         const potentialPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.csv');
         try {
           await fs.access(potentialPath);
-          filePath = potentialPath;
-          found = true;
-          break;
+          const fileContent = await fs.readFile(potentialPath, 'utf-8');
+          return this.parseCSV(fileContent);
         } catch (e) {
           // Try next type folder
         }
       }
 
-      if (!found) {
-        throw new Error(`Dataset '${datasetName}' not found in any type folder`);
-      }
-    }
-    // Legacy single file structure (backward compatibility)
-    else if ('path' in this.config && this.config.path) {
-      filePath = path.join(process.cwd(), this.config.path);
-    }
-    else {
-      throw new Error('No data path configured');
+      throw new Error(`Dataset '${datasetName}' not found`);
     }
 
-    const fileContent = await fs.readFile(filePath, 'utf-8');
-    return this.parseCSV(fileContent);
+    // New structure: load all tables from dataset
+    const allTables = await this.getDatasetTables(datasetPath);
+
+    // Filter by selected tables if specified
+    const tables = selectedTables && selectedTables.length > 0
+      ? allTables.filter(t => selectedTables.includes(t))
+      : allTables;
+
+    if (tables.length === 0) {
+      throw new Error(`No tables found in dataset '${datasetName}'`);
+    }
+
+    // Load data from all tables
+    const allData: any[] = [];
+
+    for (const tableName of tables) {
+      const tableData = await this.loadTableData(datasetPath, tableName);
+
+      // Add table identifier if multiple tables
+      if (tables.length > 1) {
+        const taggedData = tableData.map(record => ({
+          ...record,
+          _table_source: tableName
+        }));
+        allData.push(...taggedData);
+      } else {
+        allData.push(...tableData);
+      }
+    }
+
+    return allData;
+  }
+
+  private async getDatasetTables(datasetPath: string): Promise<string[]> {
+    const entries = await fs.readdir(datasetPath, { withFileTypes: true });
+    const tables: string[] = [];
+
+    for (const entry of entries) {
+      // Skip non-directories and config files
+      if (!entry.isDirectory()) continue;
+      if (['config', '.git'].includes(entry.name)) continue;
+
+      tables.push(entry.name);
+    }
+
+    return tables;
+  }
+
+  private async loadTableData(datasetPath: string, tableName: string): Promise<any[]> {
+    const tablePath = path.join(datasetPath, tableName);
+    const entries = await fs.readdir(tablePath);
+    const allData: any[] = [];
+
+    for (const entry of entries) {
+      // Skip directories and non-CSV files
+      if (!entry.endsWith('.csv')) continue;
+
+      const filePath = path.join(tablePath, entry);
+      const fileContent = await fs.readFile(filePath, 'utf-8');
+      const data = this.parseCSV(fileContent);
+
+      allData.push(...data);
+    }
+
+    return allData;
   }
 
   private parseCSV(content: string): any[] {

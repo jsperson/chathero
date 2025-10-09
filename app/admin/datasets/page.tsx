@@ -19,6 +19,7 @@ export default function DatasetManagementPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [openMenuDataset, setOpenMenuDataset] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {
     // Load available datasets
@@ -75,6 +76,27 @@ export default function DatasetManagementPage() {
     }, 500);
   };
 
+  const handleDelete = async (datasetName: string) => {
+    try {
+      const response = await fetch(`/api/datasets/${datasetName}/delete`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        console.error('Failed to delete dataset');
+        return;
+      }
+
+      // Remove from local state
+      setDatasets(prev => prev.filter(d => d.name !== datasetName));
+      setSelectedDatasets(prev => prev.filter(d => d !== datasetName));
+      setDeleteConfirm(null);
+      setOpenMenuDataset(null);
+    } catch (error) {
+      console.error('Failed to delete dataset:', error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -86,9 +108,18 @@ export default function DatasetManagementPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--color-primary)' }}>
-          Dataset Management
-        </h1>
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>
+            Dataset Management
+          </h1>
+          <button
+            onClick={() => router.push('/admin/datasets/create')}
+            className="px-4 py-2 text-white rounded-lg font-medium"
+            style={{ backgroundColor: 'var(--color-primary)' }}
+          >
+            + Create New Dataset
+          </button>
+        </div>
         <p className="text-gray-600 mb-6">
           Select which datasets to query. You can select multiple datasets for cross-dataset analysis.
         </p>
@@ -125,7 +156,16 @@ export default function DatasetManagementPage() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-lg">{dataset.displayName}</h3>
+                    <h3
+                      className="font-semibold text-lg hover:underline cursor-pointer"
+                      style={{ color: 'var(--color-primary)' }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(`/admin/datasets/${dataset.name}`);
+                      }}
+                    >
+                      {dataset.displayName}
+                    </h3>
                     {(!dataset.hasReadme || !dataset.hasProjectConfig) && (
                       <div className="relative group">
                         <span className="text-yellow-500 text-xl cursor-help">⚠️</span>
@@ -153,29 +193,73 @@ export default function DatasetManagementPage() {
                   >
                     <span className="text-gray-600 font-bold">⋯</span>
                   </button>
-                  {openMenuDataset === dataset.name && (
-                    <div className="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                  {openMenuDataset === dataset.name && deleteConfirm !== dataset.name && (
+                    <div className="absolute right-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          router.push(`/data/config?dataset=${dataset.name}`);
+                          router.push(`/admin/datasets/${dataset.name}/edit`);
                         }}
                         className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
                       >
-                        🔧 Configuration
+                        ✏️ Edit Properties
                       </button>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          const url = `/admin/schema?dataset=${dataset.name}`;
-                          console.log('Navigating to schema editor:', url);
-                          console.log('Dataset name:', dataset.name);
-                          router.push(url);
+                          router.push(`/admin/datasets/${dataset.name}`);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                      >
+                        📊 Manage Tables
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/admin/schema?dataset=${dataset.name}`);
                         }}
                         className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
                       >
                         📝 Schema Editor
                       </button>
+                      <hr className="my-1 border-gray-200" />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteConfirm(dataset.name);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 transition-colors"
+                      >
+                        🗑️ Delete Dataset
+                      </button>
+                    </div>
+                  )}
+                  {deleteConfirm === dataset.name && (
+                    <div className="absolute right-0 mt-1 w-64 bg-white rounded-lg shadow-lg border-2 border-red-500 p-4 z-50">
+                      <p className="font-semibold text-red-700 mb-2">Delete Dataset?</p>
+                      <p className="text-sm text-gray-600 mb-3">
+                        This will remove the dataset from the system. Files will not be deleted.
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteConfirm(null);
+                          }}
+                          className="flex-1 px-3 py-1.5 border border-gray-300 rounded hover:bg-gray-50 text-sm"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(dataset.name);
+                          }}
+                          className="flex-1 px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>

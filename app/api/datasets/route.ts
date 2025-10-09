@@ -4,6 +4,53 @@ import path from 'path';
 import yaml from 'js-yaml';
 import { loadConfig } from '@/lib/config';
 
+async function getDatasetTables(datasetPath: string): Promise<string[]> {
+  const entries = await fs.readdir(datasetPath, { withFileTypes: true });
+  const tables: string[] = [];
+
+  for (const entry of entries) {
+    // Skip non-directories and config files
+    if (!entry.isDirectory()) continue;
+    if (['config', '.git'].includes(entry.name)) continue;
+
+    tables.push(entry.name);
+  }
+
+  return tables;
+}
+
+async function countTableRecords(datasetPath: string, tableName: string): Promise<number> {
+  const tablePath = path.join(datasetPath, tableName);
+  const entries = await fs.readdir(tablePath);
+  let recordCount = 0;
+
+  for (const entry of entries) {
+    // Skip directories and config
+    if (!entry.endsWith('.json') && !entry.endsWith('.csv')) continue;
+
+    const filePath = path.join(tablePath, entry);
+
+    if (entry.endsWith('.json')) {
+      try {
+        const data = JSON.parse(await fs.readFile(filePath, 'utf-8'));
+        recordCount += Array.isArray(data) ? data.length : 0;
+      } catch (e) {
+        // Couldn't read JSON file
+      }
+    } else if (entry.endsWith('.csv')) {
+      try {
+        const csvContent = await fs.readFile(filePath, 'utf-8');
+        const lines = csvContent.split('\n').filter(line => line.trim().length > 0);
+        recordCount += Math.max(0, lines.length - 1); // Subtract header row
+      } catch (e) {
+        // Couldn't read CSV file
+      }
+    }
+  }
+
+  return recordCount;
+}
+
 export async function GET() {
   try {
     const config = await loadConfig();
@@ -29,104 +76,79 @@ export async function GET() {
     if (config.dataSource.datasetsPath) {
       const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
 
-      // Scan all type folders (json, url, postgres, etc.)
-      const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
-      const typeFolders = typeEntries.filter(entry => entry.isDirectory());
-
-      // For each type folder, scan for datasets
-    for (const typeFolder of typeFolders) {
-      const type = typeFolder.name;
-      const typePath = path.join(datasetsPath, type);
-
-      const datasetEntries = await fs.readdir(typePath, { withFileTypes: true });
+      // Scan for dataset directories
+      const datasetEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
       const datasets = datasetEntries.filter(entry => entry.isDirectory());
 
       for (const dataset of datasets) {
         const datasetName = dataset.name;
-        const datasetPath = path.join(typePath, datasetName);
+        const datasetPath = path.join(datasetsPath, datasetName);
 
-        const jsonPath = path.join(datasetPath, 'data.json');
-        const csvPath = path.join(datasetPath, 'data.csv');
-        const readmePath = path.join(datasetPath, 'README.md');
         const metadataPath = path.join(datasetPath, 'metadata.yaml');
-        const schemaPath = path.join(datasetPath, 'schema.yaml');
-        const legacyProjectPath = path.join(datasetPath, 'project.yaml');
+        const readmePath = path.join(datasetPath, 'README.md');
 
+        let type = 'unknown';
         let recordCount = 0;
         let description = '';
-        let hasProject = false;
+        let hasMetadata = false;
         let hasReadme = false;
-        let displayName = datasetName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        let displayName = datasetName.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
-        // Try JSON first, then CSV
+        // Read metadata.yaml
         try {
-          const data = JSON.parse(await fs.readFile(jsonPath, 'utf-8'));
-          recordCount = Array.isArray(data) ? data.length : 0;
-        } catch (e) {
-          // Try CSV
-          try {
-            const csvContent = await fs.readFile(csvPath, 'utf-8');
-            const lines = csvContent.split('\n').filter(line => line.trim().length > 0);
-            recordCount = Math.max(0, lines.length - 1); // Subtract header row
-          } catch (csvError) {
-            // Couldn't read data file
+          const metadataContent = await fs.readFile(metadataPath, 'utf-8');
+          const metadataConfig = yaml.load(metadataContent) as any;
+          hasMetadata = true;
+
+          // Skip deleted datasets
+          if (metadataConfig?.deleted) {
+            continue;
           }
+
+          if (metadataConfig?.project?.name) {
+            displayName = metadataConfig.project.name;
+          }
+
+          if (metadataConfig?.project?.description) {
+            description = metadataConfig.project.description;
+          }
+
+          if (metadataConfig?.project?.domain) {
+            type = metadataConfig.project.domain;
+          }
+        } catch (e) {
+          // No metadata.yaml, skip this dataset
+          continue;
         }
 
+        // Read README if available
         try {
-          const readme = await fs.readFile(readmePath, 'utf-8');
+          await fs.access(readmePath);
           hasReadme = true;
-          // Extract first line as description
-          description = readme.split('\n').find(line => line.trim() && !line.startsWith('#'))?.trim() || '';
         } catch (e) {
           // No README
         }
 
-        // Check for new structure (metadata.yaml + schema.yaml) or legacy project.yaml
+        // Count records across all tables
         try {
-          await fs.access(metadataPath);
-          await fs.access(schemaPath);
-          hasProject = true;
-          // Try to load project name from metadata.yaml
-          try {
-            const metadataContent = await fs.readFile(metadataPath, 'utf-8');
-            const metadataConfig = yaml.load(metadataContent) as any;
-            if (metadataConfig?.project?.name) {
-              displayName = metadataConfig.project.name;
-            }
-          } catch (e) {
-            // Couldn't parse metadata.yaml, use default display name
+          const tables = await getDatasetTables(datasetPath);
+          for (const tableName of tables) {
+            const tableRecordCount = await countTableRecords(datasetPath, tableName);
+            recordCount += tableRecordCount;
           }
         } catch (e) {
-          // Try legacy project.yaml
-          try {
-            await fs.access(legacyProjectPath);
-            hasProject = true;
-            // Try to load project name from project.yaml
-            try {
-              const projectContent = await fs.readFile(legacyProjectPath, 'utf-8');
-              const projectConfig = yaml.load(projectContent) as any;
-              if (projectConfig?.project?.name) {
-                displayName = projectConfig.project.name;
-              }
-            } catch (e) {
-              // Couldn't parse project.yaml, use default display name
-            }
-          } catch (legacyError) {
-            // No config files
-          }
+          // Couldn't count records
         }
 
         allDatasets.push({
           name: datasetName,
-          type: type,
+          type: 'file',
           displayName: displayName,
           recordCount,
           description,
-          hasProjectConfig: hasProject,
+          hasProjectConfig: hasMetadata,
           hasReadme: hasReadme,
         });
-      }
       }
     }
 
