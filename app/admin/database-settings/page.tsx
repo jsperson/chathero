@@ -127,26 +127,26 @@ export default function DatabaseSettings() {
           {/* Data Source Type Selection */}
           <div className="mb-8">
             <label className="block text-sm font-semibold mb-2">Data Source Type</label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 cursor-pointer">
+            <div className="flex flex-wrap gap-4">
+              <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
                 <input
                   type="radio"
                   name="dataSourceType"
                   value="file"
                   checked={dataSourceType === 'file'}
                   onChange={(e) => setDataSourceType(e.target.value as 'file')}
-                  className="w-4 h-4"
+                  className="w-4 h-4 flex-shrink-0"
                 />
                 <span>File-based (JSON/CSV)</span>
               </label>
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
                 <input
                   type="radio"
                   name="dataSourceType"
                   value="database"
                   checked={dataSourceType === 'database'}
                   onChange={(e) => setDataSourceType(e.target.value as 'database')}
-                  className="w-4 h-4"
+                  className="w-4 h-4 flex-shrink-0"
                 />
                 <span>Database</span>
               </label>

@@ -96,6 +96,13 @@ export default function Header() {
                   🗄️ Database Settings
                 </Link>
                 <Link
+                  href="/admin/database-schema"
+                  className="block px-6 py-2 hover:bg-gray-100 transition-colors"
+                  onClick={() => setAdminMenuOpen(false)}
+                >
+                  📐 Database Schema
+                </Link>
+                <Link
                   href="/admin/datasets"
                   className="block px-6 py-2 hover:bg-gray-100 transition-colors"
                   onClick={() => setAdminMenuOpen(false)}

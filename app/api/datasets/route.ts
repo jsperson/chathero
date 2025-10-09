@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const config = await loadConfig();
 
-    // Handle database mode - list tables instead of file-based datasets
+    // Handle database mode - return database as single dataset
     if (config.dataSource.type === 'database') {
       if (!config.dataSource.database) {
         return NextResponse.json(
@@ -17,43 +17,25 @@ export async function GET() {
         );
       }
 
-      const { createDataAdapter } = await import('@/lib/adapters/adapter-factory');
+      const dbConfig = config.dataSource.database;
+      const databaseName = dbConfig.connection.database || 'Database';
 
-      try {
-        // Create adapter to get table list
-        const adapter = await createDataAdapter(config.dataSource, []);
+      // Return the database as a single dataset
+      const datasets = [{
+        name: databaseName,
+        type: 'database',
+        displayName: databaseName,
+        recordCount: 0,
+        description: `${dbConfig.type.toUpperCase()} database at ${dbConfig.connection.host}`,
+        hasProjectConfig: false,
+        hasReadme: false,
+      }];
 
-        // Get tables using getTables() method
-        let tables: string[] = [];
-        if ('getTables' in adapter && typeof adapter.getTables === 'function') {
-          tables = await adapter.getTables();
-        } else {
-          throw new Error('Database adapter does not support getTables()');
-        }
-
-        // Format tables as datasets
-        const datasets = tables.map(tableName => ({
-          name: tableName,
-          type: 'database',
-          displayName: tableName.split('.').pop() || tableName, // Use table name without schema
-          recordCount: 0, // Would need to query COUNT(*) to get this
-          description: `Database table: ${tableName}`,
-          hasProjectConfig: false,
-          hasReadme: false,
-        }));
-
-        return NextResponse.json({
-          datasets,
-          databaseMode: true,
-          databaseType: config.dataSource.database.type,
-        });
-      } catch (error: any) {
-        console.error('Database table listing error:', error);
-        return NextResponse.json(
-          { error: 'Failed to list database tables', message: error.message },
-          { status: 500 }
-        );
-      }
+      return NextResponse.json({
+        datasets,
+        databaseMode: true,
+        databaseType: dbConfig.type,
+      });
     }
 
     // File-based datasets mode
