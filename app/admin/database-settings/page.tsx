@@ -120,36 +120,38 @@ export default function DatabaseSettings() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-2 py-4 sm:p-8">
-        <div className="bg-white rounded-lg shadow-md px-3 py-4 sm:p-8">
+      <div className="w-full sm:max-w-4xl sm:mx-auto px-4 py-4 sm:p-8">
+        <div className="bg-white rounded-lg shadow-md p-6 sm:p-8 overflow-x-hidden">
           <h1 className="text-2xl sm:text-3xl font-bold mb-6">Database Settings</h1>
 
           {/* Data Source Type Selection */}
-          <div className="mb-8">
-            <label className="block text-sm font-semibold mb-2">Data Source Type</label>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <label className="flex items-center gap-2 cursor-pointer">
+          <div className="mb-8 w-full">
+            <label className="block text-sm font-semibold mb-3">Data Source Type</label>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="dataSourceType"
                   value="file"
+                  id="type-file"
                   checked={dataSourceType === 'file'}
                   onChange={(e) => setDataSourceType(e.target.value as 'file')}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <span>File-based (JSON/CSV)</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
+                <label htmlFor="type-file" className="cursor-pointer">File-based (JSON/CSV)</label>
+              </div>
+              <div className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="dataSourceType"
                   value="database"
+                  id="type-database"
                   checked={dataSourceType === 'database'}
                   onChange={(e) => setDataSourceType(e.target.value as 'database')}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <span>Database</span>
-              </label>
+                <label htmlFor="type-database" className="cursor-pointer">Database</label>
+              </div>
             </div>
           </div>
 
