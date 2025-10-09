@@ -7,21 +7,14 @@ import { loadConfig } from '@/lib/config';
 export async function GET() {
   try {
     const config = await loadConfig();
+    const allDatasets: any[] = [];
 
-    // Handle database mode - return database as single dataset
-    if (config.dataSource.type === 'database') {
-      if (!config.dataSource.database) {
-        return NextResponse.json(
-          { error: 'Database configuration is required' },
-          { status: 500 }
-        );
-      }
-
+    // Add database if configured
+    if (config.dataSource.type === 'database' && config.dataSource.database) {
       const dbConfig = config.dataSource.database;
       const databaseName = dbConfig.connection.database || 'Database';
 
-      // Return the database as a single dataset
-      const datasets = [{
+      allDatasets.push({
         name: databaseName,
         type: 'database',
         displayName: databaseName,
@@ -29,32 +22,18 @@ export async function GET() {
         description: `${dbConfig.type.toUpperCase()} database at ${dbConfig.connection.host}`,
         hasProjectConfig: false,
         hasReadme: false,
-      }];
-
-      return NextResponse.json({
-        datasets,
-        databaseMode: true,
-        databaseType: dbConfig.type,
       });
     }
 
-    // File-based datasets mode
-    if (!config.dataSource.datasetsPath) {
-      return NextResponse.json(
-        { error: 'datasetsPath is required for file-based data sources' },
-        { status: 500 }
-      );
-    }
+    // Add file-based datasets if datasetsPath is configured
+    if (config.dataSource.datasetsPath) {
+      const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
 
-    const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
+      // Scan all type folders (json, url, postgres, etc.)
+      const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
+      const typeFolders = typeEntries.filter(entry => entry.isDirectory());
 
-    // Scan all type folders (json, url, postgres, etc.)
-    const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
-    const typeFolders = typeEntries.filter(entry => entry.isDirectory());
-
-    const allDatasets: any[] = [];
-
-    // For each type folder, scan for datasets
+      // For each type folder, scan for datasets
     for (const typeFolder of typeFolders) {
       const type = typeFolder.name;
       const typePath = path.join(datasetsPath, type);
@@ -148,8 +127,10 @@ export async function GET() {
           hasReadme: hasReadme,
         });
       }
+      }
     }
 
+    // Return all datasets (database + file-based)
     return NextResponse.json({
       datasets: allDatasets,
     });

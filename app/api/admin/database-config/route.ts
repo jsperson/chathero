@@ -145,8 +145,12 @@ export async function POST(request: NextRequest) {
       const password = database.connection.password || '';
       await writeCredentials(username, password);
 
+      // Preserve datasetsPath to show both database and file-based datasets
+      const datasetsPath = config.dataSource.datasetsPath || './data';
+
       config.dataSource = {
         type: 'database',
+        datasetsPath,
         database: {
           type: database.type,
           connection: {
