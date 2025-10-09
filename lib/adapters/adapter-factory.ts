@@ -82,8 +82,22 @@ export async function createDataAdapter(
       throw new Error('Database configuration is required for database type');
     }
 
-    // For databases, datasets parameter represents table names
-    const tables = datasets;
+    // For databases, if the requested dataset is the database name itself,
+    // use the configured tables instead
+    const databaseName = config.database.connection.database;
+    const datasetsArray = typeof datasets === 'string' ? [datasets] : datasets;
+
+    let tables: string[] | string | undefined;
+    if (datasetsArray && datasetsArray.length === 1 && datasetsArray[0] === databaseName) {
+      // User selected the database itself, use configured tables
+      tables = config.database.tables;
+    } else if (datasetsArray) {
+      // User selected specific tables
+      tables = datasetsArray;
+    } else {
+      // No selection, use configured tables
+      tables = config.database.tables;
+    }
 
     switch (config.database.type) {
       case 'sqlserver':
