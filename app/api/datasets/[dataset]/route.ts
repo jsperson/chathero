@@ -112,10 +112,23 @@ export async function GET(
     // Get tables and their record counts
     const tableNames = await getDatasetTables(datasetPath);
     const tables = await Promise.all(
-      tableNames.map(async (tableName) => ({
-        name: tableName,
-        recordCount: await countTableRecords(datasetPath, tableName),
-      }))
+      tableNames.map(async (tableName) => {
+        const schemaPath = path.join(datasetPath, tableName, 'config', 'schema.yaml');
+        let hasSchema = false;
+
+        try {
+          await fs.access(schemaPath);
+          hasSchema = true;
+        } catch (e) {
+          // No schema file
+        }
+
+        return {
+          name: tableName,
+          recordCount: await countTableRecords(datasetPath, tableName),
+          hasSchema,
+        };
+      })
     );
 
     return NextResponse.json({

@@ -6,6 +6,7 @@ import { useRouter, useParams } from 'next/navigation';
 interface Table {
   name: string;
   recordCount: number;
+  hasSchema: boolean;
 }
 
 interface DatasetInfo {
@@ -25,6 +26,8 @@ export default function DatasetDetailPage() {
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [generatingSchema, setGeneratingSchema] = useState(false);
+  const [expandedTable, setExpandedTable] = useState<string | null>(null);
 
   useEffect(() => {
     if (!datasetName) return;
@@ -89,6 +92,46 @@ export default function DatasetDetailPage() {
     }
   };
 
+  const handleGenerateSchemas = async () => {
+    if (!datasetInfo) return;
+
+    setGeneratingSchema(true);
+
+    try {
+      const tablesToGenerate = selectedTables.filter(tableName => {
+        const table = datasetInfo.tables?.find(t => t.name === tableName);
+        return table && !table.hasSchema;
+      });
+
+      if (tablesToGenerate.length === 0) {
+        alert('All selected tables already have schemas configured.');
+        setGeneratingSchema(false);
+        return;
+      }
+
+      const response = await fetch(`/api/datasets/${datasetName}/generate-schemas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tables: tablesToGenerate }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate schemas');
+      }
+
+      // Reload dataset info to show updated schema status
+      const refreshResponse = await fetch(`/api/datasets/${datasetName}`);
+      const refreshData = await refreshResponse.json();
+      setDatasetInfo(refreshData);
+
+      setGeneratingSchema(false);
+    } catch (error) {
+      console.error('Failed to generate schemas:', error);
+      alert('Failed to generate schemas. Please try again.');
+      setGeneratingSchema(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -148,6 +191,18 @@ export default function DatasetDetailPage() {
             <h2 className="text-xl font-semibold">Table Selection</h2>
             <div className="flex gap-2">
               <button
+                onClick={handleGenerateSchemas}
+                disabled={generatingSchema || selectedTables.length === 0}
+                className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                style={{
+                  backgroundColor: generatingSchema ? 'transparent' : 'var(--color-primary)',
+                  color: generatingSchema ? 'inherit' : 'white',
+                  borderColor: generatingSchema ? undefined : 'var(--color-primary)'
+                }}
+              >
+                {generatingSchema ? '🔄 Generating...' : '✨ AI Populate Schemas'}
+              </button>
+              <button
                 onClick={handleSelectAll}
                 className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
               >
@@ -163,38 +218,78 @@ export default function DatasetDetailPage() {
           </div>
 
           <p className="text-sm text-gray-600 mb-4">
-            Choose which tables from this dataset to include in your queries.
+            Choose which tables from this dataset to include in your queries. Click "AI Populate Schemas" to automatically generate schema configurations for selected unconfigured tables.
           </p>
 
           <div className="space-y-2 mb-6">
             {datasetInfo.tables?.map(table => (
               <div
                 key={table.name}
-                className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                className={`border rounded-lg transition-all ${
                   selectedTables.includes(table.name)
                     ? 'border-2 bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
                 style={selectedTables.includes(table.name) ? { borderColor: 'var(--color-primary)' } : {}}
-                onClick={() => handleToggleTable(table.name)}
               >
-                <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
-                    <input
-                      type="checkbox"
-                      checked={selectedTables.includes(table.name)}
-                      onChange={() => handleToggleTable(table.name)}
-                      className="w-5 h-5"
-                      style={{ accentColor: 'var(--color-primary)' }}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold">{table.name}</h3>
-                    <p className="text-sm text-gray-600">
-                      {table.recordCount.toLocaleString()} records
-                    </p>
+                <div
+                  className="p-4 cursor-pointer"
+                  onClick={() => handleToggleTable(table.name)}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={selectedTables.includes(table.name)}
+                        onChange={() => handleToggleTable(table.name)}
+                        className="w-5 h-5"
+                        style={{ accentColor: 'var(--color-primary)' }}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold">{table.name}</h3>
+                        {!table.hasSchema && (
+                          <span className="text-yellow-500 text-sm">⚠️ Not configured</span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        {table.recordCount.toLocaleString()} records
+                      </p>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setExpandedTable(expandedTable === table.name ? null : table.name);
+                      }}
+                      className="text-gray-500 hover:text-gray-700 px-2"
+                    >
+                      {expandedTable === table.name ? '▼' : '▶'}
+                    </button>
                   </div>
                 </div>
+
+                {expandedTable === table.name && (
+                  <div className="border-t bg-gray-50 p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium text-sm">Schema Configuration</h4>
+                      {table.hasSchema ? (
+                        <span className="text-green-600 text-sm">✓ Configured</span>
+                      ) : (
+                        <span className="text-yellow-600 text-sm">Not configured</span>
+                      )}
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(`/admin/schema?dataset=${datasetName}&table=${table.name}`);
+                      }}
+                      className="text-sm px-3 py-1.5 border border-gray-300 rounded hover:bg-white"
+                    >
+                      {table.hasSchema ? 'Edit Schema' : 'Configure Schema'}
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>

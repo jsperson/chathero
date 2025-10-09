@@ -7,9 +7,10 @@ import path from 'path';
 
 export async function GET(request: NextRequest) {
   try {
-    // Get selected dataset from URL parameter first, then cookie
+    // Get selected dataset and table from URL parameters first, then cookie
     const { searchParams } = new URL(request.url);
     const datasetFromUrl = searchParams.get('dataset');
+    const tableFromUrl = searchParams.get('table');
 
     const cookies = request.cookies;
     const datasetFromCookie = cookies.get('selectedDataset')?.value;
@@ -17,6 +18,7 @@ export async function GET(request: NextRequest) {
     const selectedDataset = datasetFromUrl || datasetFromCookie;
 
     console.log('Schema API - URL param:', datasetFromUrl);
+    console.log('Schema API - Table param:', tableFromUrl);
     console.log('Schema API - Cookie:', datasetFromCookie);
     console.log('Schema API - Selected dataset:', selectedDataset);
 
@@ -36,45 +38,96 @@ export async function GET(request: NextRequest) {
 
     const discoveredSchema = SchemaDiscovery.discover(data);
 
-    // Check if schema configuration exists for this dataset (metadata.yaml/schema.yaml or legacy project.yaml)
+    // Check if schema configuration exists for this dataset/table
     let existingConfig = null;
     try {
       const datasetName = selectedDataset;
       const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
 
-      console.log('Schema API - Looking for config files for dataset:', datasetName);
+      console.log('Schema API - Looking for config files for dataset:', datasetName, 'table:', tableFromUrl);
 
-      // Find dataset in type folders
-      const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
-      const typeFolders = typeEntries.filter(entry => entry.isDirectory());
+      // Try new flat structure first
+      const datasetPath = path.join(datasetsPath, datasetName);
 
-      for (const typeFolder of typeFolders) {
-        const datasetDir = path.join(datasetsPath, typeFolder.name, datasetName);
-        const metadataPath = path.join(datasetDir, 'metadata.yaml');
-        const schemaPath = path.join(datasetDir, 'schema.yaml');
+      try {
+        await fs.access(datasetPath);
 
-        try {
-          // Check for new structure (metadata.yaml + schema.yaml)
-          await fs.access(metadataPath);
-          await fs.access(schemaPath);
+        // If table is specified, look for table-specific schema
+        if (tableFromUrl) {
+          const tableSchemaPath = path.join(datasetPath, tableFromUrl, 'config', 'schema.yaml');
 
-          console.log('Schema API - Found new structure at:', datasetDir);
-          const projectConfig = await loadProjectConfig(selectedDataset);
-          console.log('Schema API - Loaded project config:', projectConfig.project.name);
-          existingConfig = projectConfig;
-          break;
-        } catch (e) {
-          // Try legacy project.yaml
           try {
-            const projectPath = path.join(datasetDir, 'project.yaml');
-            await fs.access(projectPath);
-            console.log('Schema API - Found legacy project.yaml at:', projectPath);
+            await fs.access(tableSchemaPath);
+            console.log('Schema API - Found table-specific schema at:', tableSchemaPath);
+
+            // Load table schema
+            const yaml = await import('js-yaml');
+            const schemaContent = await fs.readFile(tableSchemaPath, 'utf-8');
+            const tableSchema = yaml.load(schemaContent) as any;
+
+            // Load dataset metadata for project info
+            const metadataPath = path.join(datasetPath, 'metadata.yaml');
+            let metadata: any = {};
+
+            try {
+              const metadataContent = await fs.readFile(metadataPath, 'utf-8');
+              metadata = yaml.load(metadataContent);
+            } catch (e) {
+              // No metadata
+            }
+
+            existingConfig = {
+              project: metadata.project || {
+                name: tableFromUrl,
+                description: '',
+                domain: 'general data'
+              },
+              dataSchema: tableSchema.dataSchema,
+              domainKnowledge: tableSchema.domainKnowledge || { fieldKeywords: {} },
+              exampleQuestions: [],
+              queryExamples: []
+            };
+          } catch (e) {
+            console.log('Schema API - No table-specific schema found');
+          }
+        } else {
+          // Dataset-level schema
+          const projectConfig = await loadProjectConfig(selectedDataset);
+          existingConfig = projectConfig;
+        }
+      } catch (e) {
+        // Try old structure (type folders)
+        const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
+        const typeFolders = typeEntries.filter(entry => entry.isDirectory());
+
+        for (const typeFolder of typeFolders) {
+          const datasetDir = path.join(datasetsPath, typeFolder.name, datasetName);
+          const metadataPath = path.join(datasetDir, 'metadata.yaml');
+          const schemaPath = path.join(datasetDir, 'schema.yaml');
+
+          try {
+            // Check for new structure (metadata.yaml + schema.yaml)
+            await fs.access(metadataPath);
+            await fs.access(schemaPath);
+
+            console.log('Schema API - Found new structure at:', datasetDir);
             const projectConfig = await loadProjectConfig(selectedDataset);
             console.log('Schema API - Loaded project config:', projectConfig.project.name);
             existingConfig = projectConfig;
             break;
-          } catch (legacyError) {
-            // Try next type folder
+          } catch (e) {
+            // Try legacy project.yaml
+            try {
+              const projectPath = path.join(datasetDir, 'project.yaml');
+              await fs.access(projectPath);
+              console.log('Schema API - Found legacy project.yaml at:', projectPath);
+              const projectConfig = await loadProjectConfig(selectedDataset);
+              console.log('Schema API - Loaded project config:', projectConfig.project.name);
+              existingConfig = projectConfig;
+              break;
+            } catch (legacyError) {
+              // Try next type folder
+            }
           }
         }
       }
