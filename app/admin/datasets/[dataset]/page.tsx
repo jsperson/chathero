@@ -95,24 +95,24 @@ export default function DatasetDetailPage() {
   const handleGenerateSchemas = async () => {
     if (!datasetInfo) return;
 
+    if (selectedTables.length === 0) {
+      alert('Please select at least one table.');
+      return;
+    }
+
+    const confirmed = confirm(
+      `This will regenerate schemas for ${selectedTables.length} selected table(s), replacing any existing configurations. Continue?`
+    );
+
+    if (!confirmed) return;
+
     setGeneratingSchema(true);
 
     try {
-      const tablesToGenerate = selectedTables.filter(tableName => {
-        const table = datasetInfo.tables?.find(t => t.name === tableName);
-        return table && !table.hasSchema;
-      });
-
-      if (tablesToGenerate.length === 0) {
-        alert('All selected tables already have schemas configured.');
-        setGeneratingSchema(false);
-        return;
-      }
-
       const response = await fetch(`/api/datasets/${datasetName}/generate-schemas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tables: tablesToGenerate }),
+        body: JSON.stringify({ tables: selectedTables }),
       });
 
       if (!response.ok) {
@@ -218,7 +218,7 @@ export default function DatasetDetailPage() {
           </div>
 
           <p className="text-sm text-gray-600 mb-4">
-            Choose which tables from this dataset to include in your queries. Click "AI Populate Schemas" to automatically generate schema configurations for selected unconfigured tables.
+            Choose which tables from this dataset to include in your queries. Click "AI Populate Schemas" to automatically generate schema configurations for all selected tables (will replace existing schemas).
           </p>
 
           <div className="space-y-2 mb-6">
