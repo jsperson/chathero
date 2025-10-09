@@ -11,7 +11,24 @@ ChatHero can connect to relational databases and use database tables as data sou
 
 ## Configuration
 
-### 1. Set Environment Variables
+### Using the Admin UI (Recommended)
+
+The easiest way to configure database connections is through the admin interface:
+
+1. Navigate to **Admin > Database Settings**
+2. Select "Database" as the data source type
+3. Choose your database type (e.g., SQL Server)
+4. Enter connection details and credentials
+5. Click "Test Connection" to verify
+6. Click "Save Configuration"
+
+Your credentials will be automatically saved to `.env.local` (which is excluded from git), and connection settings will be saved to `config/app.yaml`.
+
+### Manual Configuration (Alternative)
+
+You can also manually configure the database connection:
+
+#### 1. Set Environment Variables
 
 Add your database credentials to `.env.local`:
 
@@ -20,7 +37,7 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
 
-### 2. Configure Database Connection
+#### 2. Configure Database Connection
 
 You have two options for configuring the database connection:
 

@@ -98,7 +98,7 @@ export default function DatabaseSettings() {
 
       if (response.ok) {
         setSaveStatus('success');
-        setSaveMessage('✅ Configuration saved successfully! Restart the server to apply changes.');
+        setSaveMessage('✅ Configuration and credentials saved successfully! Restart the server to apply changes.');
       } else {
         setSaveStatus('error');
         setSaveMessage(`❌ ${result.error}`);
@@ -255,6 +255,9 @@ export default function DatabaseSettings() {
                       placeholder="Database password"
                       className="w-full p-2 border rounded"
                     />
+                    <p className="text-xs text-gray-600 mt-1">
+                      Credentials are securely stored in .env.local (not committed to git)
+                    </p>
                   </div>
                 </>
               )}
