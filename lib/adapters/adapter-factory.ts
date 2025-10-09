@@ -3,6 +3,7 @@ import path from 'path';
 import { DataAdapter, DataSourceConfig } from './data.adapter';
 import { JSONAdapter } from './json.adapter';
 import { CSVAdapter } from './csv.adapter';
+import { SQLServerAdapter } from './database/sqlserver.adapter';
 
 /**
  * Determines the type of a dataset by checking which type folder it's in
@@ -75,6 +76,30 @@ export async function createDataAdapter(
   config: DataSourceConfig,
   datasets?: string | string[]
 ): Promise<DataAdapter> {
+  // Handle database connections
+  if (config.type === 'database') {
+    if (!config.database) {
+      throw new Error('Database configuration is required for database type');
+    }
+
+    // For databases, datasets parameter represents table names
+    const tables = datasets;
+
+    switch (config.database.type) {
+      case 'sqlserver':
+        return new SQLServerAdapter(config.database, tables);
+      case 'postgresql':
+        throw new Error('PostgreSQL adapter not yet implemented');
+      case 'mysql':
+        throw new Error('MySQL adapter not yet implemented');
+      case 'sqlite':
+        throw new Error('SQLite adapter not yet implemented');
+      default:
+        throw new Error(`Unknown database type: ${config.database.type}`);
+    }
+  }
+
+  // Handle file-based datasets (JSON, CSV)
   // Normalize to array
   const datasetArray = typeof datasets === 'string' ? [datasets] : datasets;
 

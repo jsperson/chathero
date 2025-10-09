@@ -7,6 +7,63 @@ import { loadConfig } from '@/lib/config';
 export async function GET() {
   try {
     const config = await loadConfig();
+
+    // Handle database mode - list tables instead of file-based datasets
+    if (config.dataSource.type === 'database') {
+      if (!config.dataSource.database) {
+        return NextResponse.json(
+          { error: 'Database configuration is required' },
+          { status: 500 }
+        );
+      }
+
+      const { createDataAdapter } = await import('@/lib/adapters/adapter-factory');
+
+      try {
+        // Create adapter to get table list
+        const adapter = await createDataAdapter(config.dataSource, []);
+
+        // Get tables using getTables() method
+        let tables: string[] = [];
+        if ('getTables' in adapter && typeof adapter.getTables === 'function') {
+          tables = await adapter.getTables();
+        } else {
+          throw new Error('Database adapter does not support getTables()');
+        }
+
+        // Format tables as datasets
+        const datasets = tables.map(tableName => ({
+          name: tableName,
+          type: 'database',
+          displayName: tableName.split('.').pop() || tableName, // Use table name without schema
+          recordCount: 0, // Would need to query COUNT(*) to get this
+          description: `Database table: ${tableName}`,
+          hasProjectConfig: false,
+          hasReadme: false,
+        }));
+
+        return NextResponse.json({
+          datasets,
+          databaseMode: true,
+          databaseType: config.dataSource.database.type,
+        });
+      } catch (error: any) {
+        console.error('Database table listing error:', error);
+        return NextResponse.json(
+          { error: 'Failed to list database tables', message: error.message },
+          { status: 500 }
+        );
+      }
+    }
+
+    // File-based datasets mode
+    if (!config.dataSource.datasetsPath) {
+      return NextResponse.json(
+        { error: 'datasetsPath is required for file-based data sources' },
+        { status: 500 }
+      );
+    }
+
     const datasetsPath = path.join(process.cwd(), config.dataSource.datasetsPath);
 
     // Scan all type folders (json, url, postgres, etc.)

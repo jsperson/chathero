@@ -22,8 +22,23 @@ export interface AppConfig {
   };
   dataSource: {
     type: string;
-    datasetsPath: string;
+    datasetsPath?: string;
     path?: string; // Deprecated - for backward compatibility
+    database?: {
+      type: 'sqlserver' | 'postgresql' | 'mysql' | 'sqlite';
+      connection: {
+        host?: string;
+        port?: number;
+        database?: string;
+        username?: string;
+        password?: string;
+        file?: string; // For SQLite
+        poolMin?: number;
+        poolMax?: number;
+        connectionTimeout?: number;
+      };
+      tables?: string[];
+    };
   };
 }
 

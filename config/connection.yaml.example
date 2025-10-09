@@ -1,0 +1,56 @@
+# Database Connection Configuration
+# Copy this file to connection.yaml and configure for your database
+
+# For SQL Server
+dataSource:
+  type: "database"
+  database:
+    type: "sqlserver"
+    connection:
+      host: "your-server.database.windows.net"
+      port: 1433
+      database: "YourDatabaseName"
+      username: "${DB_USERNAME}"
+      password: "${DB_PASSWORD}"
+      # Optional connection pool settings
+      poolMin: 0
+      poolMax: 10
+      connectionTimeout: 30000  # milliseconds
+    # Optional: Specify which tables to expose as datasets
+    # If not specified, all tables will be available
+    tables:
+      - "dbo.Users"
+      - "dbo.Orders"
+      - "dbo.Products"
+
+# For PostgreSQL (not yet implemented)
+# dataSource:
+#   type: "database"
+#   database:
+#     type: "postgresql"
+#     connection:
+#       host: "localhost"
+#       port: 5432
+#       database: "mydb"
+#       username: "${DB_USERNAME}"
+#       password: "${DB_PASSWORD}"
+
+# For MySQL (not yet implemented)
+# dataSource:
+#   type: "database"
+#   database:
+#     type: "mysql"
+#     connection:
+#       host: "localhost"
+#       port: 3306
+#       database: "mydb"
+#       username: "${DB_USERNAME}"
+#       password: "${DB_PASSWORD}"
+
+# For SQLite (not yet implemented)
+# dataSource:
+#   type: "database"
+#   database:
+#     type: "sqlite"
+#     connection:
+#       file: "./data/mydb.sqlite"
