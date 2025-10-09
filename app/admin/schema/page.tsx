@@ -406,10 +406,19 @@ export default function SchemaAdmin() {
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-4">
           <button
-            onClick={() => window.location.href = '/admin/datasets'}
+            onClick={() => {
+              const tableParam = searchParams.get('table');
+              if (datasetParam && tableParam) {
+                // Coming from table selection, go back to table selection
+                router.push(`/admin/datasets/${datasetParam}`);
+              } else {
+                // Go back to datasets list
+                router.push('/admin/datasets');
+              }
+            }}
             className="text-gray-600 hover:text-gray-900 flex items-center gap-1"
           >
-            ← Back to Datasets
+            ← Back to {searchParams.get('table') ? 'Table Selection' : 'Datasets'}
           </button>
         </div>
         <h1 className="text-3xl font-bold mb-4">
