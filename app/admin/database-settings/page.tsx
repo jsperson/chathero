@@ -119,39 +119,37 @@ export default function DatabaseSettings() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      <div className="w-full sm:max-w-4xl sm:mx-auto p-2 sm:p-8">
-        <div className="bg-white rounded-lg shadow-md p-3 sm:p-8">
-          <h1 className="text-xl sm:text-3xl font-bold mb-4 sm:mb-6">Database Settings</h1>
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md p-8">
+          <h1 className="text-3xl font-bold mb-6">Database Settings</h1>
 
           {/* Data Source Type Selection */}
-          <div className="mb-6 sm:mb-8">
-            <label className="block text-sm font-semibold mb-2">Data Source Type</label>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
+          <div className="mb-8">
+            <label className="block text-sm font-semibold mb-3">Data Source Type</label>
+            <div className="grid grid-cols-1 gap-3 max-w-sm">
+              <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="radio"
                   name="dataSourceType"
                   value="file"
-                  id="type-file"
                   checked={dataSourceType === 'file'}
                   onChange={(e) => setDataSourceType(e.target.value as 'file')}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <label htmlFor="type-file" className="cursor-pointer text-sm sm:text-base">File-based (JSON/CSV)</label>
-              </div>
-              <div className="flex items-center gap-2">
+                <span>File-based (JSON/CSV)</span>
+              </label>
+              <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="radio"
                   name="dataSourceType"
                   value="database"
-                  id="type-database"
                   checked={dataSourceType === 'database'}
                   onChange={(e) => setDataSourceType(e.target.value as 'database')}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <label htmlFor="type-database" className="cursor-pointer text-sm sm:text-base">Database</label>
-              </div>
+                <span>Database</span>
+              </label>
             </div>
           </div>
 
