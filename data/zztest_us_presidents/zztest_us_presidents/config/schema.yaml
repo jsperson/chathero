@@ -1,0 +1,87 @@
+dataSchema:
+  primaryDateField: birth_date
+  categoricalFields:
+    - name: name
+      displayName: Name
+      description: 45 unique values
+    - name: spouse
+      displayName: Spouse
+      description: 44 unique values
+    - name: birth_date
+      displayName: Birth Date
+      description: 45 unique values
+    - name: birth_place
+      displayName: Birth Place
+      description: 42 unique values
+    - name: death_date
+      displayName: Death Date
+      description: 38 unique values
+    - name: cause_of_death
+      displayName: Cause Of Death
+      description: 27 unique values
+    - name: presidential_start
+      displayName: Presidential Start
+      description: 47 unique values
+    - name: presidential_end
+      displayName: Presidential End
+      description: 46 unique values
+    - name: party
+      displayName: Party
+      description: 6 unique values
+  numericFields: []
+domainKnowledge:
+  fieldKeywords:
+    name:
+      - full_name
+      - president_name
+      - leader_name
+      - chief_executive_name
+      - head_of_state_name
+    spouse:
+      - partner
+      - wife
+      - husband
+      - marital_partner
+      - significant_other
+    birth_date:
+      - date_of_birth
+      - dob
+      - birth_day
+      - birth_year
+      - born_on
+    birth_place:
+      - place_of_birth
+      - birth_location
+      - hometown
+      - birth_city
+      - birth_state
+    death_date:
+      - date_of_death
+      - dod
+      - death_day
+      - death_year
+      - died_on
+    cause_of_death:
+      - death_cause
+      - reason_of_death
+      - mortality_cause
+      - cause_of_passing
+      - death_reason
+    presidential_start:
+      - term_start
+      - presidency_start
+      - inauguration_date
+      - start_of_term
+      - beginning_of_presidency
+    presidential_end:
+      - term_end
+      - presidency_end
+      - end_of_term
+      - conclusion_of_presidency
+      - end_date
+    party:
+      - political_party
+      - party_affiliation
+      - political_affiliation
+      - party_membership
+      - political_group

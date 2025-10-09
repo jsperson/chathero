@@ -1,0 +1,43 @@
+dataSchema:
+  primaryDateField: launch_date
+  categoricalFields:
+    - name: vehicle
+      displayName: Vehicle/Rocket
+      description: Type of rocket used
+    - name: outcome
+      displayName: Outcome
+      description: Success or failure of launch
+    - name: site
+      displayName: Launch Site
+      description: Location of launch
+    - name: customer
+      displayName: Customer
+      description: Customer or payload owner
+  numericFields:
+    - name: payload_mass_kg
+      displayName: Payload Mass
+      unit: ''
+domainKnowledge:
+  fieldKeywords:
+    vehicle:
+      - vehicle
+      - rocket
+      - falcon
+      - starship
+    outcome:
+      - outcome
+      - success
+      - failure
+      - successful
+      - failed
+    site:
+      - site
+      - location
+      - where
+      - launch site
+      - pad
+    customer:
+      - customer
+      - client
+      - payload owner
+      - operator
