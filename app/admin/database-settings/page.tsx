@@ -119,15 +119,15 @@ export default function DatabaseSettings() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="w-full sm:max-w-4xl sm:mx-auto px-4 py-4 sm:p-8">
-        <div className="bg-white rounded-lg shadow-md p-6 sm:p-8 overflow-x-hidden">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-6">Database Settings</h1>
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+      <div className="w-full sm:max-w-4xl sm:mx-auto p-2 sm:p-8">
+        <div className="bg-white rounded-lg shadow-md p-3 sm:p-8">
+          <h1 className="text-xl sm:text-3xl font-bold mb-4 sm:mb-6">Database Settings</h1>
 
           {/* Data Source Type Selection */}
-          <div className="mb-8 w-full">
-            <label className="block text-sm font-semibold mb-3">Data Source Type</label>
-            <div className="space-y-3">
+          <div className="mb-6 sm:mb-8">
+            <label className="block text-sm font-semibold mb-2">Data Source Type</label>
+            <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <input
                   type="radio"
@@ -138,7 +138,7 @@ export default function DatabaseSettings() {
                   onChange={(e) => setDataSourceType(e.target.value as 'file')}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <label htmlFor="type-file" className="cursor-pointer">File-based (JSON/CSV)</label>
+                <label htmlFor="type-file" className="cursor-pointer text-sm sm:text-base">File-based (JSON/CSV)</label>
               </div>
               <div className="flex items-center gap-2">
                 <input
@@ -150,7 +150,7 @@ export default function DatabaseSettings() {
                   onChange={(e) => setDataSourceType(e.target.value as 'database')}
                   className="w-4 h-4 flex-shrink-0"
                 />
-                <label htmlFor="type-database" className="cursor-pointer">Database</label>
+                <label htmlFor="type-database" className="cursor-pointer text-sm sm:text-base">Database</label>
               </div>
             </div>
           </div>
