@@ -213,15 +213,6 @@ export default function DatasetManagementPage() {
                       >
                         📊 Manage Tables
                       </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/admin/schema?dataset=${dataset.name}`);
-                        }}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
-                      >
-                        📝 Schema Editor
-                      </button>
                       <hr className="my-1 border-gray-200" />
                       <button
                         onClick={(e) => {
