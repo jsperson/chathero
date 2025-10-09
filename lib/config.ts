@@ -134,43 +134,50 @@ export async function loadProjectConfig(dataset: string): Promise<ProjectConfig>
     console.log('loadProjectConfig - cwd:', process.cwd());
     console.log('loadProjectConfig - datasetsPath:', datasetsPath);
 
-    // Find dataset in type folders
-    const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
-    const typeFolders = typeEntries.filter(entry => entry.isDirectory());
-
-    let configPath: string | null = null;
+    // Try new flat structure first
+    const datasetPath = path.join(datasetsPath, datasetName);
     let dataPath: string | null = null;
 
-    for (const typeFolder of typeFolders) {
-      const potentialConfigPath = path.join(datasetsPath, typeFolder.name, datasetName, 'project.yaml');
-      const potentialJsonPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
-      const potentialCsvPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.csv');
+    try {
+      await fs.access(datasetPath);
+      // New structure - dataset directory exists directly under datasetsPath
+      dataPath = datasetPath; // We'll use the directory path for the new structure
+    } catch (e) {
+      // Try old structure (type folders)
+      const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
+      const typeFolders = typeEntries.filter(entry => entry.isDirectory());
 
-      // Try JSON first, then CSV
-      try {
-        await fs.access(potentialJsonPath);
-        configPath = potentialConfigPath;
-        dataPath = potentialJsonPath;
-        break;
-      } catch (e) {
-        // Try CSV
+      for (const typeFolder of typeFolders) {
+        const potentialJsonPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.json');
+        const potentialCsvPath = path.join(datasetsPath, typeFolder.name, datasetName, 'data.csv');
+
+        // Try JSON first, then CSV
         try {
-          await fs.access(potentialCsvPath);
-          configPath = potentialConfigPath;
-          dataPath = potentialCsvPath;
+          await fs.access(potentialJsonPath);
+          dataPath = potentialJsonPath;
           break;
-        } catch (csvError) {
-          // Try next type folder
+        } catch (e) {
+          // Try CSV
+          try {
+            await fs.access(potentialCsvPath);
+            dataPath = potentialCsvPath;
+            break;
+          } catch (csvError) {
+            // Try next type folder
+          }
         }
       }
     }
 
     if (!dataPath) {
-      throw new Error(`Dataset '${datasetName}' not found in any type folder`);
+      throw new Error(`Dataset '${datasetName}' not found`);
     }
 
     // Load configuration from multiple files (new structure) or fallback to single file (legacy)
-    const datasetDir = path.dirname(dataPath);
+    // For new structure, dataPath is the dataset directory
+    // For old structure, dataPath is the data file path
+    const stat = await fs.stat(dataPath);
+    const datasetDir = stat.isDirectory() ? dataPath : path.dirname(dataPath);
     const metadataPath = path.join(datasetDir, 'metadata.yaml');
     const schemaPath = path.join(datasetDir, 'schema.yaml');
     const queriesPath = path.join(datasetDir, 'queries.yaml');
@@ -191,7 +198,19 @@ export async function loadProjectConfig(dataset: string): Promise<ProjectConfig>
       const schemaContent = await fs.readFile(schemaPath, 'utf-8');
       schema = yaml.load(schemaContent);
     } catch (e) {
-      // schema.yaml doesn't exist
+      // schema.yaml doesn't exist at dataset level, try first table's config
+      try {
+        const entries = await fs.readdir(datasetDir, { withFileTypes: true });
+        const tableDirs = entries.filter(entry => entry.isDirectory() && !['config', '.git'].includes(entry.name));
+
+        if (tableDirs.length > 0) {
+          const firstTableSchema = path.join(datasetDir, tableDirs[0].name, 'config', 'schema.yaml');
+          const schemaContent = await fs.readFile(firstTableSchema, 'utf-8');
+          schema = yaml.load(schemaContent);
+        }
+      } catch (tableSchemaError) {
+        // No table-level schema either
+      }
     }
 
     try {
@@ -232,7 +251,7 @@ export async function loadProjectConfig(dataset: string): Promise<ProjectConfig>
     }
 
     // Try to load README if it exists
-    const readmePath = path.join(path.dirname(dataPath), 'README.md');
+    const readmePath = path.join(datasetDir, 'README.md');
     try {
       const readmeContent = await fs.readFile(readmePath, 'utf-8');
       cachedProjectConfig!.readme = readmeContent;
