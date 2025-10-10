@@ -5,11 +5,21 @@ import { useRouter } from 'next/navigation';
 
 export default function CreateDatasetPage() {
   const router = useRouter();
+  const [sourceType, setSourceType] = useState<'file' | 'database'>('file');
   const [name, setName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [description, setDescription] = useState('');
   const [domain, setDomain] = useState('general data');
   const [dataType, setDataType] = useState<'json' | 'csv'>('json');
+
+  // Database connection fields
+  const [dbType, setDbType] = useState<'sqlserver' | 'postgresql' | 'mysql'>('sqlserver');
+  const [dbHost, setDbHost] = useState('');
+  const [dbPort, setDbPort] = useState('1433');
+  const [dbName, setDbName] = useState('');
+  const [dbUsername, setDbUsername] = useState('');
+  const [dbPassword, setDbPassword] = useState('');
+
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState('');
 
@@ -26,20 +36,41 @@ export default function CreateDatasetPage() {
       return;
     }
 
+    if (sourceType === 'database') {
+      if (!dbHost || !dbName || !dbUsername) {
+        setError('Database host, name, and username are required');
+        return;
+      }
+    }
+
     setCreating(true);
     setError('');
 
     try {
+      const payload = {
+        name: normalizedName,
+        displayName,
+        description,
+        domain,
+        sourceType,
+        ...(sourceType === 'file' ? {
+          dataType,
+        } : {
+          database: {
+            type: dbType,
+            host: dbHost,
+            port: parseInt(dbPort),
+            database: dbName,
+            username: dbUsername,
+            password: dbPassword,
+          }
+        })
+      };
+
       const response = await fetch('/api/datasets/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: normalizedName,
-          displayName,
-          description,
-          domain,
-          dataType,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -73,7 +104,7 @@ export default function CreateDatasetPage() {
             Create New Dataset
           </h1>
           <p className="text-gray-600 mt-2">
-            Create a new file-based dataset. You'll be able to add tables and data after creation.
+            Create a new dataset from either file-based data or a database connection.
           </p>
         </div>
 
@@ -85,6 +116,42 @@ export default function CreateDatasetPage() {
 
         <div className="space-y-4">
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Source Type *
+            </label>
+            <div className="flex gap-4">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  value="file"
+                  checked={sourceType === 'file'}
+                  onChange={(e) => setSourceType(e.target.value as 'file' | 'database')}
+                  className="mr-2"
+                  style={{ accentColor: 'var(--color-primary)' }}
+                />
+                <span>📁 File-Based (JSON/CSV)</span>
+              </label>
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  value="database"
+                  checked={sourceType === 'database'}
+                  onChange={(e) => setSourceType(e.target.value as 'file' | 'database')}
+                  className="mr-2"
+                  style={{ accentColor: 'var(--color-primary)' }}
+                />
+                <span>🗄️ Database Connection</span>
+              </label>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              {sourceType === 'file'
+                ? 'Store data in JSON or CSV files'
+                : 'Connect to an existing database'
+              }
+            </p>
+          </div>
+
+          <div className="border-t pt-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Dataset Name *
             </label>
@@ -150,38 +217,136 @@ export default function CreateDatasetPage() {
             </p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Data Type
-            </label>
-            <div className="flex gap-4">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  value="json"
-                  checked={dataType === 'json'}
-                  onChange={(e) => setDataType(e.target.value as 'json' | 'csv')}
-                  className="mr-2"
-                  style={{ accentColor: 'var(--color-primary)' }}
-                />
-                <span>JSON</span>
+          {sourceType === 'file' ? (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Data Type *
               </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  value="csv"
-                  checked={dataType === 'csv'}
-                  onChange={(e) => setDataType(e.target.value as 'json' | 'csv')}
-                  className="mr-2"
-                  style={{ accentColor: 'var(--color-primary)' }}
-                />
-                <span>CSV</span>
-              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    value="json"
+                    checked={dataType === 'json'}
+                    onChange={(e) => setDataType(e.target.value as 'json' | 'csv')}
+                    className="mr-2"
+                    style={{ accentColor: 'var(--color-primary)' }}
+                  />
+                  <span>JSON</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    value="csv"
+                    checked={dataType === 'csv'}
+                    onChange={(e) => setDataType(e.target.value as 'json' | 'csv')}
+                    className="mr-2"
+                    style={{ accentColor: 'var(--color-primary)' }}
+                  />
+                  <span>CSV</span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                File format for this dataset (cannot be changed later)
+              </p>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              File format for this dataset (cannot be changed later)
-            </p>
-          </div>
+          ) : (
+            <div className="space-y-4 border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <h3 className="font-medium text-gray-900">Database Connection Details</h3>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Database Type *
+                </label>
+                <select
+                  value={dbType}
+                  onChange={(e) => {
+                    setDbType(e.target.value as 'sqlserver' | 'postgresql' | 'mysql');
+                    // Update default port based on database type
+                    if (e.target.value === 'sqlserver') setDbPort('1433');
+                    else if (e.target.value === 'postgresql') setDbPort('5432');
+                    else if (e.target.value === 'mysql') setDbPort('3306');
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="sqlserver">SQL Server</option>
+                  <option value="postgresql">PostgreSQL</option>
+                  <option value="mysql">MySQL</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2 sm:col-span-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Host *
+                  </label>
+                  <input
+                    type="text"
+                    value={dbHost}
+                    onChange={(e) => setDbHost(e.target.value)}
+                    placeholder="localhost"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="col-span-2 sm:col-span-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Port *
+                  </label>
+                  <input
+                    type="number"
+                    value={dbPort}
+                    onChange={(e) => setDbPort(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Database Name *
+                </label>
+                <input
+                  type="text"
+                  value={dbName}
+                  onChange={(e) => setDbName(e.target.value)}
+                  placeholder="my_database"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2 sm:col-span-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Username *
+                  </label>
+                  <input
+                    type="text"
+                    value={dbUsername}
+                    onChange={(e) => setDbUsername(e.target.value)}
+                    placeholder="username"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="col-span-2 sm:col-span-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={dbPassword}
+                    onChange={(e) => setDbPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Optional - can use environment variables instead
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end gap-3 mt-6 pt-6 border-t">

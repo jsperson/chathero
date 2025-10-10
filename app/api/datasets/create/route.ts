@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   try {
     const config = await loadConfig();
     const body = await request.json();
-    const { name, displayName, description, domain, dataType } = body;
+    const { name, displayName, description, domain, sourceType, dataType, database } = body;
 
     if (!name || !displayName) {
       return NextResponse.json(
@@ -48,6 +48,7 @@ export async function POST(request: Request) {
         description: description || '',
         domain: domain || 'general data'
       },
+      type: sourceType || 'file',
       aiContext: {
         systemRole: `You are a helpful assistant that answers questions about ${displayName} data.`,
         domainContext: `This dataset contains data in the ${domain || 'general data'} domain. ${description || ''}`
@@ -59,6 +60,30 @@ export async function POST(request: Request) {
       yaml.dump(metadata),
       'utf-8'
     );
+
+    if (sourceType === 'database' && database) {
+      // Create connection.yaml for database sources
+      const connection = {
+        type: database.type,
+        connection: {
+          host: database.host,
+          port: database.port,
+          database: database.database,
+          username: database.username,
+          ...(database.password ? { password: database.password } : {})
+        },
+        tables: [] // Will be populated later
+      };
+
+      await fs.writeFile(
+        path.join(datasetPath, 'connection.yaml'),
+        yaml.dump(connection),
+        'utf-8'
+      );
+
+      // Create schemas directory for AI-generated schemas
+      await fs.mkdir(path.join(datasetPath, 'schemas'), { recursive: true });
+    }
 
     // Create queries.yaml
     const queries = {
@@ -79,9 +104,9 @@ export async function POST(request: Request) {
 
 ${description || 'Dataset description goes here.'}
 
-## Key Fields
+## ${sourceType === 'database' ? 'Tables' : 'Key Fields'}
 
-(Add field descriptions here)
+${sourceType === 'database' ? '(Tables will be listed here)' : '(Add field descriptions here)'}
 
 ## Potential Use Cases
 
