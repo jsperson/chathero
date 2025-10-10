@@ -45,16 +45,16 @@ export class CodeValidator {
       }
     }
 
-    // Check for imports beyond pandas/numpy
-    const importPattern = /^import\s+(?!pandas|numpy)(\w+)/gm;
-    const fromImportPattern = /^from\s+(?!pandas|numpy)(\w+)/gm;
+    // Check for imports beyond pandas/numpy/datetime/pytz
+    const importPattern = /^import\s+(?!pandas|numpy|datetime|pytz)(\w+)/gm;
+    const fromImportPattern = /^from\s+(?!pandas|numpy|datetime|pytz)(\w+)/gm;
 
     const illegalImport = importPattern.exec(code) || fromImportPattern.exec(code);
     if (illegalImport && illegalImport[1] !== 'pd' && illegalImport[1] !== 'np') {
       return {
         approved: false,
         reason: `Illegal import detected: ${illegalImport[1]}`,
-        risks: ['Code imports modules beyond pandas/numpy'],
+        risks: ['Code imports modules beyond pandas/numpy/datetime/pytz'],
       };
     }
 
@@ -96,6 +96,7 @@ VALID CODE EXAMPLES (these should be APPROVED):
 ✅ Example 2: result = df.groupby('category').size().to_dict()
 ✅ Example 3: df['date'] = pd.to_datetime(df['date'])
 ✅ Example 4: import pandas as pd\nresult = df.head().to_dict('records')
+✅ Example 5: from datetime import datetime\nutc_time = datetime.now()
 
 Note: Code may re-import pandas/numpy (e.g., "import pandas as pd") even though they're pre-imported. This is SAFE and should be APPROVED.
 
@@ -106,18 +107,18 @@ CONSTRAINTS:
 ALLOWED OPERATIONS:
 ✅ pandas operations: df.filter(), df[condition], df.groupby(), df.merge(), etc.
 ✅ numpy operations: np.sum(), np.mean(), np.max(), etc.
-✅ Date operations: pd.to_datetime(), pd.Timestamp(), pd.DateOffset()
+✅ Date/time operations: pd.to_datetime(), pd.Timestamp(), pd.DateOffset(), datetime, pytz for timezone conversions
 ✅ Basic Python: for loops, if/else, list comprehensions, dict operations
 ✅ Math operations: +, -, *, /, //, %, **
 ✅ Pandas methods: .iterrows(), .loc[], .iloc[], .copy(), .notna(), .isna(), .mode(), .isoformat()
-✅ Re-importing pandas/numpy (redundant but safe)
+✅ Allowed imports: pandas, numpy, datetime, pytz (for date/time handling)
 
 FORBIDDEN OPERATIONS (auto-reject if found):
 ❌ File I/O: open(), read(), write(), os.path, Path, etc.
 ❌ Network: requests, urllib, socket, http, etc.
 ❌ Process operations: os.system(), subprocess, exec(), eval()
 ❌ Dynamic code execution: eval(), exec(), compile(), __import__()
-❌ Module loading beyond pandas/numpy: any other imports
+❌ Module loading beyond pandas/numpy/datetime/pytz: any other imports
 ❌ System access: os, sys (beyond basic operations), ctypes, etc.
 
 Return JSON:
