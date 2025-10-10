@@ -14,6 +14,42 @@ export async function POST(
     const body = await request.json();
     const selectedTables = body.tables || [];
 
+    // Check if this is a database source
+    if (config.dataSource.type === 'database' && config.dataSource.database) {
+      const dbConfig = config.dataSource.database;
+      const databaseName = dbConfig.connection.database || 'Database';
+
+      if (datasetName === databaseName) {
+        // Save to app.yaml
+        const appConfigPath = path.join(process.cwd(), 'config', 'app.yaml');
+        let appConfig: any = {};
+
+        try {
+          const appConfigContent = await fs.readFile(appConfigPath, 'utf-8');
+          appConfig = yaml.load(appConfigContent) as any;
+        } catch (e) {
+          return NextResponse.json(
+            { error: 'Failed to read app.yaml' },
+            { status: 500 }
+          );
+        }
+
+        // Update database tables
+        if (!appConfig.dataSource) appConfig.dataSource = {};
+        if (!appConfig.dataSource.database) appConfig.dataSource.database = {};
+        appConfig.dataSource.database.tables = selectedTables;
+
+        // Write back to app.yaml
+        await fs.writeFile(appConfigPath, yaml.dump(appConfig), 'utf-8');
+
+        return NextResponse.json({
+          success: true,
+          selectedTables,
+        });
+      }
+    }
+
+    // File-based dataset
     if (!config.dataSource.datasetsPath) {
       return NextResponse.json(
         { error: 'Datasets path not configured' },

@@ -36,6 +36,8 @@ export default function DatasetDetailPage() {
     fetch(`/api/datasets/${datasetName}`)
       .then(res => res.json())
       .then(data => {
+        console.log('Dataset info loaded:', data);
+        console.log('Tables:', data.tables);
         setDatasetInfo(data);
         // Use saved selection, or default to all tables
         if (data.selectedTables && data.selectedTables.length > 0) {

@@ -15,5 +15,13 @@ ai:
   apiKey: "${OPENAI_API_KEY}"
 
 dataSource:
-  type: "json"
+  type: "database"
   datasetsPath: "./data"        # Root folder containing dataset subfolders
+  database:
+    type: sqlserver
+    connection:
+      host: P3NWPLSK12SQL-v12.shr.prod.phx3.secureserver.net
+      port: 1433
+      database: Northwinds
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}

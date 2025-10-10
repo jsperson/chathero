@@ -59,6 +59,39 @@ export async function GET(
     const config = await loadConfig();
     const datasetName = params.dataset;
 
+    // Check if this is a database source
+    if (config.dataSource.type === 'database' && config.dataSource.database) {
+      const dbConfig = config.dataSource.database;
+      const databaseName = dbConfig.connection.database || 'Database';
+
+      if (datasetName === databaseName) {
+        // This is a database dataset - get tables from database
+        const { SQLServerAdapter } = await import('@/lib/adapters/database/sqlserver.adapter');
+
+        let tables: string[] = [];
+        if (dbConfig.type === 'sqlserver') {
+          const adapter = new SQLServerAdapter(dbConfig, []);
+          tables = await adapter.getTables();
+        }
+
+        const configuredTables = dbConfig.tables || [];
+
+        return NextResponse.json({
+          name: datasetName,
+          displayName: databaseName,
+          description: `${dbConfig.type.toUpperCase()} database at ${dbConfig.connection.host}`,
+          type: 'database',
+          tables: tables.map(tableName => ({
+            name: tableName,
+            recordCount: 0, // Database tables don't have record counts in this view
+            hasSchema: false, // Database tables don't have file-based schemas
+          })),
+          selectedTables: configuredTables,
+        });
+      }
+    }
+
+    // File-based dataset
     if (!config.dataSource.datasetsPath) {
       return NextResponse.json(
         { error: 'Datasets path not configured' },
