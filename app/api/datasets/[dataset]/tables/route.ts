@@ -14,42 +14,6 @@ export async function POST(
     const body = await request.json();
     const selectedTables = body.tables || [];
 
-    // Check if this is a database source
-    if (config.dataSource.type === 'database' && config.dataSource.database) {
-      const dbConfig = config.dataSource.database;
-      const databaseName = dbConfig.connection.database || 'Database';
-
-      if (datasetName === databaseName) {
-        // Save to app.yaml
-        const appConfigPath = path.join(process.cwd(), 'config', 'app.yaml');
-        let appConfig: any = {};
-
-        try {
-          const appConfigContent = await fs.readFile(appConfigPath, 'utf-8');
-          appConfig = yaml.load(appConfigContent) as any;
-        } catch (e) {
-          return NextResponse.json(
-            { error: 'Failed to read app.yaml' },
-            { status: 500 }
-          );
-        }
-
-        // Update database tables
-        if (!appConfig.dataSource) appConfig.dataSource = {};
-        if (!appConfig.dataSource.database) appConfig.dataSource.database = {};
-        appConfig.dataSource.database.tables = selectedTables;
-
-        // Write back to app.yaml
-        await fs.writeFile(appConfigPath, yaml.dump(appConfig), 'utf-8');
-
-        return NextResponse.json({
-          success: true,
-          selectedTables,
-        });
-      }
-    }
-
-    // File-based dataset
     if (!config.dataSource.datasetsPath) {
       return NextResponse.json(
         { error: 'Datasets path not configured' },
@@ -69,6 +33,42 @@ export async function POST(
         { status: 404 }
       );
     }
+
+    // Check if this is a database dataset by looking for connection.yaml
+    const connectionPath = path.join(datasetPath, 'connection.yaml');
+    let isDatabase = false;
+    try {
+      await fs.access(connectionPath);
+      isDatabase = true;
+    } catch (e) {
+      // Not a database dataset
+    }
+
+    if (isDatabase) {
+      // Load and update connection.yaml
+      try {
+        const connectionContent = await fs.readFile(connectionPath, 'utf-8');
+        const connectionConfig = yaml.load(connectionContent) as any;
+
+        // Update tables
+        connectionConfig.tables = selectedTables;
+
+        // Write back to connection.yaml
+        await fs.writeFile(connectionPath, yaml.dump(connectionConfig), 'utf-8');
+
+        return NextResponse.json({
+          success: true,
+          selectedTables,
+        });
+      } catch (e) {
+        return NextResponse.json(
+          { error: 'Failed to update connection.yaml' },
+          { status: 500 }
+        );
+      }
+    }
+
+    // File-based dataset
 
     // Save table selection to metadata.yaml
     const metadataPath = path.join(datasetPath, 'metadata.yaml');
