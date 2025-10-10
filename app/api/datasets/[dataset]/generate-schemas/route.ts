@@ -6,7 +6,11 @@ import { loadConfig, AppConfig } from '@/lib/config';
 import { SchemaDiscovery } from '@/lib/schema-discovery';
 import OpenAI from 'openai';
 
-async function generateDatabaseSchemas(dbConfig: any, tables: string[]) {
+async function generateDatabaseSchemas(
+  dbConfig: any,
+  tables: string[],
+  schemasDir: string
+) {
   try {
     const { SQLServerAdapter } = await import('@/lib/adapters/database/sqlserver.adapter');
     const adapter = new SQLServerAdapter(dbConfig, []);
@@ -15,7 +19,6 @@ async function generateDatabaseSchemas(dbConfig: any, tables: string[]) {
     const openai = new OpenAI({ apiKey: config.ai.apiKey });
 
     const results: { table: string; success: boolean; error?: string }[] = [];
-    const schemaDescriptions: any = {};
 
     for (const tableName of tables) {
       try {
@@ -60,7 +63,7 @@ Format as valid JSON only, no markdown.`;
         const responseText = completion.choices[0]?.message?.content || '{}';
         const semanticLayer = JSON.parse(responseText);
 
-        schemaDescriptions[tableName] = {
+        const schemaDescription = {
           columns: schema.columns.map(col => ({
             name: col.name,
             type: col.type,
@@ -75,6 +78,10 @@ Format as valid JSON only, no markdown.`;
           relationships: semanticLayer.relationships || []
         };
 
+        // Save individual schema file for this table
+        const schemaFile = path.join(schemasDir, `${tableName}.yaml`);
+        await fs.writeFile(schemaFile, yaml.dump(schemaDescription), 'utf-8');
+
         results.push({ table: tableName, success: true });
       } catch (error) {
         console.error(`Failed to generate schema for ${tableName}:`, error);
@@ -85,13 +92,6 @@ Format as valid JSON only, no markdown.`;
         });
       }
     }
-
-    // Save schemas to config directory
-    const schemasDir = path.join(process.cwd(), 'config', 'database-schemas');
-    await fs.mkdir(schemasDir, { recursive: true });
-
-    const schemasFile = path.join(schemasDir, `${dbConfig.connection.database}.yaml`);
-    await fs.writeFile(schemasFile, yaml.dump(schemaDescriptions), 'utf-8');
 
     return NextResponse.json({
       success: true,
@@ -167,18 +167,6 @@ export async function POST(
     const body = await request.json();
     const tables = body.tables || [];
 
-    // Check if this is a database source
-    if (config.dataSource.type === 'database' && config.dataSource.database) {
-      const dbConfig = config.dataSource.database;
-      const databaseName = dbConfig.connection.database || 'Database';
-
-      if (datasetName === databaseName) {
-        // Handle database schema generation
-        return await generateDatabaseSchemas(dbConfig, tables);
-      }
-    }
-
-    // File-based dataset handling
     if (!config.dataSource.datasetsPath) {
       return NextResponse.json(
         { error: 'Datasets path not configured' },
@@ -197,6 +185,29 @@ export async function POST(
         { error: 'Dataset not found' },
         { status: 404 }
       );
+    }
+
+    // Check if this is a database dataset by looking for connection.yaml
+    const connectionPath = path.join(datasetPath, 'connection.yaml');
+    let isDatabase = false;
+    try {
+      await fs.access(connectionPath);
+      isDatabase = true;
+    } catch (e) {
+      // Not a database dataset
+    }
+
+    if (isDatabase) {
+      // Load database connection from data/{dataset}/connection.yaml
+      const connectionContent = await fs.readFile(connectionPath, 'utf-8');
+      const dbConfig = yaml.load(connectionContent) as any;
+
+      // Create schemas directory
+      const schemasDir = path.join(datasetPath, 'schemas');
+      await fs.mkdir(schemasDir, { recursive: true });
+
+      // Handle database schema generation
+      return await generateDatabaseSchemas(dbConfig, tables, schemasDir);
     }
 
     const results: { table: string; success: boolean; error?: string }[] = [];
