@@ -192,18 +192,20 @@ export default function DatasetDetailPage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold">Table Selection</h2>
             <div className="flex gap-2">
-              <button
-                onClick={handleGenerateSchemas}
-                disabled={generatingSchema || selectedTables.length === 0}
-                className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
-                style={{
-                  backgroundColor: generatingSchema ? 'transparent' : 'var(--color-primary)',
-                  color: generatingSchema ? 'inherit' : 'white',
-                  borderColor: generatingSchema ? undefined : 'var(--color-primary)'
-                }}
-              >
-                {generatingSchema ? '🔄 Generating...' : '✨ AI Populate Schemas'}
-              </button>
+              {datasetInfo.type !== 'database' && (
+                <button
+                  onClick={handleGenerateSchemas}
+                  disabled={generatingSchema || selectedTables.length === 0}
+                  className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                  style={{
+                    backgroundColor: generatingSchema ? 'transparent' : 'var(--color-primary)',
+                    color: generatingSchema ? 'inherit' : 'white',
+                    borderColor: generatingSchema ? undefined : 'var(--color-primary)'
+                  }}
+                >
+                  {generatingSchema ? '🔄 Generating...' : '✨ AI Populate Schemas'}
+                </button>
+              )}
               <button
                 onClick={handleSelectAll}
                 className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
@@ -220,7 +222,10 @@ export default function DatasetDetailPage() {
           </div>
 
           <p className="text-sm text-gray-600 mb-4">
-            Choose which tables from this dataset to include in your queries. Click "AI Populate Schemas" to automatically generate schema configurations for all selected tables (will replace existing schemas).
+            {datasetInfo.type === 'database'
+              ? 'Choose which tables from this database to include in your queries.'
+              : 'Choose which tables from this dataset to include in your queries. Click "AI Populate Schemas" to automatically generate schema configurations for all selected tables (will replace existing schemas).'
+            }
           </p>
 
           <div className="space-y-2 mb-6">
@@ -251,7 +256,7 @@ export default function DatasetDetailPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold">{table.name}</h3>
-                        {!table.hasSchema && (
+                        {!table.hasSchema && datasetInfo.type !== 'database' && (
                           <span className="text-yellow-500 text-sm">⚠️ Not configured</span>
                         )}
                       </div>
@@ -259,19 +264,21 @@ export default function DatasetDetailPage() {
                         {table.recordCount.toLocaleString()} records
                       </p>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setExpandedTable(expandedTable === table.name ? null : table.name);
-                      }}
-                      className="text-gray-500 hover:text-gray-700 px-2"
-                    >
-                      {expandedTable === table.name ? '▼' : '▶'}
-                    </button>
+                    {datasetInfo.type !== 'database' && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExpandedTable(expandedTable === table.name ? null : table.name);
+                        }}
+                        className="text-gray-500 hover:text-gray-700 px-2"
+                      >
+                        {expandedTable === table.name ? '▼' : '▶'}
+                      </button>
+                    )}
                   </div>
                 </div>
 
-                {expandedTable === table.name && (
+                {expandedTable === table.name && datasetInfo.type !== 'database' && (
                   <div className="border-t bg-gray-50 p-4">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium text-sm">Schema Configuration</h4>
