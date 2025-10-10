@@ -87,7 +87,8 @@ export async function GET() {
         const metadataPath = path.join(datasetPath, 'metadata.yaml');
         const readmePath = path.join(datasetPath, 'README.md');
 
-        let type = 'unknown';
+        let sourceType = 'file';
+        let domain = 'unknown';
         let recordCount = 0;
         let description = '';
         let hasMetadata = false;
@@ -114,7 +115,12 @@ export async function GET() {
           }
 
           if (metadataConfig?.project?.domain) {
-            type = metadataConfig.project.domain;
+            domain = metadataConfig.project.domain;
+          }
+
+          // Check source type from metadata
+          if (metadataConfig?.type) {
+            sourceType = metadataConfig.type;
           }
         } catch (e) {
           // No metadata.yaml, skip this dataset
@@ -129,23 +135,27 @@ export async function GET() {
           // No README
         }
 
-        // Count records across all tables
-        try {
-          const tables = await getDatasetTables(datasetPath);
-          for (const tableName of tables) {
-            const tableRecordCount = await countTableRecords(datasetPath, tableName);
-            recordCount += tableRecordCount;
+        // Count records for file-based datasets only
+        if (sourceType === 'file') {
+          try {
+            const tables = await getDatasetTables(datasetPath);
+            for (const tableName of tables) {
+              const tableRecordCount = await countTableRecords(datasetPath, tableName);
+              recordCount += tableRecordCount;
+            }
+          } catch (e) {
+            // Couldn't count records
           }
-        } catch (e) {
-          // Couldn't count records
         }
 
         allDatasets.push({
           name: datasetName,
-          type: 'file',
+          type: sourceType,
           displayName: displayName,
           recordCount,
-          description,
+          description: sourceType === 'database'
+            ? `${domain} database`
+            : description,
           hasProjectConfig: hasMetadata,
           hasReadme: hasReadme,
         });
