@@ -1,12 +1,13 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import yaml from 'js-yaml';
 import { DataAdapter, DataSourceConfig } from './data.adapter';
 import { JSONAdapter } from './json.adapter';
 import { CSVAdapter } from './csv.adapter';
 import { SQLServerAdapter } from './database/sqlserver.adapter';
 
 /**
- * Determines the type of a dataset by checking which type folder it's in
+ * Determines the type of a dataset by checking for connection.yaml or metadata
  */
 async function getDatasetType(config: DataSourceConfig, datasetName: string): Promise<string> {
   if (!('datasetsPath' in config) || !config.datasetsPath) {
@@ -15,20 +16,38 @@ async function getDatasetType(config: DataSourceConfig, datasetName: string): Pr
   }
 
   const datasetsPath = path.join(process.cwd(), config.datasetsPath);
-  const typeEntries = await fs.readdir(datasetsPath, { withFileTypes: true });
-  const typeFolders = typeEntries.filter(entry => entry.isDirectory());
+  const datasetPath = path.join(datasetsPath, datasetName);
 
-  for (const typeFolder of typeFolders) {
-    const datasetPath = path.join(datasetsPath, typeFolder.name, datasetName);
-    try {
-      await fs.access(datasetPath);
-      return typeFolder.name;
-    } catch (e) {
-      // Try next type folder
-    }
+  // Check if dataset exists
+  try {
+    await fs.access(datasetPath);
+  } catch (e) {
+    // Dataset doesn't exist, default to json
+    return 'json';
   }
 
-  // Default to json if not found
+  // Check for connection.yaml (indicates database dataset)
+  const connectionPath = path.join(datasetPath, 'connection.yaml');
+  try {
+    await fs.access(connectionPath);
+    return 'database';
+  } catch (e) {
+    // Not a database dataset
+  }
+
+  // Check metadata.yaml for type field
+  const metadataPath = path.join(datasetPath, 'metadata.yaml');
+  try {
+    const metadataContent = await fs.readFile(metadataPath, 'utf-8');
+    const metadata = yaml.load(metadataContent) as any;
+    if (metadata?.type === 'database') {
+      return 'database';
+    }
+  } catch (e) {
+    // No metadata or couldn't read it
+  }
+
+  // Default to json for file-based datasets
   return 'json';
 }
 
@@ -50,7 +69,7 @@ class MultiDatasetAdapter implements DataAdapter {
     // Load each dataset with its own adapter
     for (const datasetName of this.datasets) {
       const type = await getDatasetType(this.config, datasetName);
-      const adapter = createAdapterForType(type, this.config, datasetName);
+      const adapter = await createAdapterForType(type, this.config, datasetName);
 
       console.log(`Loading dataset '${datasetName}' with ${type} adapter`);
       const data = await adapter.getData();
@@ -107,7 +126,7 @@ export async function createDataAdapter(
     // Otherwise, fall through to file-based handling
   }
 
-  // Handle file-based datasets (JSON, CSV)
+  // Handle file-based and database datasets
   // Normalize to array
   const datasetArray = typeof datasets === 'string' ? [datasets] : datasets;
 
@@ -118,23 +137,52 @@ export async function createDataAdapter(
   // Single dataset - use appropriate adapter directly
   if (datasetArray.length === 1) {
     const type = await getDatasetType(config, datasetArray[0]);
-    return createAdapterForType(type, config, datasetArray[0]);
+    return await createAdapterForType(type, config, datasetArray[0]);
   }
 
   // Multiple datasets - use MultiDatasetAdapter which handles each dataset individually
   return new MultiDatasetAdapter(config, datasetArray);
 }
 
-function createAdapterForType(
+async function createAdapterForType(
   type: string,
   config: DataSourceConfig,
-  datasets: string | string[]
-): DataAdapter {
+  datasetName: string
+): Promise<DataAdapter> {
   switch (type.toLowerCase()) {
+    case 'database': {
+      // Load database config from data/{dataset}/connection.yaml
+      if (!('datasetsPath' in config) || !config.datasetsPath) {
+        throw new Error('datasetsPath not configured for database dataset');
+      }
+
+      const datasetsPath = path.join(process.cwd(), config.datasetsPath);
+      const datasetPath = path.join(datasetsPath, datasetName);
+      const connectionPath = path.join(datasetPath, 'connection.yaml');
+
+      const connectionContent = await fs.readFile(connectionPath, 'utf-8');
+      const dbConfig = yaml.load(connectionContent) as any;
+
+      // Get configured tables
+      const tables = dbConfig.tables || [];
+
+      switch (dbConfig.type) {
+        case 'sqlserver':
+          return new SQLServerAdapter(dbConfig, tables);
+        case 'postgresql':
+          throw new Error('PostgreSQL adapter not yet implemented');
+        case 'mysql':
+          throw new Error('MySQL adapter not yet implemented');
+        case 'sqlite':
+          throw new Error('SQLite adapter not yet implemented');
+        default:
+          throw new Error(`Unknown database type: ${dbConfig.type}`);
+      }
+    }
     case 'csv':
-      return new CSVAdapter(config, datasets);
+      return new CSVAdapter(config, datasetName);
     case 'json':
     default:
-      return new JSONAdapter(config, datasets);
+      return new JSONAdapter(config, datasetName);
   }
 }
