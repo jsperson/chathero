@@ -192,20 +192,18 @@ export default function DatasetDetailPage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold">Table Selection</h2>
             <div className="flex gap-2">
-              {datasetInfo.type !== 'database' && (
-                <button
-                  onClick={handleGenerateSchemas}
-                  disabled={generatingSchema || selectedTables.length === 0}
-                  className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
-                  style={{
-                    backgroundColor: generatingSchema ? 'transparent' : 'var(--color-primary)',
-                    color: generatingSchema ? 'inherit' : 'white',
-                    borderColor: generatingSchema ? undefined : 'var(--color-primary)'
-                  }}
-                >
-                  {generatingSchema ? '🔄 Generating...' : '✨ AI Populate Schemas'}
-                </button>
-              )}
+              <button
+                onClick={handleGenerateSchemas}
+                disabled={generatingSchema || selectedTables.length === 0}
+                className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                style={{
+                  backgroundColor: generatingSchema ? 'transparent' : 'var(--color-primary)',
+                  color: generatingSchema ? 'inherit' : 'white',
+                  borderColor: generatingSchema ? undefined : 'var(--color-primary)'
+                }}
+              >
+                {generatingSchema ? '🔄 Generating...' : '✨ AI Populate Schemas'}
+              </button>
               <button
                 onClick={handleSelectAll}
                 className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
@@ -223,7 +221,7 @@ export default function DatasetDetailPage() {
 
           <p className="text-sm text-gray-600 mb-4">
             {datasetInfo.type === 'database'
-              ? 'Choose which tables from this database to include in your queries.'
+              ? 'Choose which tables from this database to include in your queries. Click "AI Populate Schemas" to automatically generate semantic layer descriptions for all selected tables.'
               : 'Choose which tables from this dataset to include in your queries. Click "AI Populate Schemas" to automatically generate schema configurations for all selected tables (will replace existing schemas).'
             }
           </p>

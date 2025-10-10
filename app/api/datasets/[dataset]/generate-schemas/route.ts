@@ -2,8 +2,98 @@ import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import { loadConfig } from '@/lib/config';
+import { loadConfig, AppConfig } from '@/lib/config';
 import { SchemaDiscovery } from '@/lib/schema-discovery';
+import OpenAI from 'openai';
+
+async function generateDatabaseSchemas(dbConfig: any, tables: string[]) {
+  try {
+    const { SQLServerAdapter } = await import('@/lib/adapters/database/sqlserver.adapter');
+    const adapter = new SQLServerAdapter(dbConfig, []);
+
+    const config = await loadConfig();
+    const openai = new OpenAI({ apiKey: config.ai.apiKey });
+
+    const results: { table: string; success: boolean; error?: string }[] = [];
+    const schemaDescriptions: any = {};
+
+    for (const tableName of tables) {
+      try {
+        // Get table schema from database
+        const columns = await adapter.getTableSchema(tableName);
+
+        // Format schema for AI
+        const schemaInfo = columns.map(col =>
+          `${col.name} (${col.type}${col.nullable ? ', nullable' : ', required'})`
+        ).join('\n');
+
+        // Use AI to generate semantic description
+        const prompt = `Analyze this database table schema and provide a semantic layer description.
+
+Table: ${tableName}
+Columns:
+${schemaInfo}
+
+Generate a JSON response with:
+1. description: A brief description of what this table represents
+2. fieldDescriptions: An object mapping each column name to a human-readable description
+3. businessContext: Any business logic or domain knowledge inferred from the schema
+
+Format as valid JSON only, no markdown.`;
+
+        const completion = await openai.chat.completions.create({
+          model: config.ai.model,
+          messages: [
+            { role: 'system', content: 'You are a data analyst helping to document database schemas. Provide clear, concise descriptions.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.3,
+        });
+
+        const responseText = completion.choices[0]?.message?.content || '{}';
+        const semanticLayer = JSON.parse(responseText);
+
+        schemaDescriptions[tableName] = {
+          columns: columns.map(col => ({
+            name: col.name,
+            type: col.type,
+            nullable: col.nullable,
+            description: semanticLayer.fieldDescriptions?.[col.name] || ''
+          })),
+          description: semanticLayer.description || '',
+          businessContext: semanticLayer.businessContext || ''
+        };
+
+        results.push({ table: tableName, success: true });
+      } catch (error) {
+        console.error(`Failed to generate schema for ${tableName}:`, error);
+        results.push({
+          table: tableName,
+          success: false,
+          error: String(error)
+        });
+      }
+    }
+
+    // Save schemas to config directory
+    const schemasDir = path.join(process.cwd(), 'config', 'database-schemas');
+    await fs.mkdir(schemasDir, { recursive: true });
+
+    const schemasFile = path.join(schemasDir, `${dbConfig.connection.database}.yaml`);
+    await fs.writeFile(schemasFile, yaml.dump(schemaDescriptions), 'utf-8');
+
+    return NextResponse.json({
+      success: true,
+      results
+    });
+  } catch (error) {
+    console.error('Database schema generation error:', error);
+    return NextResponse.json(
+      { error: 'Failed to generate database schemas: ' + String(error) },
+      { status: 500 }
+    );
+  }
+}
 
 async function loadTableData(datasetPath: string, tableName: string): Promise<any[]> {
   const tablePath = path.join(datasetPath, tableName);
@@ -66,6 +156,18 @@ export async function POST(
     const body = await request.json();
     const tables = body.tables || [];
 
+    // Check if this is a database source
+    if (config.dataSource.type === 'database' && config.dataSource.database) {
+      const dbConfig = config.dataSource.database;
+      const databaseName = dbConfig.connection.database || 'Database';
+
+      if (datasetName === databaseName) {
+        // Handle database schema generation
+        return await generateDatabaseSchemas(dbConfig, tables);
+      }
+    }
+
+    // File-based dataset handling
     if (!config.dataSource.datasetsPath) {
       return NextResponse.json(
         { error: 'Datasets path not configured' },
