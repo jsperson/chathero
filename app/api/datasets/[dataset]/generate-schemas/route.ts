@@ -19,32 +19,39 @@ async function generateDatabaseSchemas(dbConfig: any, tables: string[]) {
 
     for (const tableName of tables) {
       try {
-        // Get table schema from database
-        const columns = await adapter.getTableSchema(tableName);
+        // Get extended table schema from database (includes keys and relationships)
+        const schema = await adapter.getExtendedTableSchema(tableName);
 
         // Format schema for AI
-        const schemaInfo = columns.map(col =>
-          `${col.name} (${col.type}${col.nullable ? ', nullable' : ', required'})`
+        const columnInfo = schema.columns.map(col =>
+          `${col.name} (${col.type}${col.isPrimaryKey ? ', PRIMARY KEY' : ''}${col.nullable ? ', nullable' : ', required'})`
         ).join('\n');
+
+        const fkInfo = schema.foreignKeys.length > 0
+          ? '\nForeign Keys:\n' + schema.foreignKeys.map(fk =>
+              `${fk.column} -> ${fk.referencedTable}.${fk.referencedColumn}`
+            ).join('\n')
+          : '';
 
         // Use AI to generate semantic description
         const prompt = `Analyze this database table schema and provide a semantic layer description.
 
 Table: ${tableName}
 Columns:
-${schemaInfo}
+${columnInfo}${fkInfo}
 
 Generate a JSON response with:
 1. description: A brief description of what this table represents
 2. fieldDescriptions: An object mapping each column name to a human-readable description
 3. businessContext: Any business logic or domain knowledge inferred from the schema
+4. relationships: An array describing how this table relates to other tables based on the foreign keys
 
 Format as valid JSON only, no markdown.`;
 
         const completion = await openai.chat.completions.create({
           model: config.ai.model,
           messages: [
-            { role: 'system', content: 'You are a data analyst helping to document database schemas. Provide clear, concise descriptions.' },
+            { role: 'system', content: 'You are a data analyst helping to document database schemas. Provide clear, concise descriptions and identify table relationships.' },
             { role: 'user', content: prompt }
           ],
           temperature: 0.3,
@@ -54,14 +61,18 @@ Format as valid JSON only, no markdown.`;
         const semanticLayer = JSON.parse(responseText);
 
         schemaDescriptions[tableName] = {
-          columns: columns.map(col => ({
+          columns: schema.columns.map(col => ({
             name: col.name,
             type: col.type,
             nullable: col.nullable,
+            isPrimaryKey: col.isPrimaryKey,
             description: semanticLayer.fieldDescriptions?.[col.name] || ''
           })),
+          primaryKeys: schema.primaryKeys,
+          foreignKeys: schema.foreignKeys,
           description: semanticLayer.description || '',
-          businessContext: semanticLayer.businessContext || ''
+          businessContext: semanticLayer.businessContext || '',
+          relationships: semanticLayer.relationships || []
         };
 
         results.push({ table: tableName, success: true });

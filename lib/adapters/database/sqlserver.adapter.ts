@@ -198,4 +198,98 @@ export class SQLServerAdapter extends BaseDatabaseAdapter {
       throw error;
     }
   }
+
+  /**
+   * Get extended schema information including keys and relationships
+   */
+  async getExtendedTableSchema(tableName: string): Promise<{
+    columns: Array<{
+      name: string;
+      type: string;
+      nullable: boolean;
+      isPrimaryKey: boolean;
+    }>;
+    primaryKeys: string[];
+    foreignKeys: Array<{
+      column: string;
+      referencedTable: string;
+      referencedColumn: string;
+    }>;
+  }> {
+    await this.connect();
+
+    try {
+      // Split schema.table if provided
+      const parts = tableName.split('.');
+      const schema = parts.length > 1 ? parts[0] : 'dbo';
+      const table = parts.length > 1 ? parts[1] : parts[0];
+
+      // Get columns with primary key info
+      const columnQuery = `
+        SELECT
+          c.COLUMN_NAME as name,
+          c.DATA_TYPE as type,
+          CASE WHEN c.IS_NULLABLE = 'YES' THEN 1 ELSE 0 END as nullable,
+          CASE WHEN pk.COLUMN_NAME IS NOT NULL THEN 1 ELSE 0 END as isPrimaryKey
+        FROM INFORMATION_SCHEMA.COLUMNS c
+        LEFT JOIN (
+          SELECT ku.COLUMN_NAME
+          FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+          JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE ku
+            ON tc.CONSTRAINT_NAME = ku.CONSTRAINT_NAME
+            AND tc.TABLE_SCHEMA = ku.TABLE_SCHEMA
+            AND tc.TABLE_NAME = ku.TABLE_NAME
+          WHERE tc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+            AND tc.TABLE_SCHEMA = '${schema.replace(/'/g, "''")}'
+            AND tc.TABLE_NAME = '${table.replace(/'/g, "''")}'
+        ) pk ON c.COLUMN_NAME = pk.COLUMN_NAME
+        WHERE c.TABLE_SCHEMA = '${schema.replace(/'/g, "''")}'
+          AND c.TABLE_NAME = '${table.replace(/'/g, "''")}'
+        ORDER BY c.ORDINAL_POSITION
+      `;
+
+      // Get foreign keys
+      const fkQuery = `
+        SELECT
+          kcu.COLUMN_NAME as column_name,
+          ccu.TABLE_SCHEMA + '.' + ccu.TABLE_NAME as referenced_table,
+          ccu.COLUMN_NAME as referenced_column
+        FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
+        JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+          ON rc.CONSTRAINT_NAME = kcu.CONSTRAINT_NAME
+          AND rc.CONSTRAINT_SCHEMA = kcu.CONSTRAINT_SCHEMA
+        JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu
+          ON rc.UNIQUE_CONSTRAINT_NAME = ccu.CONSTRAINT_NAME
+          AND rc.UNIQUE_CONSTRAINT_SCHEMA = ccu.CONSTRAINT_SCHEMA
+        WHERE kcu.TABLE_SCHEMA = '${schema.replace(/'/g, "''")}'
+          AND kcu.TABLE_NAME = '${table.replace(/'/g, "''")}'
+      `;
+
+      const [columns, foreignKeys] = await Promise.all([
+        this.executeQuery(columnQuery),
+        this.executeQuery(fkQuery)
+      ]);
+
+      const result = {
+        columns: columns.map(row => ({
+          name: row.name,
+          type: row.type,
+          nullable: row.nullable === 1,
+          isPrimaryKey: row.isPrimaryKey === 1,
+        })),
+        primaryKeys: columns.filter(row => row.isPrimaryKey === 1).map(row => row.name),
+        foreignKeys: foreignKeys.map(row => ({
+          column: row.column_name,
+          referencedTable: row.referenced_table,
+          referencedColumn: row.referenced_column,
+        }))
+      };
+
+      await this.disconnect();
+      return result;
+    } catch (error) {
+      await this.disconnect();
+      throw error;
+    }
+  }
 }
