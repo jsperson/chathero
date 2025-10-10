@@ -263,9 +263,9 @@ export async function POST(request: NextRequest) {
           contextData.data_explanation = `${contextData.data_explanation}\n\nNote: Showing first ${PHASE_3_MAX_RECORDS} of ${processedData.length} total records to avoid token limits.`;
         }
 
-        const currentDate = new Date().toISOString().split('T')[0];
+        const currentDateTime = new Date().toISOString(); // Full ISO datetime
         const metadata: any = {
-          current_date: currentDate,
+          current_date: currentDateTime,
           query_analysis: queryAnalysis.explanation,
         };
 

@@ -59,7 +59,7 @@ export class OpenAIAdapter implements AIAdapter {
 
   async chat(message: string, context: any): Promise<string> {
     try {
-      const currentDate = context.current_date || new Date().toISOString().split('T')[0];
+      const currentDate = context.current_date || new Date().toISOString();
 
       // Check if this is a JSON analysis request
       const isJsonMode = context.system_instruction && context.require_json;

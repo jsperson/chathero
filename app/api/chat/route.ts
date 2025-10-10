@@ -325,9 +325,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Add metadata
-    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const currentDateTime = new Date().toISOString(); // Full ISO datetime
     const metadata: any = {
-      current_date: currentDate,
+      current_date: currentDateTime,
       query_analysis: queryAnalysis.explanation,
     };
 
