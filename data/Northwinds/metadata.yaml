@@ -1,0 +1,5 @@
+type: database
+project:
+  name: Northwinds
+  description: SQL Server database with Northwinds and Toys data
+  domain: database

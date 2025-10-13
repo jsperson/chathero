@@ -1,0 +1,26 @@
+type: sqlserver
+connection:
+  host: P3NWPLSK12SQL-v12.shr.prod.phx3.secureserver.net
+  port: 1433
+  database: Northwinds
+  username: ${DB_USERNAME}
+  password: ${DB_PASSWORD}
+tables:
+  - dbo.Categories
+  - dbo.CustomerCustomerDemo
+  - dbo.CustomerDemographics
+  - dbo.Customers
+  - dbo.Employees
+  - dbo.EmployeeTerritories
+  - dbo.Order Details
+  - dbo.Orders
+  - dbo.Products
+  - dbo.Region
+  - dbo.Shippers
+  - dbo.Suppliers
+  - dbo.Territories
+  - toys.Customers
+  - toys.OrderItems
+  - toys.Orders
+  - toys.Products
+  - toys.Vendors
